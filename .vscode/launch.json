@@ -8,28 +8,28 @@
       "name": "Launch development",
       "request": "launch",
       "type": "dart",
-      "program": "lib/main_development.dart",
+      "program": "lib/common/main_development.dart",
       "noDebug": true,
       "args": [
         "--flavor",
         "development",
         "--target",
-        "lib/main_development.dart"
+        "lib/common/main_development.dart"
       ]
     },
     {
       "name": "Launch staging",
       "request": "launch",
       "type": "dart",
-      "program": "lib/main_staging.dart",
-      "args": ["--flavor", "staging", "--target", "lib/main_staging.dart"]
+      "program": "lib/common/main_staging.dart",
+      "args": ["--flavor", "staging", "--target", "lib/common/main_staging.dart"]
     },
     {
       "name": "Launch production",
       "request": "launch",
       "type": "dart",
-      "program": "lib/main_production.dart",
-      "args": ["--flavor", "production", "--target", "lib/main_production.dart"]
+      "program": "lib/common/main_production.dart",
+      "args": ["--flavor", "production", "--target", "lib/common/main_production.dart"]
     }
   ]
 }

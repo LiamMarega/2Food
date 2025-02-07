@@ -1,10 +1,8 @@
-
 # Don't want to expose your supabase credentials? you have two options
 # 1. Use a .env file to specify SUPABASE_URL and SUPABASE_ANON_KEY
 # 2. Specify --url and --key in the CLI (ex. supadart -u <url> -k <key>)
-SUPABASE_URL: 
-SUPABASE_ANON_KEY:
-
+SUPABASE_URL: https://mjoxycdldkxmrhbnwqsu.supabase.co
+SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1qb3h5Y2RsZGt4bXJoYm53cXN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzgzNTM0NzAsImV4cCI6MjA1MzkyOTQ3MH0.W7F5Yi7E80lisgyLwYxGb-7VdJ_NBaDOHzvvwtOoG9s
 
 # Enums in your database? map them here (Case Sensitive)
 # Please take a look at the documentation to see how to work with enums
@@ -14,7 +12,7 @@ enums:
 # Optional, where to place the generated classes files default: ./lib/models/
 output: lib/models/
 # Set to true, if you want to generate separated files for each classes
-separated: false
+separated: true
 # Set to true, if you are not using Flutter, just normal Dart project
 dart: false
 
@@ -30,4 +28,3 @@ exclude:
   # - toJson
   - copyWith
   - New
-

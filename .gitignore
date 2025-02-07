@@ -21,6 +21,9 @@ migrate_working_dir/
 .project
 .settings/
 .vscode/*
+.vscode
+.idea/*
+
 
 # packages file containing multi-root paths
 .packages.generated
@@ -110,3 +113,4 @@ app.*.map.json
 !.idea/codeStyles/
 !.idea/dictionaries/
 !.idea/runConfigurations/
+supadart.yaml

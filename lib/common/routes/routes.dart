@@ -1,3 +1,4 @@
+import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -55,6 +56,12 @@ class RouterNotifier extends ChangeNotifier {
               ),
             ),
             GoRoute(
+              path: '/orders',
+              builder: (context, state) => const Center(
+                child: Text('Orders Page'),
+              ),
+            ),
+            GoRoute(
               path: '/profile',
               builder: (context, state) => const Center(
                 child: Text('Profile Page'),
@@ -77,44 +84,55 @@ class ScaffoldWithNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: child,
-      bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (index) {
+      appBar: AppBar(
+        title: const Text('SnapFood'),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.question_mark_sharp),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: AnimatedBottomNavigationBar(
+        blurEffect: true,
+        icons: const [
+          Icons.home_outlined,
+          Icons.search_outlined,
+          Icons.receipt_long_outlined,
+          Icons.person_outline,
+        ],
+        activeIndex: _calculateSelectedIndex(context),
+        gapLocation: GapLocation.center,
+        notchSmoothness: NotchSmoothness.verySmoothEdge,
+        leftCornerRadius: 32,
+        rightCornerRadius: 32,
+        onTap: (index) {
           switch (index) {
             case 0:
               context.go('/');
             case 1:
               context.go('/search');
             case 2:
+              context.go('/orders');
+            case 3:
               context.go('/profile');
           }
         },
-        selectedIndex: _calculateSelectedIndex(context),
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.search_outlined),
-            selectedIcon: Icon(Icons.search),
-            label: 'Search',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        activeColor: Theme.of(context).colorScheme.primary,
+        inactiveColor: Theme.of(context).colorScheme.onSurfaceVariant,
+        splashColor:
+            Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+        splashSpeedInMilliseconds: 300,
       ),
     );
   }
 
   int _calculateSelectedIndex(BuildContext context) {
-    final String location = GoRouterState.of(context).uri.path;
+    final location = GoRouterState.of(context).uri.path;
     if (location == '/') return 0;
     if (location == '/search') return 1;
-    if (location == '/profile') return 2;
+    if (location == '/orders') return 2;
+    if (location == '/profile') return 3;
     return 0;
   }
 }

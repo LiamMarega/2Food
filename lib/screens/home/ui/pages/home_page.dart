@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:snapfood/models/generated_classes.dart';
 import 'package:snapfood/screens/home/ui/providers/home_provider.dart';
 
@@ -10,21 +11,21 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Column(
       children: [
-        CarouselExample(),
+        CarouselRecommended(),
         Expanded(child: SizedBox()),
       ],
     );
   }
 }
 
-class CarouselExample extends StatefulWidget {
-  const CarouselExample({super.key});
+class CarouselRecommended extends StatefulWidget {
+  const CarouselRecommended({super.key});
 
   @override
-  State<CarouselExample> createState() => _CarouselExampleState();
+  State<CarouselRecommended> createState() => _CarouselExampleState();
 }
 
-class _CarouselExampleState extends State<CarouselExample> {
+class _CarouselExampleState extends State<CarouselRecommended> {
   final CarouselController controller = CarouselController(initialItem: 1);
 
   @override
@@ -36,7 +37,7 @@ class _CarouselExampleState extends State<CarouselExample> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 200, // Fixed height for the carousel
+      height: 300, // Fixed height for the carousel
       child: ListView(
         physics:
             const NeverScrollableScrollPhysics(), // Prevent ListView scroll
@@ -81,7 +82,18 @@ class HeroLayoutCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width;
-    return SizedBox(
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: ShadTheme.of(context).colorScheme.primary,
+            spreadRadius: 1,
+            blurRadius: 20,
+            offset: const Offset(5, 15),
+          ),
+        ],
+      ),
       width: width * 7 / 8,
       child: Transform(
         transform: Matrix4.identity()
