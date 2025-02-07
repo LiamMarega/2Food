@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:snapfood/models/generated_classes.dart';
+import 'package:snapfood/common/models/generated_classes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'home_provider.freezed.dart';

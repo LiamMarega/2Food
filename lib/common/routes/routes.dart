@@ -2,9 +2,11 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:snapfood/common/models/generated_classes.dart';
 import 'package:snapfood/screens/auth/pages/login_page.dart';
 import 'package:snapfood/screens/auth/providers/auth_provider.dart';
 import 'package:snapfood/screens/home/ui/pages/home_page.dart';
+import 'package:snapfood/screens/home/ui/pages/restaurant_detail.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final router = RouterNotifier(ref);
@@ -48,6 +50,15 @@ class RouterNotifier extends ChangeNotifier {
             GoRoute(
               path: '/',
               builder: (context, state) => const HomePage(),
+              routes: [
+                GoRoute(
+                  path: 'restaurant/:id',
+                  builder: (context, state) {
+                    final restaurant = state.extra as Restaurants;
+                    return RestaurantDetail(restaurant: restaurant);
+                  },
+                ),
+              ],
             ),
             GoRoute(
               path: '/search',
