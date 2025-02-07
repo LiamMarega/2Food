@@ -1,13 +1,180 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:snapfood/common/models/generated_classes.dart';
+import 'package:snapfood/screens/home/ui/providers/restaurant_detail_provider.dart';
 
-class RestaurantDetail extends StatelessWidget {
+class RestaurantDetail extends StatefulWidget {
   const RestaurantDetail({
     required this.restaurant,
     super.key,
   });
 
   final Restaurants restaurant;
+
+  @override
+  State<RestaurantDetail> createState() => _RestaurantDetailState();
+}
+
+class _RestaurantDetailState extends State<RestaurantDetail> {
+  final TextEditingController _searchController = TextEditingController();
+  RangeValues _priceRange = const RangeValues(0, 100);
+  double _rating = 3.0;
+  final List<String> _selectedIngredients = [];
+
+  final List<String> _availableIngredients = [
+    'Vegetarian',
+    'Vegan',
+    'Gluten Free',
+    'Dairy Free',
+    'Spicy',
+    'Nuts',
+    'Seafood',
+    'Halal',
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch menu items after widget is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchMenuItems();
+    });
+  }
+
+  void _fetchMenuItems() {
+    final container = ProviderScope.containerOf(context);
+    container
+        .read(restaurantDetailProvider(restaurantId: widget.restaurant.id)
+            .notifier)
+        .fetchMenuItems(widget.restaurant.id);
+  }
+
+  void _showFilterBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+          top: 20,
+          left: 20,
+          right: 20,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Filters',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.close),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Price Range',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            RangeSlider(
+              values: _priceRange,
+              min: 0,
+              max: 100,
+              divisions: 20,
+              labels: RangeLabels(
+                '\$${_priceRange.start.round()}',
+                '\$${_priceRange.end.round()}',
+              ),
+              onChanged: (values) {
+                setState(() {
+                  _priceRange = values;
+                });
+              },
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Minimum Rating',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            Slider(
+              value: _rating,
+              min: 0,
+              max: 5,
+              divisions: 10,
+              label: _rating.toString(),
+              onChanged: (value) {
+                setState(() {
+                  _rating = value;
+                });
+              },
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Dietary Preferences',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 10),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: _availableIngredients.map((ingredient) {
+                final isSelected = _selectedIngredients.contains(ingredient);
+                return FilterChip(
+                  selected: isSelected,
+                  label: Text(ingredient),
+                  onSelected: (selected) {
+                    setState(() {
+                      if (selected) {
+                        _selectedIngredients.add(ingredient);
+                      } else {
+                        _selectedIngredients.remove(ingredient);
+                      }
+                    });
+                  },
+                  backgroundColor: isSelected
+                      ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
+                      : null,
+                  checkmarkColor: Theme.of(context).colorScheme.primary,
+                  selectedColor:
+                      Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                );
+              }).toList(),
+            ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton(
+                onPressed: () {
+                  // Apply filters
+                  Navigator.pop(context);
+                },
+                child: const Text('Apply Filters'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +189,9 @@ class RestaurantDetail extends StatelessWidget {
                 fit: StackFit.expand,
                 children: [
                   Hero(
-                    tag: 'restaurant-${restaurant.id}',
+                    tag: 'restaurant-${widget.restaurant.id}',
                     child: Image.network(
-                      restaurant.image,
+                      widget.restaurant.image,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -52,7 +219,7 @@ class RestaurantDetail extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          restaurant.name,
+                          widget.restaurant.name,
                           style: Theme.of(context)
                               .textTheme
                               .headlineMedium
@@ -70,7 +237,7 @@ class RestaurantDetail extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          restaurant.description ?? '',
+                          widget.restaurant.description ?? '',
                           style:
                               Theme.of(context).textTheme.bodyMedium?.copyWith(
                             color: Colors.white.withOpacity(0.95),
@@ -92,26 +259,76 @@ class RestaurantDetail extends StatelessWidget {
               ),
             ),
           ),
-          // Products Grid
-          SliverPadding(
-            padding: const EdgeInsets.all(16),
-            sliver: SliverGrid(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
-                childAspectRatio: 0.75,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  // Sample product data
-                  final product =
-                      _sampleProducts[index % _sampleProducts.length];
-                  return ProductCard(product: product);
-                },
-                childCount: 10, // Show 10 sample products
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ShadInput(
+                      controller: _searchController,
+                      placeholder: const Text('Search dishes...'),
+                      prefix: const Icon(Icons.search),
+                      onChanged: (value) {
+                        //
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  ShadButton.outline(
+                    icon: const Icon(Icons.tune),
+                    onPressed: _showFilterBottomSheet,
+                  ),
+                ],
               ),
             ),
+          ),
+          // Products Grid
+          Consumer(
+            builder: (context, ref, child) {
+              final restaurantState = ref.watch(
+                  restaurantDetailProvider(restaurantId: widget.restaurant.id));
+
+              return restaurantState.when(
+                loading: () => const SliverToBoxAdapter(
+                  child: Center(child: CircularProgressIndicator()),
+                ),
+                error: (error, stack) => SliverToBoxAdapter(
+                  child: Center(child: Text('Error: $error')),
+                ),
+                data: (state) {
+                  final menuItems = state.menuItems;
+
+                  if (menuItems == null || menuItems.isEmpty) {
+                    return const SliverToBoxAdapter(
+                      child: Center(child: Text('No menu items available')),
+                    );
+                  }
+
+                  return SliverPadding(
+                    padding: const EdgeInsets.all(16),
+                    sliver: SliverGrid(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 16,
+                        crossAxisSpacing: 16,
+                        childAspectRatio: 0.65,
+                      ),
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          final menuItem = menuItems[index];
+                          return ProductCard(
+                            product: menuItem,
+                          );
+                        },
+                        childCount: menuItems.length,
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
           ),
         ],
       ),
@@ -125,7 +342,7 @@ class ProductCard extends StatelessWidget {
     super.key,
   });
 
-  final _SampleProduct product;
+  final MenuItems product;
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +361,7 @@ class ProductCard extends StatelessWidget {
                 borderRadius:
                     const BorderRadius.vertical(top: Radius.circular(16)),
                 image: DecorationImage(
-                  image: NetworkImage(product.imageUrl),
+                  image: NetworkImage(product.photo ?? ''),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -167,23 +384,50 @@ class ProductCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    product.description,
+                    product.description ?? '',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Colors.grey[600],
                         ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const Spacer(),
-                  Text(
-                    '\$${product.price.toStringAsFixed(2)}',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
+                  // const Spacer(),
                 ],
               ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Text(
+                      '\$${product.price}',
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withValues(alpha: 0.5),
+                            decoration: TextDecoration.lineThrough,
+                          ),
+                    ),
+                    Text(
+                      '\$${product.price}',
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                    ),
+                  ],
+                ),
+                ShadButton.outline(
+                  onPressed: () {},
+                  child: const Icon(Icons.add_shopping_cart),
+                ),
+              ],
             ),
           ),
         ],
@@ -208,33 +452,3 @@ class _SampleProduct {
 }
 
 // Sample products data
-final _sampleProducts = [
-  const _SampleProduct(
-    name: 'Classic Burger',
-    description: 'Juicy beef patty with fresh vegetables',
-    price: 12.99,
-    imageUrl:
-        'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60',
-  ),
-  const _SampleProduct(
-    name: 'Margherita Pizza',
-    description: 'Fresh tomatoes, mozzarella, and basil',
-    price: 15.99,
-    imageUrl:
-        'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60',
-  ),
-  const _SampleProduct(
-    name: 'Caesar Salad',
-    description: 'Crispy romaine lettuce with parmesan',
-    price: 9.99,
-    imageUrl:
-        'https://images.unsplash.com/photo-1546793665-c74683f339c1?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60',
-  ),
-  const _SampleProduct(
-    name: 'Pasta Carbonara',
-    description: 'Creamy pasta with bacon and eggs',
-    price: 14.99,
-    imageUrl:
-        'https://images.unsplash.com/photo-1612874742237-6526221588e3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60',
-  ),
-];

@@ -916,10 +916,12 @@ class MenuItems implements SupadartClass<MenuItems> {
     this.arContentUrl,
     this.isSignature,
     this.trendingScore,
+    this.photo,
   });
   factory MenuItems.fromJson(Map<String, dynamic> jsonn) {
     return MenuItems(
       id: jsonn['id'] != null ? jsonn['id'].toString() : '',
+      photo: jsonn['photo'] != null ? jsonn['photo'].toString() : '',
       restaurantId: jsonn['restaurant_id'] != null
           ? jsonn['restaurant_id'].toString()
           : '',
@@ -945,6 +947,7 @@ class MenuItems implements SupadartClass<MenuItems> {
   final String? arContentUrl;
   final bool? isSignature;
   final int? trendingScore;
+  final String? photo;
 
   static String get table_name => 'menu_items';
   static String get c_id => 'id';
@@ -955,7 +958,7 @@ class MenuItems implements SupadartClass<MenuItems> {
   static String get c_arContentUrl => 'ar_content_url';
   static String get c_isSignature => 'is_signature';
   static String get c_trendingScore => 'trending_score';
-
+  static String get c_photo => 'photo';
   static List<MenuItems> converter(List<Map<String, dynamic>> data) {
     return data.map(MenuItems.fromJson).toList();
   }

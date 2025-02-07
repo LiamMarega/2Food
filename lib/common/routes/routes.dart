@@ -54,7 +54,7 @@ class RouterNotifier extends ChangeNotifier {
                 GoRoute(
                   path: 'restaurant/:id',
                   builder: (context, state) {
-                    final restaurant = state.extra as Restaurants;
+                    final restaurant = state.extra! as Restaurants;
                     return RestaurantDetail(restaurant: restaurant);
                   },
                 ),
