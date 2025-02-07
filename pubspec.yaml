@@ -37,7 +37,7 @@ dev_dependencies:
   freezed: ^2.4.7
   riverpod_generator: 2.6.1
   riverpod_lint: ^2.6.1
-  very_good_analysis: ^6.0.0
+  very_good_analysis: ^7.0.0
 
 flutter:
   uses-material-design: true
