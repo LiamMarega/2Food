@@ -12,6 +12,7 @@ part 'home_provider.g.dart';
 class HomeState with _$HomeState {
   const factory HomeState({
     List<Restaurants>? restaurants,
+    List<Map<String, dynamic>>? promotions,
     @Default(false) bool isLoading,
   }) = _HomeState;
 }
@@ -21,23 +22,43 @@ class Home extends _$Home {
   @override
   HomeState build() {
     _fetchRestaurants();
+    _fetchPromotions();
     return const HomeState(isLoading: true);
   }
 
+  SupabaseClient get supabase => Supabase.instance.client;
+
   Future<void> _fetchRestaurants() async {
     try {
-      final data = await Supabase.instance.client
+      final data = await supabase
           .from('restaurants')
           .select()
           .eq('recommended', true)
           .withConverter(Restaurants.converter);
 
-      state = HomeState(
+      state = state.copyWith(
         restaurants: data,
+        isLoading: false,
       );
     } catch (e) {
       log('Error fetching restaurants: $e');
-      state = const HomeState();
+      state = state.copyWith(isLoading: false);
+    }
+  }
+
+  Future<void> _fetchPromotions() async {
+    try {
+      final data = await supabase.from('promotions').select();
+
+      log('Promotions: $data');
+
+      state = state.copyWith(
+        promotions: data,
+        isLoading: false,
+      );
+    } catch (e) {
+      log('Error fetching promotions: $e');
+      state = state.copyWith(isLoading: false);
     }
   }
 }

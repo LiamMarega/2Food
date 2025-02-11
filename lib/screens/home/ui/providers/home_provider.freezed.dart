@@ -17,6 +17,8 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$HomeState {
   List<Restaurants>? get restaurants => throw _privateConstructorUsedError;
+  List<Map<String, dynamic>>? get promotions =>
+      throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
 
   /// Create a copy of HomeState
@@ -31,7 +33,10 @@ abstract class $HomeStateCopyWith<$Res> {
   factory $HomeStateCopyWith(HomeState value, $Res Function(HomeState) then) =
       _$HomeStateCopyWithImpl<$Res, HomeState>;
   @useResult
-  $Res call({List<Restaurants>? restaurants, bool isLoading});
+  $Res call(
+      {List<Restaurants>? restaurants,
+      List<Map<String, dynamic>>? promotions,
+      bool isLoading});
 }
 
 /// @nodoc
@@ -50,6 +55,7 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
   @override
   $Res call({
     Object? restaurants = freezed,
+    Object? promotions = freezed,
     Object? isLoading = null,
   }) {
     return _then(_value.copyWith(
@@ -57,6 +63,10 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
           ? _value.restaurants
           : restaurants // ignore: cast_nullable_to_non_nullable
               as List<Restaurants>?,
+      promotions: freezed == promotions
+          ? _value.promotions
+          : promotions // ignore: cast_nullable_to_non_nullable
+              as List<Map<String, dynamic>>?,
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
@@ -73,7 +83,10 @@ abstract class _$$HomeStateImplCopyWith<$Res>
       __$$HomeStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<Restaurants>? restaurants, bool isLoading});
+  $Res call(
+      {List<Restaurants>? restaurants,
+      List<Map<String, dynamic>>? promotions,
+      bool isLoading});
 }
 
 /// @nodoc
@@ -90,6 +103,7 @@ class __$$HomeStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? restaurants = freezed,
+    Object? promotions = freezed,
     Object? isLoading = null,
   }) {
     return _then(_$HomeStateImpl(
@@ -97,6 +111,10 @@ class __$$HomeStateImplCopyWithImpl<$Res>
           ? _value._restaurants
           : restaurants // ignore: cast_nullable_to_non_nullable
               as List<Restaurants>?,
+      promotions: freezed == promotions
+          ? _value._promotions
+          : promotions // ignore: cast_nullable_to_non_nullable
+              as List<Map<String, dynamic>>?,
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
@@ -109,8 +127,11 @@ class __$$HomeStateImplCopyWithImpl<$Res>
 
 class _$HomeStateImpl implements _HomeState {
   const _$HomeStateImpl(
-      {final List<Restaurants>? restaurants, this.isLoading = false})
-      : _restaurants = restaurants;
+      {final List<Restaurants>? restaurants,
+      final List<Map<String, dynamic>>? promotions,
+      this.isLoading = false})
+      : _restaurants = restaurants,
+        _promotions = promotions;
 
   final List<Restaurants>? _restaurants;
   @override
@@ -122,13 +143,23 @@ class _$HomeStateImpl implements _HomeState {
     return EqualUnmodifiableListView(value);
   }
 
+  final List<Map<String, dynamic>>? _promotions;
+  @override
+  List<Map<String, dynamic>>? get promotions {
+    final value = _promotions;
+    if (value == null) return null;
+    if (_promotions is EqualUnmodifiableListView) return _promotions;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   @JsonKey()
   final bool isLoading;
 
   @override
   String toString() {
-    return 'HomeState(restaurants: $restaurants, isLoading: $isLoading)';
+    return 'HomeState(restaurants: $restaurants, promotions: $promotions, isLoading: $isLoading)';
   }
 
   @override
@@ -138,13 +169,18 @@ class _$HomeStateImpl implements _HomeState {
             other is _$HomeStateImpl &&
             const DeepCollectionEquality()
                 .equals(other._restaurants, _restaurants) &&
+            const DeepCollectionEquality()
+                .equals(other._promotions, _promotions) &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_restaurants), isLoading);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_restaurants),
+      const DeepCollectionEquality().hash(_promotions),
+      isLoading);
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.
@@ -158,10 +194,13 @@ class _$HomeStateImpl implements _HomeState {
 abstract class _HomeState implements HomeState {
   const factory _HomeState(
       {final List<Restaurants>? restaurants,
+      final List<Map<String, dynamic>>? promotions,
       final bool isLoading}) = _$HomeStateImpl;
 
   @override
   List<Restaurants>? get restaurants;
+  @override
+  List<Map<String, dynamic>>? get promotions;
   @override
   bool get isLoading;
 

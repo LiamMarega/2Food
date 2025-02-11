@@ -13,9 +13,20 @@ class HomePage extends StatelessWidget {
     return const Column(
       children: [
         CarouselRecommended(),
-        Expanded(child: SizedBox()),
+        CarouselPromotions(),
       ],
     );
+  }
+}
+
+class CarouselPromotions extends ConsumerWidget {
+  const CarouselPromotions({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final promotions =
+        ref.watch(homeProvider.select((state) => state.promotions));
+    return Text(promotions.toString());
   }
 }
 

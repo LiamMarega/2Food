@@ -32,12 +32,12 @@ class _ProviderLogger extends ProviderObserver {
     Object? newValue,
     ProviderContainer container,
   ) {
-    log('''
-{
-  provider: ${provider.name ?? provider.runtimeType},
-  oldValue: $previousValue,
-  newValue: $newValue
-}''');
+//     log('''
+// {
+//   provider: ${provider.name ?? provider.runtimeType},
+//   oldValue: $previousValue,
+//   newValue: $newValue
+// }''');
   }
 
   @override
