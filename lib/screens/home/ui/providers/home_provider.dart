@@ -12,7 +12,7 @@ part 'home_provider.g.dart';
 class HomeState with _$HomeState {
   const factory HomeState({
     List<Restaurants>? restaurants,
-    List<Map<String, dynamic>>? promotions,
+    List<Promotions>? promotions,
     @Default(false) bool isLoading,
   }) = _HomeState;
 }
@@ -48,7 +48,13 @@ class Home extends _$Home {
 
   Future<void> _fetchPromotions() async {
     try {
-      final data = await supabase.from('promotions').select();
+      final data = await supabase
+          .from('promotions')
+          .select(
+            'id, description, type, start_time, end_time, menu_item_id (id, name, description, price, photo, trending_score)',
+          )
+          .withConverter(
+              (pomotions) => pomotions.map(Promotions.fromJson).toList());
 
       log('Promotions: $data');
 

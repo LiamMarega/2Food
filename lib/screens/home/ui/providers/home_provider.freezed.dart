@@ -17,8 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$HomeState {
   List<Restaurants>? get restaurants => throw _privateConstructorUsedError;
-  List<Map<String, dynamic>>? get promotions =>
-      throw _privateConstructorUsedError;
+  List<Promotions>? get promotions => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
 
   /// Create a copy of HomeState
@@ -35,7 +34,7 @@ abstract class $HomeStateCopyWith<$Res> {
   @useResult
   $Res call(
       {List<Restaurants>? restaurants,
-      List<Map<String, dynamic>>? promotions,
+      List<Promotions>? promotions,
       bool isLoading});
 }
 
@@ -66,7 +65,7 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
       promotions: freezed == promotions
           ? _value.promotions
           : promotions // ignore: cast_nullable_to_non_nullable
-              as List<Map<String, dynamic>>?,
+              as List<Promotions>?,
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
@@ -85,7 +84,7 @@ abstract class _$$HomeStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {List<Restaurants>? restaurants,
-      List<Map<String, dynamic>>? promotions,
+      List<Promotions>? promotions,
       bool isLoading});
 }
 
@@ -114,7 +113,7 @@ class __$$HomeStateImplCopyWithImpl<$Res>
       promotions: freezed == promotions
           ? _value._promotions
           : promotions // ignore: cast_nullable_to_non_nullable
-              as List<Map<String, dynamic>>?,
+              as List<Promotions>?,
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
@@ -128,7 +127,7 @@ class __$$HomeStateImplCopyWithImpl<$Res>
 class _$HomeStateImpl implements _HomeState {
   const _$HomeStateImpl(
       {final List<Restaurants>? restaurants,
-      final List<Map<String, dynamic>>? promotions,
+      final List<Promotions>? promotions,
       this.isLoading = false})
       : _restaurants = restaurants,
         _promotions = promotions;
@@ -143,9 +142,9 @@ class _$HomeStateImpl implements _HomeState {
     return EqualUnmodifiableListView(value);
   }
 
-  final List<Map<String, dynamic>>? _promotions;
+  final List<Promotions>? _promotions;
   @override
-  List<Map<String, dynamic>>? get promotions {
+  List<Promotions>? get promotions {
     final value = _promotions;
     if (value == null) return null;
     if (_promotions is EqualUnmodifiableListView) return _promotions;
@@ -194,13 +193,13 @@ class _$HomeStateImpl implements _HomeState {
 abstract class _HomeState implements HomeState {
   const factory _HomeState(
       {final List<Restaurants>? restaurants,
-      final List<Map<String, dynamic>>? promotions,
+      final List<Promotions>? promotions,
       final bool isLoading}) = _$HomeStateImpl;
 
   @override
   List<Restaurants>? get restaurants;
   @override
-  List<Map<String, dynamic>>? get promotions;
+  List<Promotions>? get promotions;
   @override
   bool get isLoading;
 
