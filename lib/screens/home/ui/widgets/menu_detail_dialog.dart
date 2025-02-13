@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
-import 'package:snapfood/common/models/generated_classes.dart';
+import 'package:snapfood/common/models/menu_item.dart';
 
 class MenuDetailDialog extends StatelessWidget {
   const MenuDetailDialog({
@@ -8,9 +8,9 @@ class MenuDetailDialog extends StatelessWidget {
     super.key,
   });
 
-  final MenuItems menuItem;
+  final MenuItem menuItem;
 
-  static Future<void> show(BuildContext context, MenuItems menuItem) {
+  static Future<void> show(BuildContext context, MenuItem menuItem) {
     return showShadDialog(
       context: context,
       animateIn: [ShimmerEffect(duration: 1000.milliseconds)],

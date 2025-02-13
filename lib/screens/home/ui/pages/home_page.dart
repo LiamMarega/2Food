@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:snapfood/common/models/generated_classes.dart';
+import 'package:snapfood/common/utils/media_query.dart';
 import 'package:snapfood/screens/home/ui/providers/home_provider.dart';
 
 class HomePage extends StatelessWidget {
@@ -25,8 +26,19 @@ class CarouselPromotions extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final promotions =
-        ref.watch(homeProvider.select((state) => state.promotions));
-    return Text(promotions.toString());
+        ref.watch(homeProvider.select((state) => state.promotions)) ?? [];
+
+    return SizedBox(
+      height: mediaHeight(context, 0.2),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: promotions.length,
+        itemBuilder: (context, idx) {
+          final promotion = promotions[idx];
+          // return FoodCard(promotion)
+        },
+      ),
+    );
   }
 }
 

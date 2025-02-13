@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:snapfood/common/models/generated_classes.dart';
+import 'package:snapfood/common/models/menu_item.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'home_provider.freezed.dart';
@@ -12,12 +13,14 @@ part 'home_provider.g.dart';
 class HomeState with _$HomeState {
   const factory HomeState({
     List<Restaurants>? restaurants,
-    List<Promotions>? promotions,
+    List<MenuItem>? promotions,
     @Default(false) bool isLoading,
   }) = _HomeState;
 }
 
-@Riverpod(keepAlive: true)
+@Riverpod(
+  keepAlive: true,
+)
 class Home extends _$Home {
   @override
   HomeState build() {
@@ -49,17 +52,17 @@ class Home extends _$Home {
   Future<void> _fetchPromotions() async {
     try {
       final data = await supabase
-          .from('promotions')
-          .select(
-            'id, description, type, start_time, end_time, menu_item_id (id, name, description, price, photo, trending_score)',
-          )
+          .from('menu_items')
+          .select('*, promotions(*)')
+          .not('promotions', 'is', 'null')
           .withConverter(
-              (pomotions) => pomotions.map(Promotions.fromJson).toList());
+            (promo) => log(promo.toString()),
+          );
 
-      log('Promotions: $data');
+      // log('Promotions: ${data.first.toJson()}');
 
       state = state.copyWith(
-        promotions: data,
+        // promotions: data,
         isLoading: false,
       );
     } catch (e) {

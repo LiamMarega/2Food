@@ -17,7 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$RestaurantDetailState {
   List<Restaurants>? get restaurants => throw _privateConstructorUsedError;
-  List<MenuItems>? get menuItems => throw _privateConstructorUsedError;
+  List<MenuItem>? get menuItems => throw _privateConstructorUsedError;
   String? get restaurantId => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
 
@@ -36,7 +36,7 @@ abstract class $RestaurantDetailStateCopyWith<$Res> {
   @useResult
   $Res call(
       {List<Restaurants>? restaurants,
-      List<MenuItems>? menuItems,
+      List<MenuItem>? menuItems,
       String? restaurantId,
       bool isLoading});
 }
@@ -70,7 +70,7 @@ class _$RestaurantDetailStateCopyWithImpl<$Res,
       menuItems: freezed == menuItems
           ? _value.menuItems
           : menuItems // ignore: cast_nullable_to_non_nullable
-              as List<MenuItems>?,
+              as List<MenuItem>?,
       restaurantId: freezed == restaurantId
           ? _value.restaurantId
           : restaurantId // ignore: cast_nullable_to_non_nullable
@@ -94,7 +94,7 @@ abstract class _$$RestaurantDetailStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {List<Restaurants>? restaurants,
-      List<MenuItems>? menuItems,
+      List<MenuItem>? menuItems,
       String? restaurantId,
       bool isLoading});
 }
@@ -126,7 +126,7 @@ class __$$RestaurantDetailStateImplCopyWithImpl<$Res>
       menuItems: freezed == menuItems
           ? _value._menuItems
           : menuItems // ignore: cast_nullable_to_non_nullable
-              as List<MenuItems>?,
+              as List<MenuItem>?,
       restaurantId: freezed == restaurantId
           ? _value.restaurantId
           : restaurantId // ignore: cast_nullable_to_non_nullable
@@ -144,7 +144,7 @@ class __$$RestaurantDetailStateImplCopyWithImpl<$Res>
 class _$RestaurantDetailStateImpl implements _RestaurantDetailState {
   const _$RestaurantDetailStateImpl(
       {final List<Restaurants>? restaurants,
-      final List<MenuItems>? menuItems,
+      final List<MenuItem>? menuItems,
       this.restaurantId,
       this.isLoading = false})
       : _restaurants = restaurants,
@@ -160,9 +160,9 @@ class _$RestaurantDetailStateImpl implements _RestaurantDetailState {
     return EqualUnmodifiableListView(value);
   }
 
-  final List<MenuItems>? _menuItems;
+  final List<MenuItem>? _menuItems;
   @override
-  List<MenuItems>? get menuItems {
+  List<MenuItem>? get menuItems {
     final value = _menuItems;
     if (value == null) return null;
     if (_menuItems is EqualUnmodifiableListView) return _menuItems;
@@ -217,14 +217,14 @@ class _$RestaurantDetailStateImpl implements _RestaurantDetailState {
 abstract class _RestaurantDetailState implements RestaurantDetailState {
   const factory _RestaurantDetailState(
       {final List<Restaurants>? restaurants,
-      final List<MenuItems>? menuItems,
+      final List<MenuItem>? menuItems,
       final String? restaurantId,
       final bool isLoading}) = _$RestaurantDetailStateImpl;
 
   @override
   List<Restaurants>? get restaurants;
   @override
-  List<MenuItems>? get menuItems;
+  List<MenuItem>? get menuItems;
   @override
   String? get restaurantId;
   @override

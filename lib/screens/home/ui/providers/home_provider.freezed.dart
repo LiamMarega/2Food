@@ -17,7 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$HomeState {
   List<Restaurants>? get restaurants => throw _privateConstructorUsedError;
-  List<Promotions>? get promotions => throw _privateConstructorUsedError;
+  List<MenuItem>? get promotions => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
 
   /// Create a copy of HomeState
@@ -34,7 +34,7 @@ abstract class $HomeStateCopyWith<$Res> {
   @useResult
   $Res call(
       {List<Restaurants>? restaurants,
-      List<Promotions>? promotions,
+      List<MenuItem>? promotions,
       bool isLoading});
 }
 
@@ -65,7 +65,7 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
       promotions: freezed == promotions
           ? _value.promotions
           : promotions // ignore: cast_nullable_to_non_nullable
-              as List<Promotions>?,
+              as List<MenuItem>?,
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
@@ -84,7 +84,7 @@ abstract class _$$HomeStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {List<Restaurants>? restaurants,
-      List<Promotions>? promotions,
+      List<MenuItem>? promotions,
       bool isLoading});
 }
 
@@ -113,7 +113,7 @@ class __$$HomeStateImplCopyWithImpl<$Res>
       promotions: freezed == promotions
           ? _value._promotions
           : promotions // ignore: cast_nullable_to_non_nullable
-              as List<Promotions>?,
+              as List<MenuItem>?,
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
@@ -127,7 +127,7 @@ class __$$HomeStateImplCopyWithImpl<$Res>
 class _$HomeStateImpl implements _HomeState {
   const _$HomeStateImpl(
       {final List<Restaurants>? restaurants,
-      final List<Promotions>? promotions,
+      final List<MenuItem>? promotions,
       this.isLoading = false})
       : _restaurants = restaurants,
         _promotions = promotions;
@@ -142,9 +142,9 @@ class _$HomeStateImpl implements _HomeState {
     return EqualUnmodifiableListView(value);
   }
 
-  final List<Promotions>? _promotions;
+  final List<MenuItem>? _promotions;
   @override
-  List<Promotions>? get promotions {
+  List<MenuItem>? get promotions {
     final value = _promotions;
     if (value == null) return null;
     if (_promotions is EqualUnmodifiableListView) return _promotions;
@@ -193,13 +193,13 @@ class _$HomeStateImpl implements _HomeState {
 abstract class _HomeState implements HomeState {
   const factory _HomeState(
       {final List<Restaurants>? restaurants,
-      final List<Promotions>? promotions,
+      final List<MenuItem>? promotions,
       final bool isLoading}) = _$HomeStateImpl;
 
   @override
   List<Restaurants>? get restaurants;
   @override
-  List<Promotions>? get promotions;
+  List<MenuItem>? get promotions;
   @override
   bool get isLoading;
 

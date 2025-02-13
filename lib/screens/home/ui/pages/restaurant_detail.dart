@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:snapfood/common/models/generated_classes.dart';
+import 'package:snapfood/common/models/menu_item.dart';
 import 'package:snapfood/screens/home/ui/providers/restaurant_detail_provider.dart';
 import 'package:snapfood/screens/home/ui/widgets/menu_detail_dialog.dart';
 
@@ -20,7 +21,7 @@ class RestaurantDetail extends StatefulWidget {
 class _RestaurantDetailState extends State<RestaurantDetail> {
   final TextEditingController _searchController = TextEditingController();
   RangeValues _priceRange = const RangeValues(0, 100);
-  double _rating = 3.0;
+  double _rating = 3;
   final List<String> _selectedIngredients = [];
 
   final List<String> _availableIngredients = [
@@ -46,8 +47,9 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
   void _fetchMenuItems() {
     final container = ProviderScope.containerOf(context);
     container
-        .read(restaurantDetailProvider(restaurantId: widget.restaurant.id)
-            .notifier)
+        .read(
+          restaurantDetailProvider(restaurantId: widget.restaurant.id).notifier,
+        )
         .fetchMenuItems(widget.restaurant.id);
   }
 
@@ -92,7 +94,6 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
             ),
             RangeSlider(
               values: _priceRange,
-              min: 0,
               max: 100,
               divisions: 20,
               labels: RangeLabels(
@@ -112,7 +113,6 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
             ),
             Slider(
               value: _rating,
-              min: 0,
               max: 5,
               divisions: 10,
               label: _rating.toString(),
@@ -146,11 +146,16 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                     });
                   },
                   backgroundColor: isSelected
-                      ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
+                      ? Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withValues(alpha: 0.1)
                       : null,
                   checkmarkColor: Theme.of(context).colorScheme.primary,
-                  selectedColor:
-                      Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                  selectedColor: Theme.of(context)
+                      .colorScheme
+                      .primary
+                      .withValues(alpha: 0.2),
                 );
               }).toList(),
             ),
@@ -204,7 +209,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                         end: Alignment.bottomCenter,
                         colors: [
                           Colors.transparent,
-                          Colors.black.withOpacity(0.8),
+                          Colors.black.withValues(alpha: 0.8),
                         ],
                         stops: const [0.3, 1.0],
                       ),
@@ -229,7 +234,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                             fontWeight: FontWeight.bold,
                             shadows: [
                               Shadow(
-                                color: Colors.black.withOpacity(0.5),
+                                color: Colors.black.withValues(alpha: 0.5),
                                 blurRadius: 10,
                                 offset: const Offset(0, 2),
                               ),
@@ -241,10 +246,10 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                           widget.restaurant.description ?? '',
                           style:
                               Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Colors.white.withOpacity(0.95),
+                            color: Colors.white.withValues(alpha: 0.95),
                             shadows: [
                               Shadow(
-                                color: Colors.black.withOpacity(0.5),
+                                color: Colors.black.withValues(alpha: 0.5),
                                 blurRadius: 8,
                                 offset: const Offset(0, 1),
                               ),
@@ -288,7 +293,8 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
           Consumer(
             builder: (context, ref, child) {
               final restaurantState = ref.watch(
-                  restaurantDetailProvider(restaurantId: widget.restaurant.id));
+                restaurantDetailProvider(restaurantId: widget.restaurant.id),
+              );
 
               return restaurantState.when(
                 loading: () => const SliverToBoxAdapter(
@@ -343,100 +349,112 @@ class ProductCard extends StatelessWidget {
     super.key,
   });
 
-  final MenuItems product;
+  final MenuItem product;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => MenuDetailDialog.show(context, product),
-      child: Card(
-        elevation: 3,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 3,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(16)),
-                  image: DecorationImage(
-                    image: NetworkImage(product.photo ?? ''),
-                    fit: BoxFit.cover,
-                  ),
+      child: FoodCard(product: product),
+    );
+  }
+}
+
+class FoodCard extends StatelessWidget {
+  const FoodCard({
+    required this.product,
+    super.key,
+  });
+
+  final MenuItem product; // Keep it as MenuItem type
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 3,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 3,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(16)),
+                image: DecorationImage(
+                  image: NetworkImage(product.photo ?? ''),
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      product.name,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      product.description ?? '',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.grey[600],
-                          ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    // const Spacer(),
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ),
+          Expanded(
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    children: [
-                      Text(
-                        '\$${product.price}',
-                        style:
-                            Theme.of(context).textTheme.labelMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primary
-                                      .withValues(alpha: 0.5),
-                                  decoration: TextDecoration.lineThrough,
-                                ),
-                      ),
-                      Text(
-                        '\$${product.price}',
-                        style:
-                            Theme.of(context).textTheme.labelMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                      ),
-                    ],
+                  Text(
+                    product.name,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  ShadButton.outline(
-                    onPressed: () {},
-                    child: const Icon(Icons.add_shopping_cart),
+                  const SizedBox(height: 4),
+                  Text(
+                    product.description ?? '',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Colors.grey[600],
+                        ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
+                  // const Spacer(),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Text(
+                      '\$${product.price}',
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withValues(alpha: 0.5),
+                            decoration: TextDecoration.lineThrough,
+                          ),
+                    ),
+                    Text(
+                      '\$${product.price}',
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                    ),
+                  ],
+                ),
+                ShadButton.outline(
+                  onPressed: () {},
+                  child: const Icon(Icons.add_shopping_cart),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:snapfood/common/models/generated_classes.dart';
+import 'package:snapfood/common/models/menu_item.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'restaurant_detail_provider.freezed.dart';
@@ -12,7 +13,7 @@ part 'restaurant_detail_provider.g.dart';
 class RestaurantDetailState with _$RestaurantDetailState {
   const factory RestaurantDetailState({
     List<Restaurants>? restaurants,
-    List<MenuItems>? menuItems,
+    List<MenuItem>? menuItems,
     String? restaurantId,
     @Default(false) bool isLoading,
   }) = _RestaurantDetailState;
@@ -26,7 +27,8 @@ class RestaurantDetail extends _$RestaurantDetail {
   }
 
   Future<RestaurantDetailState> _fetchRestaurantDetails(
-      String restaurantId) async {
+    String restaurantId,
+  ) async {
     final data = await Supabase.instance.client
         .from('restaurants')
         .select()
@@ -46,11 +48,13 @@ class RestaurantDetail extends _$RestaurantDetail {
           .from('menu_items')
           .select()
           .eq('restaurant_id', restaurantId)
-          .withConverter(MenuItems.converter);
+          .withConverter((menu) => MenuItem.fromJson);
 
-      state = AsyncData(state.value!.copyWith(
-        menuItems: menuItems,
-      ));
+      state = AsyncData(
+        state.value!.copyWith(
+            // menuItems: menuItems,
+            ),
+      );
     } catch (e) {
       log('Error fetching menu items: $e');
       state = AsyncError(e, StackTrace.current);

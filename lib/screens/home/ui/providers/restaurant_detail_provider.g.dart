@@ -6,7 +6,7 @@ part of 'restaurant_detail_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$restaurantDetailHash() => r'2e623240706692cfce5baf0bf7f0b41dfb4a9cd6';
+String _$restaurantDetailHash() => r'ef242efd26feaf5f3f6225658262e2a6216454cd';
 
 /// Copied from Dart SDK
 class _SystemHash {
