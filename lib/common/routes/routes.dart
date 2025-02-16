@@ -95,9 +95,6 @@ class ScaffoldWithNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: child,
-      appBar: AppBar(
-        title: const Text('SnapFood'),
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         child: const Icon(Icons.question_mark_sharp),

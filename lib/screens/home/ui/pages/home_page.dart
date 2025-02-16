@@ -4,18 +4,99 @@ import 'package:go_router/go_router.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:snapfood/common/models/generated_classes.dart';
 import 'package:snapfood/common/utils/media_query.dart';
+import 'package:snapfood/screens/home/ui/pages/restaurant_detail.dart';
 import 'package:snapfood/screens/home/ui/providers/home_provider.dart';
+import 'package:snapfood/screens/home/ui/widgets/category_tabs.dart';
+import 'package:snapfood/screens/home/ui/widgets/date_selector.dart';
+import 'package:snapfood/screens/home/ui/widgets/location_header.dart';
+import 'package:snapfood/screens/home/ui/widgets/menu_grid.dart';
+import 'package:snapfood/screens/home/ui/widgets/promo_banner.dart';
+import 'package:snapfood/screens/home/ui/widgets/upcoming_events.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const Column(
-      children: [
-        CarouselRecommended(),
-        CarouselPromotions(),
-      ],
+  Widget build(BuildContext context, WidgetRef ref) {
+    final homeState = ref.watch(homeProvider);
+
+    return Scaffold(
+      backgroundColor:
+          Colors.grey[900], // Using a dark grey color instead of black
+      body: SafeArea(
+        child: Stack(
+          children: [
+            const Column(
+              children: [
+                LocationHeader(),
+                SizedBox(height: 8),
+                DateSelector(),
+              ],
+            ),
+            NotificationListener<ScrollNotification>(
+              onNotification: (notification) {
+                return true;
+              },
+              child: CustomScrollView(
+                physics: const ClampingScrollPhysics(),
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: SizedBox(height: mediaHeight(context, 0.2)),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Container(
+                      padding: const EdgeInsets.only(top: 25),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(50),
+                          topRight: Radius.circular(50),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.1),
+                            blurRadius: 10,
+                            offset: const Offset(0, -5),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const PromoBanner(),
+                          const SizedBox(height: 16),
+                          ColoredBox(
+                            color: Theme.of(context).colorScheme.surface,
+                            child: const CategoryTabs(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  if (homeState.isLoading)
+                    const SliverFillRemaining(
+                      child: Center(child: CircularProgressIndicator()),
+                    )
+                  else ...[
+                    SliverToBoxAdapter(
+                      child: Container(
+                        color: Theme.of(context).colorScheme.surface,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          children: [
+                            MenuGrid(items: homeState.promotions ?? []),
+                            const UpcomingEvents(),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -28,14 +109,18 @@ class CarouselPromotions extends ConsumerWidget {
     final promotions =
         ref.watch(homeProvider.select((state) => state.promotions)) ?? [];
 
+    print('promotions: $promotions');
     return SizedBox(
-      height: mediaHeight(context, 0.2),
+      height: mediaHeight(context, 0.3),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: promotions.length,
         itemBuilder: (context, idx) {
           final promotion = promotions[idx];
-          // return FoodCard(promotion)
+          return FoodCard(
+            key: Key('promotion-${promotion.id}'),
+            product: promotion,
+          );
         },
       ),
     );
@@ -113,7 +198,7 @@ class HeroLayoutCard extends StatelessWidget {
       tag: 'restaurant-${restaurant.id}',
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(50),
           boxShadow: [
             BoxShadow(
               color: ShadTheme.of(context).colorScheme.primary,
@@ -139,7 +224,7 @@ class HeroLayoutCard extends StatelessWidget {
             alignment: FractionalOffset.center,
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(50),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.1),
@@ -159,7 +244,7 @@ class HeroLayoutCard extends StatelessWidget {
                 elevation: 0,
                 color: Theme.of(context).cardColor.withValues(alpha: 0.8),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(50),
                   side: BorderSide(
                     color:
                         Theme.of(context).dividerColor.withValues(alpha: 0.2),
@@ -172,7 +257,7 @@ class HeroLayoutCard extends StatelessWidget {
                     SizedBox(
                       width: double.infinity,
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(50),
                         child: Image.network(
                           restaurant.image,
                           fit: BoxFit.cover,

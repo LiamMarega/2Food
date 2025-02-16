@@ -18,9 +18,7 @@ class HomeState with _$HomeState {
   }) = _HomeState;
 }
 
-@Riverpod(
-  keepAlive: true,
-)
+@Riverpod(keepAlive: true)
 class Home extends _$Home {
   @override
   HomeState build() {
@@ -55,18 +53,20 @@ class Home extends _$Home {
           .from('menu_items')
           .select('*, promotions(*)')
           .not('promotions', 'is', 'null')
-          .withConverter(
-            (promo) => log(promo.toString()),
-          );
+          .withConverter((promo) => (promo as List<dynamic>)
+              .map((p) => MenuItem.fromJson(p as Map<String, dynamic>))
+              .toList(),);
 
-      // log('Promotions: ${data.first.toJson()}');
+      if (data.isNotEmpty) {
+        log('Promotions: ${data.first}');
+      }
 
       state = state.copyWith(
-        // promotions: data,
+        promotions: data,
         isLoading: false,
       );
-    } catch (e) {
-      log('Error fetching promotions: $e');
+    } catch (e, track) {
+      log('Error fetching promotions: $e $track');
       state = state.copyWith(isLoading: false);
     }
   }

@@ -21,7 +21,7 @@ class MenuDetailDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ShadDialog(
-      radius: BorderRadius.circular(20),
+      radius: BorderRadius.circular(50),
       removeBorderRadiusWhenTiny: false,
       constraints: BoxConstraints(
         maxWidth: MediaQuery.of(context).size.width * 0.8,
