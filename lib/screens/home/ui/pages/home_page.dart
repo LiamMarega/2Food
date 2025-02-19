@@ -6,6 +6,7 @@ import 'package:snapfood/common/models/generated_classes.dart';
 import 'package:snapfood/common/utils/media_query.dart';
 import 'package:snapfood/screens/home/ui/pages/restaurant_detail.dart';
 import 'package:snapfood/screens/home/ui/providers/home_provider.dart';
+import 'package:snapfood/screens/payments/ui/providers/payment_provider.dart';
 import 'package:snapfood/screens/home/ui/widgets/category_tabs.dart';
 import 'package:snapfood/screens/home/ui/widgets/date_selector.dart';
 import 'package:snapfood/screens/home/ui/widgets/location_header.dart';
@@ -63,6 +64,24 @@ class HomePage extends ConsumerWidget {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
+                          Consumer(
+                            builder: (context, ref, _) {
+                              return ShadButton.outline(
+                                onPressed: () async {
+                                  final preference = await ref
+                                      .read(paymentProvider)
+                                      .createPreference(
+                                        title: 'Test',
+                                        quantity: 1,
+                                        price: 100,
+                                      );
+                                  context.go(
+                                      '/payment?url=${preference.sandboxInitPoint}');
+                                },
+                                child: const Text('Test'),
+                              );
+                            },
+                          ),
                           const PromoBanner(),
                           const SizedBox(height: 16),
                           ColoredBox(

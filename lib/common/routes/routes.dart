@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:snapfood/common/models/generated_classes.dart';
+import 'package:snapfood/screens/payments/ui/page/payment_status/approved_screen.dart';
+import 'package:snapfood/screens/payments/ui/page/payment_screen.dart';
+import 'package:snapfood/screens/payments/ui/page/payment_status/pending_screen.dart';
+import 'package:snapfood/screens/payments/ui/page/payment_status/rejected_screen.dart';
 import 'package:snapfood/screens/auth/pages/login_page.dart';
 import 'package:snapfood/screens/auth/providers/auth_provider.dart';
 import 'package:snapfood/screens/home/ui/pages/home_page.dart';
@@ -57,6 +61,26 @@ class RouterNotifier extends ChangeNotifier {
                     final restaurant = state.extra! as Restaurants;
                     return RestaurantDetail(restaurant: restaurant);
                   },
+                ),
+                GoRoute(
+                  path: 'payment',
+                  builder: (context, state) => PaymentScreen(
+                    url: state.uri.queryParameters['url'],
+                  ),
+                  routes: [
+                    GoRoute(
+                      path: 'approved',
+                      builder: (context, state) => const ApprovedScreen(),
+                    ),
+                    GoRoute(
+                      path: 'pending',
+                      builder: (context, state) => const PendingScreen(),
+                    ),
+                    GoRoute(
+                      path: 'rejected',
+                      builder: (context, state) => const RejectedScreen(),
+                    ),
+                  ],
                 ),
               ],
             ),
