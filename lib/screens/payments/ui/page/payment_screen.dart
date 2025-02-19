@@ -28,12 +28,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
         Uri.parse(widget.url!),
         prefersDeepLink: true,
         customTabsOptions: CustomTabsOptions(
+          instantAppsEnabled: true,
           colorSchemes: CustomTabsColorSchemes.defaults(
             toolbarColor: Theme.of(context).colorScheme.surface,
           ),
-          shareState: CustomTabsShareState.on,
-          urlBarHidingEnabled: true,
-          showTitle: true,
+          shareState: CustomTabsShareState.off,
+          urlBarHidingEnabled: false,
+          showTitle: false,
           closeButton: CustomTabsCloseButton(
             icon: CustomTabsCloseButtonIcons.back,
           ),
@@ -42,6 +43,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
             startExit: 'android:anim/fade_out',
             endEnter: 'android:anim/fade_in',
             endExit: 'slide_down',
+          ),
+          browser: const CustomTabsBrowserConfiguration(
+            prefersDefaultBrowser: true,
+            fallbackCustomTabs: ["com.android.chrome"],
           ),
         ),
       );

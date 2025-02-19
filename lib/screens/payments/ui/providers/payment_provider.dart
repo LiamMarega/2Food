@@ -23,8 +23,6 @@ class PaymentService {
           'currency_id': 'ARS',
         },
       );
-      print('Creating preference 2');
-      print('Preference created $response');
 
       final preference = MercadoPagoPreference.fromJson(
         response.data as Map<String, dynamic>,
