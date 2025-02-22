@@ -7,7 +7,6 @@ import 'package:snapfood/common/utils/media_query.dart';
 import 'package:snapfood/screens/home/ui/pages/restaurant_detail.dart';
 import 'package:snapfood/screens/home/ui/providers/home_provider.dart';
 import 'package:snapfood/screens/payments/ui/providers/payment_provider.dart';
-import 'package:snapfood/screens/home/ui/widgets/category_tabs.dart';
 import 'package:snapfood/screens/home/ui/widgets/date_selector.dart';
 import 'package:snapfood/screens/home/ui/widgets/location_header.dart';
 import 'package:snapfood/screens/home/ui/widgets/menu_grid.dart';
@@ -66,28 +65,48 @@ class HomePage extends ConsumerWidget {
                         children: [
                           Consumer(
                             builder: (context, ref, _) {
-                              return ShadButton.outline(
-                                onPressed: () async {
-                                  final preference = await ref
-                                      .read(paymentProvider)
-                                      .createPreference(
-                                        title: 'Test',
-                                        quantity: 1,
-                                        price: 100,
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ShadButton.outline(
+                                    onPressed: () async {
+                                      final preference = await ref
+                                          .read(paymentProvider)
+                                          .createPreference(
+                                            title: 'Compra de prueba',
+                                            quantity: 1,
+                                            price: 100,
+                                          );
+                                      context.go(
+                                          '/payment?url=${preference.initPoint}');
+                                    },
+                                    child: const Text('Test'),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  ShadButton.outline(
+                                    onPressed: () async {
+                                      // const clientId =
+                                      //     '3304198023139623'; // Replace with your client ID
+                                      // const redirectUri =
+                                      //     'https://www.liammarega.com/'; // Replace with your redirect URI
+                                      const authUrl =
+                                          'https://auth.mercadopago.com.ar/authorization?client_id=6258040925132648&response_type=code&platform_id=mp&redirect_uri=https://www.liammarega.com/';
+                                      context.go(
+                                        '/mercadopago/auth-webview?url=$authUrl',
                                       );
-                                  context.go(
-                                      '/payment?url=${preference.sandboxInitPoint}');
-                                },
-                                child: const Text('Test'),
+                                    },
+                                    child: const Text('Auth'),
+                                  ),
+                                ],
                               );
                             },
                           ),
                           const PromoBanner(),
                           const SizedBox(height: 16),
-                          ColoredBox(
-                            color: Theme.of(context).colorScheme.surface,
-                            child: const CategoryTabs(),
-                          ),
+                          // ColoredBox(
+                          //   color: Theme.of(context).colorScheme.surface,
+                          //   child: const CategoryTabs(),
+                          // ),
                         ],
                       ),
                     ),

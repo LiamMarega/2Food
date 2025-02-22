@@ -33,6 +33,7 @@ dependencies:
   url_launcher: ^6.2.5
   dio: ^5.8.0+1
   flutter_custom_tabs: ^2.1.0
+  webview_flutter: ^4.10.0
 
 dev_dependencies:
   build_runner: ^2.4.14

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:snapfood/common/models/generated_classes.dart';
+import 'package:snapfood/screens/payments/ui/page/auth_webview_screen.dart';
 import 'package:snapfood/screens/payments/ui/page/payment_status/approved_screen.dart';
 import 'package:snapfood/screens/payments/ui/page/payment_screen.dart';
 import 'package:snapfood/screens/payments/ui/page/payment_status/pending_screen.dart';
@@ -63,6 +64,13 @@ class RouterNotifier extends ChangeNotifier {
                   },
                 ),
                 GoRoute(
+                  path: 'mercadopago/auth-webview',
+                  builder: (context, state) {
+                    final url = state.uri.queryParameters['url'];
+                    return AuthWebViewScreen(url: url);
+                  },
+                ),
+                GoRoute(
                   path: 'payment',
                   builder: (context, state) => PaymentScreen(
                     url: state.uri.queryParameters['url'],
@@ -70,15 +78,48 @@ class RouterNotifier extends ChangeNotifier {
                   routes: [
                     GoRoute(
                       path: 'approved',
-                      builder: (context, state) => const ApprovedScreen(),
+                      builder: (context, state) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          Navigator.of(context)
+                              .popUntil((route) => route.isFirst);
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                                builder: (context) => const ApprovedScreen()),
+                          );
+                        });
+                        return const SizedBox
+                            .shrink(); // Return an empty widget as this will be replaced
+                      },
                     ),
                     GoRoute(
                       path: 'pending',
-                      builder: (context, state) => const PendingScreen(),
+                      builder: (context, state) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          Navigator.of(context)
+                              .popUntil((route) => route.isFirst);
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                                builder: (context) => const PendingScreen()),
+                          );
+                        });
+                        return const SizedBox
+                            .shrink(); // Return an empty widget as this will be replaced
+                      },
                     ),
                     GoRoute(
                       path: 'rejected',
-                      builder: (context, state) => const RejectedScreen(),
+                      builder: (context, state) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          Navigator.of(context)
+                              .popUntil((route) => route.isFirst);
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                                builder: (context) => const RejectedScreen()),
+                          );
+                        });
+                        return const SizedBox
+                            .shrink(); // Return an empty widget as this will be replaced
+                      },
                     ),
                   ],
                 ),
