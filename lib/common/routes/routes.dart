@@ -2,16 +2,10 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:snapfood/common/models/generated_classes.dart';
-import 'package:snapfood/screens/payments/ui/page/auth_webview_screen.dart';
-import 'package:snapfood/screens/payments/ui/page/payment_status/approved_screen.dart';
-import 'package:snapfood/screens/payments/ui/page/payment_screen.dart';
-import 'package:snapfood/screens/payments/ui/page/payment_status/pending_screen.dart';
-import 'package:snapfood/screens/payments/ui/page/payment_status/rejected_screen.dart';
-import 'package:snapfood/screens/auth/pages/login_page.dart';
 import 'package:snapfood/screens/auth/providers/auth_provider.dart';
-import 'package:snapfood/screens/home/ui/pages/home_page.dart';
-import 'package:snapfood/screens/home/ui/pages/restaurant_detail.dart';
+import 'package:snapfood/screens/auth/routes/auth_routes.dart';
+import 'package:snapfood/screens/home/routes/home_routes.dart';
+import 'package:snapfood/screens/payments/routes/payment_routes.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final router = RouterNotifier(ref);
@@ -43,88 +37,14 @@ class RouterNotifier extends ChangeNotifier {
   }
 
   List<RouteBase> get _routes => [
-        GoRoute(
-          path: '/login',
-          builder: (context, state) => const LoginPage(),
-        ),
+        ...authRoutes,
         ShellRoute(
           builder: (context, state, child) {
             return ScaffoldWithNavBar(child: child);
           },
           routes: [
-            GoRoute(
-              path: '/',
-              builder: (context, state) => const HomePage(),
-              routes: [
-                GoRoute(
-                  path: 'restaurant/:id',
-                  builder: (context, state) {
-                    final restaurant = state.extra! as Restaurants;
-                    return RestaurantDetail(restaurant: restaurant);
-                  },
-                ),
-                GoRoute(
-                  path: 'mercadopago/auth-webview',
-                  builder: (context, state) {
-                    final url = state.uri.queryParameters['url'];
-                    return AuthWebViewScreen(url: url);
-                  },
-                ),
-                GoRoute(
-                  path: 'payment',
-                  builder: (context, state) => PaymentScreen(
-                    url: state.uri.queryParameters['url'],
-                  ),
-                  routes: [
-                    GoRoute(
-                      path: 'approved',
-                      builder: (context, state) {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          Navigator.of(context)
-                              .popUntil((route) => route.isFirst);
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                                builder: (context) => const ApprovedScreen()),
-                          );
-                        });
-                        return const SizedBox
-                            .shrink(); // Return an empty widget as this will be replaced
-                      },
-                    ),
-                    GoRoute(
-                      path: 'pending',
-                      builder: (context, state) {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          Navigator.of(context)
-                              .popUntil((route) => route.isFirst);
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                                builder: (context) => const PendingScreen()),
-                          );
-                        });
-                        return const SizedBox
-                            .shrink(); // Return an empty widget as this will be replaced
-                      },
-                    ),
-                    GoRoute(
-                      path: 'rejected',
-                      builder: (context, state) {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          Navigator.of(context)
-                              .popUntil((route) => route.isFirst);
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                                builder: (context) => const RejectedScreen()),
-                          );
-                        });
-                        return const SizedBox
-                            .shrink(); // Return an empty widget as this will be replaced
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
+            ...homeRoutes,
+            ...paymentRoutes,
             GoRoute(
               path: '/search',
               builder: (context, state) => const Center(

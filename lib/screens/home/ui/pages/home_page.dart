@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -6,9 +9,7 @@ import 'package:snapfood/common/models/generated_classes.dart';
 import 'package:snapfood/common/utils/media_query.dart';
 import 'package:snapfood/screens/home/ui/pages/restaurant_detail.dart';
 import 'package:snapfood/screens/home/ui/providers/home_provider.dart';
-import 'package:snapfood/screens/payments/ui/providers/payment_provider.dart';
-import 'package:snapfood/screens/home/ui/widgets/date_selector.dart';
-import 'package:snapfood/screens/home/ui/widgets/location_header.dart';
+import 'package:snapfood/screens/home/ui/widgets/category_tabs.dart';
 import 'package:snapfood/screens/home/ui/widgets/menu_grid.dart';
 import 'package:snapfood/screens/home/ui/widgets/promo_banner.dart';
 import 'package:snapfood/screens/home/ui/widgets/upcoming_events.dart';
@@ -24,115 +25,184 @@ class HomePage extends ConsumerWidget {
       backgroundColor:
           Colors.grey[900], // Using a dark grey color instead of black
       body: SafeArea(
-        child: Stack(
-          children: [
-            const Column(
-              children: [
-                LocationHeader(),
-                SizedBox(height: 8),
-                DateSelector(),
-              ],
-            ),
-            NotificationListener<ScrollNotification>(
-              onNotification: (notification) {
-                return true;
-              },
-              child: CustomScrollView(
-                physics: const ClampingScrollPhysics(),
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: SizedBox(height: mediaHeight(context, 0.2)),
-                  ),
-                  SliverToBoxAdapter(
-                    child: Container(
-                      padding: const EdgeInsets.only(top: 25),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surface,
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(50),
-                          topRight: Radius.circular(50),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.1),
-                            blurRadius: 10,
-                            offset: const Offset(0, -5),
+        child: NotificationListener<ScrollNotification>(
+          onNotification: (notification) {
+            return true;
+          },
+          child: CustomScrollView(
+            physics: const ClampingScrollPhysics(),
+            slivers: [
+              const SliverPadding(padding: EdgeInsets.all(20)),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  child: Autocomplete<String>(
+                    optionsBuilder: (TextEditingValue textEditingValue) {
+                      if (textEditingValue.text == '') {
+                        return const <String>[];
+                      }
+                      // Combined list of food and restaurants in Spanish
+                      final searchOptions = [
+                        // Foods
+                        'Pizza',
+                        'Hamburguesa',
+                        'Pasta',
+                        'Sushi',
+                        'Tacos',
+                        'Ensalada',
+                        'Bistec',
+                        'Mariscos',
+                        'Vegetariano',
+                        'Postre',
+                        // Restaurants
+                        'La Parrilla',
+                        'El Rincón Mexicano',
+                        'Sabor Italiano',
+                        'Sushi Express',
+                        'Burger King',
+                        'La Casa de las Enchiladas',
+                        'El Asador',
+                        'Mariscos del Puerto',
+                        'Vegetariano Saludable',
+                        'Dulce Tentación',
+                      ];
+                      return searchOptions.where((option) {
+                        return option.toLowerCase().contains(
+                              textEditingValue.text.toLowerCase(),
+                            );
+                      });
+                    },
+                    fieldViewBuilder: (
+                      context,
+                      textEditingController,
+                      focusNode,
+                      onFieldSubmitted,
+                    ) {
+                      return ShadInput(
+                        controller: textEditingController,
+                        focusNode: focusNode,
+                        placeholder: const Text(
+                          'Search for food or restaurants...',
+                          style: TextStyle(
+                            color: Colors.white,
                           ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Consumer(
-                            builder: (context, ref, _) {
-                              return Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  ShadButton.outline(
-                                    onPressed: () async {
-                                      final preference = await ref
-                                          .read(paymentProvider)
-                                          .createPreference(
-                                            title: 'Compra de prueba',
-                                            quantity: 1,
-                                            price: 100,
-                                          );
-                                      context.go(
-                                          '/payment?url=${preference.initPoint}');
-                                    },
-                                    child: const Text('Test'),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  ShadButton.outline(
-                                    onPressed: () async {
-                                      // const clientId =
-                                      //     '3304198023139623'; // Replace with your client ID
-                                      // const redirectUri =
-                                      //     'https://www.liammarega.com/'; // Replace with your redirect URI
-                                      const authUrl =
-                                          'https://auth.mercadopago.com.ar/authorization?client_id=6258040925132648&response_type=code&platform_id=mp&redirect_uri=https://www.liammarega.com/';
-                                      context.go(
-                                        '/mercadopago/auth-webview?url=$authUrl',
-                                      );
-                                    },
-                                    child: const Text('Auth'),
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                          const PromoBanner(),
-                          const SizedBox(height: 16),
-                          // ColoredBox(
-                          //   color: Theme.of(context).colorScheme.surface,
-                          //   child: const CategoryTabs(),
-                          // ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  if (homeState.isLoading)
-                    const SliverFillRemaining(
-                      child: Center(child: CircularProgressIndicator()),
-                    )
-                  else ...[
-                    SliverToBoxAdapter(
-                      child: Container(
-                        color: Theme.of(context).colorScheme.surface,
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Column(
-                          children: [
-                            MenuGrid(items: homeState.promotions ?? []),
-                            const UpcomingEvents(),
-                          ],
                         ),
-                      ),
-                    ),
-                  ],
-                ],
+                        prefix: const Icon(Icons.search),
+                        onChanged: (value) {},
+                      );
+                    },
+                    optionsViewBuilder: (context, onSelected, options) {
+                      return Align(
+                        alignment: Alignment.topLeft,
+                        child: Material(
+                          elevation: 4,
+                          color: Theme.of(context).colorScheme.surface,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: SizedBox(
+                            height: min(options.length * 48, 200),
+                            width: MediaQuery.of(context).size.width - 40,
+                            child: ListView.builder(
+                              padding: EdgeInsets.zero,
+                              itemCount: options.length,
+                              itemBuilder: (context, index) {
+                                final option = options.elementAt(index);
+                                // Determine if this is a food or restaurant (simplified approach)
+                                final isRestaurant = [
+                                  'La Parrilla',
+                                  'El Rincón Mexicano',
+                                  'Sabor Italiano',
+                                  'Sushi Express',
+                                  'Burger King',
+                                  'La Casa de las Enchiladas',
+                                  'El Asador',
+                                  'Mariscos del Puerto',
+                                  'Vegetariano Saludable',
+                                  'Dulce Tentación',
+                                ].contains(option);
+
+                                return ListTile(
+                                  leading: Icon(
+                                    isRestaurant
+                                        ? Icons.restaurant
+                                        : Icons.fastfood,
+                                    color: Theme.of(context).hintColor,
+                                  ),
+                                  title: Text(option),
+                                  subtitle: Text(
+                                    isRestaurant ? 'Restaurant' : 'Food',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Theme.of(context).hintColor,
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    onSelected(option);
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ),
-            ),
-          ],
+              // Space after search bar
+              SliverToBoxAdapter(
+                child: SizedBox(height: mediaHeight(context, 0.05)),
+              ),
+              // Main content container
+              SliverToBoxAdapter(
+                child: Container(
+                  padding: const EdgeInsets.only(top: 25),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(50),
+                      topRight: Radius.circular(50),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.1),
+                        blurRadius: 10,
+                        offset: const Offset(0, -5),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const PromoBanner(),
+                      const SizedBox(height: 16),
+                      ColoredBox(
+                        color: Theme.of(context).colorScheme.surface,
+                        child: const CategoryTabs(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              // Content based on loading state
+              SliverToBoxAdapter(
+                child: ColoredBox(
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Column(
+                      children: [
+                        MenuGrid(items: homeState.promotions ?? []),
+                        const UpcomingEvents(),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
