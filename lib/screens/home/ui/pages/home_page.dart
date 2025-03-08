@@ -13,195 +13,245 @@ import 'package:snapfood/screens/home/ui/widgets/menu_grid.dart';
 import 'package:snapfood/screens/home/ui/widgets/promo_banner.dart';
 import 'package:snapfood/screens/home/ui/widgets/upcoming_events.dart';
 
-class HomePage extends ConsumerWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends ConsumerState<HomePage> {
+  final ScrollController _scrollController = ScrollController();
+  double _scrollOffset = 0.0;
+  final double _searchBarHeight =
+      80.0; // Altura aproximada de la barra de búsqueda
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    setState(() {
+      _scrollOffset = _scrollController.offset;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final homeState = ref.watch(homeProvider);
+    final parallaxFactor =
+        0.5; // Ajusta este valor para controlar la intensidad del parallax
+
+    // Calcula la posición de la barra de búsqueda basada en el scroll
+    // Cuando el scroll es 0, la barra está en su posición original (0)
+    // Cuando el scroll aumenta, la barra se mueve hacia arriba (valor negativo)
+    final searchBarOffset = -min(_scrollOffset, _searchBarHeight);
 
     return Scaffold(
       backgroundColor:
-          Colors.grey[900], // Using a dark grey color instead of black
+          Colors.grey[900], // Usando un color gris oscuro en lugar de negro
       body: SafeArea(
-        child: NotificationListener<ScrollNotification>(
-          onNotification: (notification) {
-            return true;
-          },
-          child: CustomScrollView(
-            physics: const ClampingScrollPhysics(),
-            slivers: [
-              const SliverPadding(padding: EdgeInsets.all(20)),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                  child: Autocomplete<String>(
-                    optionsBuilder: (TextEditingValue textEditingValue) {
-                      if (textEditingValue.text == '') {
-                        return const <String>[];
-                      }
-                      // Combined list of food and restaurants in Spanish
-                      final searchOptions = [
-                        // Foods
-                        'Pizza',
-                        'Hamburguesa',
-                        'Pasta',
-                        'Sushi',
-                        'Tacos',
-                        'Ensalada',
-                        'Bistec',
-                        'Mariscos',
-                        'Vegetariano',
-                        'Postre',
-                        // Restaurants
-                        'La Parrilla',
-                        'El Rincón Mexicano',
-                        'Sabor Italiano',
-                        'Sushi Express',
-                        'Burger King',
-                        'La Casa de las Enchiladas',
-                        'El Asador',
-                        'Mariscos del Puerto',
-                        'Vegetariano Saludable',
-                        'Dulce Tentación',
-                      ];
-                      return searchOptions.where((option) {
-                        return option.toLowerCase().contains(
-                              textEditingValue.text.toLowerCase(),
-                            );
-                      });
-                    },
-                    fieldViewBuilder: (
-                      context,
-                      textEditingController,
-                      focusNode,
-                      onFieldSubmitted,
-                    ) {
-                      return ShadInput(
-                        controller: textEditingController,
-                        focusNode: focusNode,
-                        placeholder: const Text(
-                          'Search for food or restaurants...',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
+        child: Stack(
+          children: [
+            // Contenido desplazable con efecto parallax
+            CustomScrollView(
+              controller: _scrollController,
+              physics: const ClampingScrollPhysics(),
+              slivers: [
+                // Espacio para permitir que el contenido comience debajo de la barra de búsqueda
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                      height: _searchBarHeight +
+                          20), // Altura de la barra + espacio adicional
+                ),
+                // Contenedor principal con todo el contenido
+                SliverToBoxAdapter(
+                  child: Transform.translate(
+                    offset: Offset(0, _scrollOffset * parallaxFactor),
+                    child: Container(
+                      padding: const EdgeInsets.only(top: 25),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(50),
+                          topRight: Radius.circular(50),
                         ),
-                        prefix: const Icon(Icons.search),
-                        onChanged: (value) {},
-                      );
-                    },
-                    optionsViewBuilder: (context, onSelected, options) {
-                      return Align(
-                        alignment: Alignment.topLeft,
-                        child: Material(
-                          elevation: 4,
-                          color: Theme.of(context).colorScheme.surface,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.1),
+                            blurRadius: 10,
+                            offset: const Offset(0, -5),
                           ),
-                          child: SizedBox(
-                            height: min(options.length * 48, 200),
-                            width: MediaQuery.of(context).size.width - 40,
-                            child: ListView.builder(
-                              padding: EdgeInsets.zero,
-                              itemCount: options.length,
-                              itemBuilder: (context, index) {
-                                final option = options.elementAt(index);
-                                // Determine if this is a food or restaurant (simplified approach)
-                                final isRestaurant = [
-                                  'La Parrilla',
-                                  'El Rincón Mexicano',
-                                  'Sabor Italiano',
-                                  'Sushi Express',
-                                  'Burger King',
-                                  'La Casa de las Enchiladas',
-                                  'El Asador',
-                                  'Mariscos del Puerto',
-                                  'Vegetariano Saludable',
-                                  'Dulce Tentación',
-                                ].contains(option);
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Promo Banner
+                          const PromoBanner(),
+                          const SizedBox(height: 16),
 
-                                return ListTile(
-                                  leading: Icon(
-                                    isRestaurant
-                                        ? Icons.restaurant
-                                        : Icons.fastfood,
+                          // Category Tabs
+                          ColoredBox(
+                            color: Theme.of(context).colorScheme.surface,
+                            child: const CategoryTabs(),
+                          ),
+
+                          // Menu Carousel (no scrollable verticalmente)
+                          Padding(
+                            padding: const EdgeInsets.all(8),
+                            child:
+                                MenuCarousel(items: homeState.promotions ?? []),
+                          ),
+
+                          // Upcoming Events
+                          const Padding(
+                            padding: EdgeInsets.all(8),
+                            child: UpcomingEvents(),
+                          ),
+
+                          // Espacio adicional al final para asegurar que todo sea visible
+                          SizedBox(height: mediaHeight(context, 0.1)),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            // Barra de búsqueda que se oculta al hacer scroll
+            Positioned(
+              top: searchBarOffset, // Se mueve hacia arriba con el scroll
+              left: 0,
+              right: 0,
+              child: Container(
+                color: Colors.grey[900],
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                child: Autocomplete<String>(
+                  optionsBuilder: (TextEditingValue textEditingValue) {
+                    if (textEditingValue.text == '') {
+                      return const <String>[];
+                    }
+                    // Lista combinada de comidas y restaurantes en español
+                    final searchOptions = [
+                      // Foods
+                      'Pizza',
+                      'Hamburguesa',
+                      'Pasta',
+                      'Sushi',
+                      'Tacos',
+                      'Ensalada',
+                      'Bistec',
+                      'Mariscos',
+                      'Vegetariano',
+                      'Postre',
+                      // Restaurants
+                      'La Parrilla',
+                      'El Rincón Mexicano',
+                      'Sabor Italiano',
+                      'Sushi Express',
+                      'Burger King',
+                      'La Casa de las Enchiladas',
+                      'El Asador',
+                      'Mariscos del Puerto',
+                      'Vegetariano Saludable',
+                      'Dulce Tentación',
+                    ];
+                    return searchOptions.where((option) {
+                      return option.toLowerCase().contains(
+                            textEditingValue.text.toLowerCase(),
+                          );
+                    });
+                  },
+                  fieldViewBuilder: (
+                    context,
+                    textEditingController,
+                    focusNode,
+                    onFieldSubmitted,
+                  ) {
+                    return ShadInput(
+                      controller: textEditingController,
+                      focusNode: focusNode,
+                      placeholder: const Text(
+                        'Search for food or restaurants...',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      prefix: const Icon(Icons.search),
+                      onChanged: (value) {},
+                    );
+                  },
+                  optionsViewBuilder: (context, onSelected, options) {
+                    return Align(
+                      alignment: Alignment.topLeft,
+                      child: Material(
+                        elevation: 4,
+                        color: Theme.of(context).colorScheme.surface,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: SizedBox(
+                          height: min(options.length * 48, 200),
+                          width: MediaQuery.of(context).size.width - 40,
+                          child: ListView.builder(
+                            padding: EdgeInsets.zero,
+                            itemCount: options.length,
+                            itemBuilder: (context, index) {
+                              final option = options.elementAt(index);
+                              // Determine if this is a food or restaurant (simplified approach)
+                              final isRestaurant = [
+                                'La Parrilla',
+                                'El Rincón Mexicano',
+                                'Sabor Italiano',
+                                'Sushi Express',
+                                'Burger King',
+                                'La Casa de las Enchiladas',
+                                'El Asador',
+                                'Mariscos del Puerto',
+                                'Vegetariano Saludable',
+                                'Dulce Tentación',
+                              ].contains(option);
+
+                              return ListTile(
+                                leading: Icon(
+                                  isRestaurant
+                                      ? Icons.restaurant
+                                      : Icons.fastfood,
+                                  color: Theme.of(context).hintColor,
+                                ),
+                                title: Text(option),
+                                subtitle: Text(
+                                  isRestaurant ? 'Restaurant' : 'Food',
+                                  style: TextStyle(
+                                    fontSize: 12,
                                     color: Theme.of(context).hintColor,
                                   ),
-                                  title: Text(option),
-                                  subtitle: Text(
-                                    isRestaurant ? 'Restaurant' : 'Food',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Theme.of(context).hintColor,
-                                    ),
-                                  ),
-                                  onTap: () {
-                                    onSelected(option);
-                                  },
-                                );
-                              },
-                            ),
+                                ),
+                                onTap: () {
+                                  onSelected(option);
+                                },
+                              );
+                            },
                           ),
                         ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-              // Space after search bar
-              SliverToBoxAdapter(
-                child: SizedBox(height: mediaHeight(context, 0.05)),
-              ),
-              // Main content container
-              SliverToBoxAdapter(
-                child: Container(
-                  padding: const EdgeInsets.only(top: 25),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(50),
-                      topRight: Radius.circular(50),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.1),
-                        blurRadius: 10,
-                        offset: const Offset(0, -5),
                       ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const PromoBanner(),
-                      const SizedBox(height: 16),
-                      ColoredBox(
-                        color: Theme.of(context).colorScheme.surface,
-                        child: const CategoryTabs(),
-                      ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
               ),
-              // Content based on loading state
-              SliverToBoxAdapter(
-                child: ColoredBox(
-                  color: Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Column(
-                      children: [
-                        MenuCarousel(items: homeState.promotions ?? []),
-                        const UpcomingEvents(),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
