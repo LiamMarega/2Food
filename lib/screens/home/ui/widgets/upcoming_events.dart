@@ -138,7 +138,6 @@ class EventCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               side: BorderSide(
                 color: colorScheme.primary.withOpacity(0.1),
-                width: 1,
               ),
             ),
             clipBehavior: Clip.antiAlias,

@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -194,7 +193,7 @@ class HomePage extends ConsumerWidget {
                     padding: const EdgeInsets.all(8),
                     child: Column(
                       children: [
-                        MenuGrid(items: homeState.promotions ?? []),
+                        MenuCarousel(items: homeState.promotions ?? []),
                         const UpcomingEvents(),
                       ],
                     ),
@@ -217,7 +216,6 @@ class CarouselPromotions extends ConsumerWidget {
     final promotions =
         ref.watch(homeProvider.select((state) => state.promotions)) ?? [];
 
-    print('promotions: $promotions');
     return SizedBox(
       height: mediaHeight(context, 0.3),
       child: ListView.builder(

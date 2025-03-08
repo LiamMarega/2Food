@@ -6,6 +6,7 @@ import 'package:snapfood/screens/auth/providers/auth_provider.dart';
 import 'package:snapfood/screens/auth/routes/auth_routes.dart';
 import 'package:snapfood/screens/home/routes/home_routes.dart';
 import 'package:snapfood/screens/payments/routes/payment_routes.dart';
+import 'package:snapfood/screens/payments/ui/page/payment_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final router = RouterNotifier(ref);
@@ -38,6 +39,15 @@ class RouterNotifier extends ChangeNotifier {
 
   List<RouteBase> get _routes => [
         ...authRoutes,
+        // Add a separate route for the payment screen
+        GoRoute(
+          path: '/payment-process',
+          name: 'payment',
+          builder: (context, state) {
+            final url = state.extra as String;
+            return PaymentScreen(url: url);
+          },
+        ),
         ShellRoute(
           builder: (context, state, child) {
             return ScaffoldWithNavBar(child: child);

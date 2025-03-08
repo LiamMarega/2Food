@@ -1,11 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:go_router/go_router.dart';
+import 'package:snapfood/common/widgets/global_alert.dart';
 
 class PaymentScreen extends StatefulWidget {
-  static const String routeName = 'payment';
-  final String? url;
-  const PaymentScreen({super.key, this.url});
+  static const String routeName = '/payment-process';
+  final String url;
+
+  const PaymentScreen({super.key, required this.url});
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
@@ -15,17 +19,21 @@ class _PaymentScreenState extends State<PaymentScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    log("PaymentScreen initState called");
+    log("URL: ${widget.url}");
+
+    // Use a small delay to ensure the widget is fully built
+    Future.microtask(() {
       _launchURL(context);
     });
   }
 
   Future<void> _launchURL(BuildContext context) async {
-    if (widget.url == null) return;
+    log("Launching URL: ${widget.url}");
 
     try {
       await launchUrl(
-        Uri.parse(widget.url!),
+        Uri.parse(widget.url),
         prefersDeepLink: true,
         customTabsOptions: CustomTabsOptions(
           instantAppsEnabled: true,
@@ -46,33 +54,45 @@ class _PaymentScreenState extends State<PaymentScreen> {
           ),
           browser: const CustomTabsBrowserConfiguration(
             prefersDefaultBrowser: true,
-            fallbackCustomTabs: ["com.android.chrome"],
+            fallbackCustomTabs: ['com.android.chrome'],
           ),
         ),
       );
     } catch (e) {
-      debugPrint('Error al abrir el navegador: $e');
+      log('Error launching URL: $e');
       if (!mounted) return;
-      context.go('/');
+
+      GlobalAlert.showError(context, 'Error al abrir el navegador: $e');
+      Future.delayed(const Duration(seconds: 2), () {
+        context.go('/');
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const CircularProgressIndicator(),
-              const SizedBox(height: 20),
-              TextButton(
-                onPressed: () => context.go('/'),
-                child: const Text('Cancelar'),
-              ),
-            ],
-          ),
+    log("PaymentScreen build method called");
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Procesando pago'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.go('/'),
+        ),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const CircularProgressIndicator(),
+            const SizedBox(height: 20),
+            const Text('Abriendo pasarela de pago...'),
+            const SizedBox(height: 20),
+            TextButton(
+              onPressed: () => context.go('/'),
+              child: const Text('Cancelar'),
+            ),
+          ],
         ),
       ),
     );

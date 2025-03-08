@@ -49,13 +49,22 @@ class Home extends _$Home {
 
   Future<void> _fetchPromotions() async {
     try {
+      final data2 = await supabase
+          .from('menu_items')
+          .select('*, promotions(*)')
+          .not('promotions', 'is', 'null');
+
+      log('data2: $data2');
+
       final data = await supabase
           .from('menu_items')
           .select('*, promotions(*)')
           .not('promotions', 'is', 'null')
-          .withConverter((promo) => (promo as List<dynamic>)
-              .map((p) => MenuItem.fromJson(p as Map<String, dynamic>))
-              .toList(),);
+          .withConverter(
+            (promo) => (promo as List<dynamic>)
+                .map((p) => MenuItem.fromJson(p as Map<String, dynamic>))
+                .toList(),
+          );
 
       if (data.isNotEmpty) {
         log('Promotions: ${data.first}');

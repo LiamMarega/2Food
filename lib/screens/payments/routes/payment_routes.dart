@@ -13,24 +13,24 @@ final paymentRoutes = [
       return AuthWebViewScreen(url: url);
     },
   ),
+  // Payment status routes
   GoRoute(
     path: 'payment',
-    builder: (context, state) => PaymentScreen(
-      url: state.uri.queryParameters['url'],
-    ),
-    routes: [
-      GoRoute(
-        path: 'approved',
-        builder: (context, state) => const ApprovedScreen(),
-      ),
-      GoRoute(
-        path: 'pending',
-        builder: (context, state) => const PendingScreen(),
-      ),
-      GoRoute(
-        path: 'rejected',
-        builder: (context, state) => const RejectedScreen(),
-      ),
-    ],
+    builder: (context, state) {
+      final url = state.extra! as String;
+      return PaymentScreen(url: url);
+    },
+  ),
+  GoRoute(
+    path: 'payment-status/approved',
+    builder: (context, state) => const ApprovedScreen(),
+  ),
+  GoRoute(
+    path: 'payment-status/pending',
+    builder: (context, state) => const PendingScreen(),
+  ),
+  GoRoute(
+    path: 'payment-status/rejected',
+    builder: (context, state) => const RejectedScreen(),
   ),
 ];

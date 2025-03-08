@@ -29,6 +29,7 @@ mixin _$MenuItem {
   bool? get isSignature => throw _privateConstructorUsedError;
   int? get trendingScore => throw _privateConstructorUsedError;
   String? get photo => throw _privateConstructorUsedError;
+  List<Promotion>? get promotions => throw _privateConstructorUsedError;
 
   /// Serializes this MenuItem to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -54,7 +55,8 @@ abstract class $MenuItemCopyWith<$Res> {
       String? arContentUrl,
       bool? isSignature,
       int? trendingScore,
-      String? photo});
+      String? photo,
+      List<Promotion>? promotions});
 }
 
 /// @nodoc
@@ -81,6 +83,7 @@ class _$MenuItemCopyWithImpl<$Res, $Val extends MenuItem>
     Object? isSignature = freezed,
     Object? trendingScore = freezed,
     Object? photo = freezed,
+    Object? promotions = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -119,6 +122,10 @@ class _$MenuItemCopyWithImpl<$Res, $Val extends MenuItem>
           ? _value.photo
           : photo // ignore: cast_nullable_to_non_nullable
               as String?,
+      promotions: freezed == promotions
+          ? _value.promotions
+          : promotions // ignore: cast_nullable_to_non_nullable
+              as List<Promotion>?,
     ) as $Val);
   }
 }
@@ -140,7 +147,8 @@ abstract class _$$MenuItemImplCopyWith<$Res>
       String? arContentUrl,
       bool? isSignature,
       int? trendingScore,
-      String? photo});
+      String? photo,
+      List<Promotion>? promotions});
 }
 
 /// @nodoc
@@ -165,6 +173,7 @@ class __$$MenuItemImplCopyWithImpl<$Res>
     Object? isSignature = freezed,
     Object? trendingScore = freezed,
     Object? photo = freezed,
+    Object? promotions = freezed,
   }) {
     return _then(_$MenuItemImpl(
       id: null == id
@@ -203,6 +212,10 @@ class __$$MenuItemImplCopyWithImpl<$Res>
           ? _value.photo
           : photo // ignore: cast_nullable_to_non_nullable
               as String?,
+      promotions: freezed == promotions
+          ? _value._promotions
+          : promotions // ignore: cast_nullable_to_non_nullable
+              as List<Promotion>?,
     ));
   }
 }
@@ -219,7 +232,9 @@ class _$MenuItemImpl implements _MenuItem {
       this.arContentUrl,
       this.isSignature,
       this.trendingScore,
-      this.photo});
+      this.photo,
+      final List<Promotion>? promotions})
+      : _promotions = promotions;
 
   factory _$MenuItemImpl.fromJson(Map<String, dynamic> json) =>
       _$$MenuItemImplFromJson(json);
@@ -242,10 +257,19 @@ class _$MenuItemImpl implements _MenuItem {
   final int? trendingScore;
   @override
   final String? photo;
+  final List<Promotion>? _promotions;
+  @override
+  List<Promotion>? get promotions {
+    final value = _promotions;
+    if (value == null) return null;
+    if (_promotions is EqualUnmodifiableListView) return _promotions;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString() {
-    return 'MenuItem(id: $id, restaurantId: $restaurantId, name: $name, price: $price, description: $description, arContentUrl: $arContentUrl, isSignature: $isSignature, trendingScore: $trendingScore, photo: $photo)';
+    return 'MenuItem(id: $id, restaurantId: $restaurantId, name: $name, price: $price, description: $description, arContentUrl: $arContentUrl, isSignature: $isSignature, trendingScore: $trendingScore, photo: $photo, promotions: $promotions)';
   }
 
   @override
@@ -266,13 +290,25 @@ class _$MenuItemImpl implements _MenuItem {
                 other.isSignature == isSignature) &&
             (identical(other.trendingScore, trendingScore) ||
                 other.trendingScore == trendingScore) &&
-            (identical(other.photo, photo) || other.photo == photo));
+            (identical(other.photo, photo) || other.photo == photo) &&
+            const DeepCollectionEquality()
+                .equals(other._promotions, _promotions));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, restaurantId, name, price,
-      description, arContentUrl, isSignature, trendingScore, photo);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      restaurantId,
+      name,
+      price,
+      description,
+      arContentUrl,
+      isSignature,
+      trendingScore,
+      photo,
+      const DeepCollectionEquality().hash(_promotions));
 
   /// Create a copy of MenuItem
   /// with the given fields replaced by the non-null parameter values.
@@ -300,7 +336,8 @@ abstract class _MenuItem implements MenuItem {
       final String? arContentUrl,
       final bool? isSignature,
       final int? trendingScore,
-      final String? photo}) = _$MenuItemImpl;
+      final String? photo,
+      final List<Promotion>? promotions}) = _$MenuItemImpl;
 
   factory _MenuItem.fromJson(Map<String, dynamic> json) =
       _$MenuItemImpl.fromJson;
@@ -323,6 +360,8 @@ abstract class _MenuItem implements MenuItem {
   int? get trendingScore;
   @override
   String? get photo;
+  @override
+  List<Promotion>? get promotions;
 
   /// Create a copy of MenuItem
   /// with the given fields replaced by the non-null parameter values.

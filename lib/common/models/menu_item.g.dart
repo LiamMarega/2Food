@@ -17,6 +17,9 @@ _$MenuItemImpl _$$MenuItemImplFromJson(Map<String, dynamic> json) =>
       isSignature: json['isSignature'] as bool?,
       trendingScore: (json['trendingScore'] as num?)?.toInt(),
       photo: json['photo'] as String?,
+      promotions: (json['promotions'] as List<dynamic>?)
+          ?.map((e) => Promotion.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$$MenuItemImplToJson(_$MenuItemImpl instance) =>
@@ -30,4 +33,5 @@ Map<String, dynamic> _$$MenuItemImplToJson(_$MenuItemImpl instance) =>
       'isSignature': instance.isSignature,
       'trendingScore': instance.trendingScore,
       'photo': instance.photo,
+      'promotions': instance.promotions,
     };
