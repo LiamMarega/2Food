@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -6,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:snapfood/common/models/mercadopago_preference.dart';
 import 'package:snapfood/common/widgets/global_alert.dart';
-import 'package:snapfood/screens/payments/ui/page/payment_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MercadoPagoOAuthResponse {
@@ -71,11 +71,12 @@ final paymentProvider = Provider((ref) => PaymentService());
 
 class PaymentService {
   final _dio = Dio();
-  static const _baseUrl = 'http://192.168.0.108:3000';
   final SupabaseClient _client = Supabase.instance.client;
 
   Future<RestaurantToken?> getRestaurantToken(
-      BuildContext context, String restaurantId) async {
+    BuildContext context,
+    String restaurantId,
+  ) async {
     try {
       final data = await _client
           .from('restaurant_tokens')
@@ -172,29 +173,37 @@ class PaymentService {
   }) async {
     try {
       log('Creating payment preference for restaurant: $restaurantId');
-      final token = await getRestaurantToken(context, restaurantId);
-      if (token == null) {
-        GlobalAlert.showError(
-            context, 'No token found for restaurant: $restaurantId');
-        return null;
-      }
 
-      log('Restaurant token found, creating preference with MercadoPago');
-      final response = await _dio.post(
-        '$_baseUrl/create_preferences',
-        data: {
+      final res = await _client.functions.invoke(
+        'create-preferences',
+        body: {
+          'marketplace_id': restaurantId,
           'title': title,
           'quantity': quantity,
-          'price': price,
           'unit_price': price,
           'currency_id': 'ARS',
-          'marketplace_id': token.mpAccessToken,
         },
       );
 
-      final preference = MercadoPagoPreference.fromJson(
-        response.data as Map<String, dynamic>,
-      );
+      final data = res.data;
+
+      log('Preference data: $data');
+
+      // Check if data is a String and parse it to a Map
+      Map<String, dynamic> preferenceData;
+      if (data is String) {
+        // Parse the JSON string to a Map
+        preferenceData = Map<String, dynamic>.from(
+          jsonDecode(data) as Map,
+        );
+      } else if (data is Map<String, dynamic>) {
+        // If it's already a Map, use it directly
+        preferenceData = data;
+      } else {
+        throw Exception('Unexpected response format: ${data.runtimeType}');
+      }
+
+      final preference = MercadoPagoPreference.fromJson(preferenceData);
 
       log('Preference created successfully: ${preference.id}');
       log('Navigating to payment screen with URL: ${preference.initPoint}');
@@ -207,7 +216,7 @@ class PaymentService {
 
       return preference;
     } catch (e) {
-      log("Error creating payment preference: $e");
+      log('Error creating payment preference: $e');
       if (context.mounted) {
         GlobalAlert.showError(context, 'Error creating payment preference: $e');
       }

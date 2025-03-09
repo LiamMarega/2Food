@@ -44,7 +44,7 @@ class RouterNotifier extends ChangeNotifier {
           path: '/payment-process',
           name: 'payment',
           builder: (context, state) {
-            final url = state.extra as String;
+            final url = state.extra! as String;
             return PaymentScreen(url: url);
           },
         ),

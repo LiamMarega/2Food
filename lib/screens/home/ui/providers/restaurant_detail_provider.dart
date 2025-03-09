@@ -44,12 +44,6 @@ class RestaurantDetail extends _$RestaurantDetail {
   Future<void> fetchMenuItems(String restaurantId) async {
     state = const AsyncLoading();
     try {
-      final menuItems = await Supabase.instance.client
-          .from('menu_items')
-          .select()
-          .eq('restaurant_id', restaurantId)
-          .withConverter((menu) => MenuItem.fromJson);
-
       state = AsyncData(
         state.value!.copyWith(
             // menuItems: menuItems,

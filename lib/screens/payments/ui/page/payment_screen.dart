@@ -9,7 +9,7 @@ class PaymentScreen extends StatefulWidget {
   static const String routeName = '/payment-process';
   final String url;
 
-  const PaymentScreen({super.key, required this.url});
+  const PaymentScreen({required this.url, super.key});
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
@@ -19,8 +19,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
   @override
   void initState() {
     super.initState();
-    log("PaymentScreen initState called");
-    log("URL: ${widget.url}");
+    log('PaymentScreen initState called');
+    log('URL: ${widget.url}');
 
     // Use a small delay to ensure the widget is fully built
     Future.microtask(() {
@@ -29,7 +29,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   Future<void> _launchURL(BuildContext context) async {
-    log("Launching URL: ${widget.url}");
+    log('Launching URL: ${widget.url}');
 
     try {
       await launchUrl(
@@ -71,7 +71,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    log("PaymentScreen build method called");
+    log('PaymentScreen build method called');
     return Scaffold(
       appBar: AppBar(
         title: const Text('Procesando pago'),

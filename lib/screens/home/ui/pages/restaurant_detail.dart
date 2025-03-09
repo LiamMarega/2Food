@@ -460,19 +460,4 @@ class FoodCard extends StatelessWidget {
   }
 }
 
-// Sample product data model
-class _SampleProduct {
-  const _SampleProduct({
-    required this.name,
-    required this.description,
-    required this.price,
-    required this.imageUrl,
-  });
-
-  final String name;
-  final String description;
-  final double price;
-  final String imageUrl;
-}
-
 // Sample products data

@@ -8,10 +8,12 @@ import 'package:snapfood/screens/payments/ui/providers/payment_provider.dart';
 class MenuDetailDialog extends ConsumerStatefulWidget {
   const MenuDetailDialog({
     required this.menuItem,
+    required this.parentContext,
     super.key,
   });
 
   final MenuItem menuItem;
+  final BuildContext parentContext;
 
   static Future<void> show(BuildContext context, MenuItem menuItem) {
     return showShadSheet(
@@ -24,7 +26,10 @@ class MenuDetailDialog extends ConsumerStatefulWidget {
         ),
         ShimmerEffect(duration: 1000.milliseconds),
       ],
-      builder: (context) => MenuDetailDialog(menuItem: menuItem),
+      builder: (dialogContext) => MenuDetailDialog(
+        menuItem: menuItem,
+        parentContext: context,
+      ),
     );
   }
 
@@ -67,11 +72,11 @@ class _MenuDetailDialogState extends ConsumerState<MenuDetailDialog> {
         : false;
 
     // Calcular el precio con descuento según el tipo de promoción
-    num discountedPrice = widget.menuItem.price;
-    String discountLabel = '';
+    var discountedPrice = widget.menuItem.price;
+    var discountLabel = '';
 
     if (hasDiscount && isPromotionActive) {
-      if (promotion!.type == 'PERCENTAGE') {
+      if (promotion.type == 'PERCENTAGE') {
         // Descuento porcentual
         final discountAmount = widget.menuItem.price * (promotion.amount / 100);
         discountedPrice = widget.menuItem.price - discountAmount;
@@ -123,8 +128,10 @@ class _MenuDetailDialogState extends ConsumerState<MenuDetailDialog> {
                       Row(
                         children: [
                           IconButton(
-                            icon: const Icon(Icons.favorite_border,
-                                color: Colors.black),
+                            icon: const Icon(
+                              Icons.favorite_border,
+                              color: Colors.black,
+                            ),
                             onPressed: () {},
                           ),
                           IconButton(
@@ -144,18 +151,20 @@ class _MenuDetailDialogState extends ConsumerState<MenuDetailDialog> {
                         borderRadius: BorderRadius.circular(15),
                         image: DecorationImage(
                           image: NetworkImage(widget.menuItem.photo ?? ''),
-                          fit: BoxFit.cover,
+                          fit: BoxFit.contain,
                         ),
                       ),
                     ),
                   ),
 
                   // Timer indicator (solo si hay promoción activa con fecha de fin)
-                  if (isPromotionActive && promotion!.endTime != null) ...[
+                  if (isPromotionActive && promotion.endTime != null) ...[
                     Container(
                       margin: const EdgeInsets.symmetric(vertical: 16),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 8),
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.amber.shade100,
                         borderRadius: BorderRadius.circular(20),
@@ -224,7 +233,9 @@ class _MenuDetailDialogState extends ConsumerState<MenuDetailDialog> {
                         const SizedBox(width: 8),
                         Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 4),
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             color: Colors.amber.shade800,
                             borderRadius: BorderRadius.circular(12),
@@ -262,11 +273,6 @@ class _MenuDetailDialogState extends ConsumerState<MenuDetailDialog> {
                         height: 40,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
-                          image: const DecorationImage(
-                            image:
-                                NetworkImage('https://via.placeholder.com/40'),
-                            fit: BoxFit.cover,
-                          ),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -284,8 +290,11 @@ class _MenuDetailDialogState extends ConsumerState<MenuDetailDialog> {
                           ),
                           Row(
                             children: [
-                              const Icon(Icons.location_on,
-                                  size: 16, color: Colors.grey),
+                              const Icon(
+                                Icons.location_on,
+                                size: 16,
+                                color: Colors.grey,
+                              ),
                               const SizedBox(width: 4),
                               Text(
                                 'Adolfo Alsina 431',
@@ -313,7 +322,7 @@ class _MenuDetailDialogState extends ConsumerState<MenuDetailDialog> {
                           const Icon(Icons.access_time, color: Colors.amber),
                           const SizedBox(width: 8),
                           Text(
-                            'Promoción válida hasta ${_formatDate(promotion!.endTime)}',
+                            'Promoción válida hasta ${_formatDate(promotion.endTime)}',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
@@ -439,7 +448,7 @@ class _MenuDetailDialogState extends ConsumerState<MenuDetailDialog> {
                       onPressed: () {
                         Navigator.of(context).pop();
                         ref.read(paymentProvider).createPreference(
-                              context: context,
+                              context: widget.parentContext,
                               title: widget.menuItem.name,
                               quantity: quantity,
                               price: (isPromotionActive

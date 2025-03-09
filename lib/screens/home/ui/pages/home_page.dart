@@ -22,9 +22,9 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   final ScrollController _scrollController = ScrollController();
-  double _scrollOffset = 0.0;
+  double _scrollOffset = 0;
   final double _searchBarHeight =
-      80.0; // Altura aproximada de la barra de búsqueda
+      80; // Altura aproximada de la barra de búsqueda
 
   @override
   void initState() {
@@ -48,12 +48,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     final homeState = ref.watch(homeProvider);
-    final parallaxFactor =
-        0.5; // Ajusta este valor para controlar la intensidad del parallax
-
-    // Calcula la posición de la barra de búsqueda basada en el scroll
-    // Cuando el scroll es 0, la barra está en su posición original (0)
-    // Cuando el scroll aumenta, la barra se mueve hacia arriba (valor negativo)
+    const parallaxFactor = 0.5;
     final searchBarOffset = -min(_scrollOffset, _searchBarHeight);
 
     return Scaffold(
@@ -70,8 +65,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                 // Espacio para permitir que el contenido comience debajo de la barra de búsqueda
                 SliverToBoxAdapter(
                   child: SizedBox(
-                      height: _searchBarHeight +
-                          20), // Altura de la barra + espacio adicional
+                    height: _searchBarHeight + 20,
+                  ), // Altura de la barra + espacio adicional
                 ),
                 // Contenedor principal con todo el contenido
                 SliverToBoxAdapter(
@@ -120,7 +115,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                           ),
 
                           // Espacio adicional al final para asegurar que todo sea visible
-                          SizedBox(height: mediaHeight(context, 0.1)),
+                          SizedBox(height: mediaHeight(context, 0.2)),
                         ],
                       ),
                     ),

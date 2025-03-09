@@ -1,19 +1,10 @@
 import 'package:go_router/go_router.dart';
-import 'package:snapfood/screens/payments/ui/page/auth_webview_screen.dart';
 import 'package:snapfood/screens/payments/ui/page/payment_screen.dart';
 import 'package:snapfood/screens/payments/ui/page/payment_status/approved_screen.dart';
 import 'package:snapfood/screens/payments/ui/page/payment_status/pending_screen.dart';
 import 'package:snapfood/screens/payments/ui/page/payment_status/rejected_screen.dart';
 
 final paymentRoutes = [
-  GoRoute(
-    path: 'mercadopago/auth-webview',
-    builder: (context, state) {
-      final url = state.uri.queryParameters['url'];
-      return AuthWebViewScreen(url: url);
-    },
-  ),
-  // Payment status routes
   GoRoute(
     path: 'payment',
     builder: (context, state) {

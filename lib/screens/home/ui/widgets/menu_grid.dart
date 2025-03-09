@@ -62,10 +62,13 @@ class MenuItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Store the context at the build method level to ensure it has access to ScaffoldMessenger
+    final parentContext = context;
+
     // Mover las declaraciones de variables fuera de la lista
-    bool showOfferTag = false;
-    bool isHotDeal = false;
-    bool isPromotionActive = false;
+    var showOfferTag = false;
+    var isHotDeal = false;
+    var isPromotionActive = false;
 
     if (item.promotions != null && item.promotions!.isNotEmpty) {
       final promotion = item.promotions!.first;
@@ -80,7 +83,7 @@ class MenuItemCard extends StatelessWidget {
     }
 
     return GestureDetector(
-      onTap: () => MenuDetailDialog.show(context, item),
+      onTap: () => MenuDetailDialog.show(parentContext, item),
       child: Card(
         clipBehavior: Clip.antiAlias,
         color: Theme.of(context).colorScheme.surface,
@@ -313,14 +316,18 @@ class _FireEffectContainerState extends State<FireEffectContainer>
     )..repeat();
 
     // Crear algunas partículas de fuego
-    for (int i = 0; i < 5; i++) {
-      _particles.add(FireParticle(
-        position: Offset(_random.nextDouble() * 40, 24),
-        velocity: Offset(
-            (_random.nextDouble() - 0.5) * 2, -_random.nextDouble() * 3 - 1),
-        size: _random.nextDouble() * 3 + 1,
-        lifetime: _random.nextDouble() * 0.7 + 0.3,
-      ));
+    for (var i = 0; i < 5; i++) {
+      _particles.add(
+        FireParticle(
+          position: Offset(_random.nextDouble() * 40, 24),
+          velocity: Offset(
+            (_random.nextDouble() - 0.5) * 2,
+            -_random.nextDouble() * 3 - 1,
+          ),
+          size: _random.nextDouble() * 3 + 1,
+          lifetime: _random.nextDouble() * 0.7 + 0.3,
+        ),
+      );
     }
   }
 
@@ -336,13 +343,15 @@ class _FireEffectContainerState extends State<FireEffectContainer>
       animation: _controller,
       builder: (context, child) {
         // Actualizar partículas
-        for (var particle in _particles) {
+        for (final particle in _particles) {
           particle.update();
           if (particle.isDead) {
             particle.reset(
               position: Offset(_random.nextDouble() * 40, 24),
-              velocity: Offset((_random.nextDouble() - 0.5) * 2,
-                  -_random.nextDouble() * 3 - 1),
+              velocity: Offset(
+                (_random.nextDouble() - 0.5) * 2,
+                -_random.nextDouble() * 3 - 1,
+              ),
               size: _random.nextDouble() * 3 + 1,
               lifetime: _random.nextDouble() * 0.7 + 0.3,
             );
@@ -384,10 +393,10 @@ class _FireEffectContainerState extends State<FireEffectContainer>
                   ),
                 ],
               ),
-              child: Center(
+              child: const Center(
                 child: Text(
                   'Oferta HOT',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
@@ -399,28 +408,30 @@ class _FireEffectContainerState extends State<FireEffectContainer>
             // Partículas de fuego (opcional, si se ven bien)
             if (_random.nextDouble() >
                 0.7) // Solo mostrar partículas ocasionalmente
-              ...(_particles.map((particle) => Positioned(
-                    left: particle.position.dx,
-                    top: particle.position.dy,
-                    child: Opacity(
-                      opacity: particle.opacity,
-                      child: Container(
-                        width: particle.size,
-                        height: particle.size,
-                        decoration: BoxDecoration(
-                          color: Colors.amber.withOpacity(0.8),
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.orange.withOpacity(0.5),
-                              blurRadius: 3,
-                              spreadRadius: 1,
-                            ),
-                          ],
-                        ),
+              ...(_particles.map(
+                (particle) => Positioned(
+                  left: particle.position.dx,
+                  top: particle.position.dy,
+                  child: Opacity(
+                    opacity: particle.opacity,
+                    child: Container(
+                      width: particle.size,
+                      height: particle.size,
+                      decoration: BoxDecoration(
+                        color: Colors.amber.withOpacity(0.8),
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.orange.withOpacity(0.5),
+                            blurRadius: 3,
+                            spreadRadius: 1,
+                          ),
+                        ],
                       ),
                     ),
-                  ))),
+                  ),
+                ),
+              )),
           ],
         );
       },

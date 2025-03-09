@@ -16,23 +16,49 @@ class App extends ConsumerWidget {
       path: 'assets/translations',
       fallbackLocale: const Locale('es'),
       child: Builder(
-        builder: (context) => ShadApp.cupertinoRouter(
-          darkTheme: ShadThemeData(
-            brightness: Brightness.dark,
-            colorScheme: const ShadOrangeColorScheme.light(),
+        builder: (context) => MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            colorScheme: const ColorScheme.light(
+              primary: Color(
+                  0xFFFF5722), // Orange color to match ShadOrangeColorScheme
+            ),
           ),
-          cupertinoThemeBuilder: (context, theme) {
-            return theme.copyWith(applyThemeToAll: true);
-          },
-          materialThemeBuilder: (context, theme) {
-            return theme.copyWith(
-              appBarTheme: const AppBarTheme(toolbarHeight: 52),
-            );
-          },
+          darkTheme: ThemeData.dark().copyWith(
+            colorScheme: const ColorScheme.dark(
+              primary: Color(
+                  0xFFFF5722), // Orange color to match ShadOrangeColorScheme
+            ),
+          ),
           locale: context.locale,
           supportedLocales: context.supportedLocales,
           localizationsDelegates: context.localizationDelegates,
           routerConfig: router,
+          builder: (context, child) {
+            // Wrap the app with a ScaffoldMessenger
+            return ScaffoldMessenger(
+              child: Builder(
+                builder: (innerContext) => ShadApp.cupertinoRouter(
+                  darkTheme: ShadThemeData(
+                    brightness: Brightness.dark,
+                    colorScheme: const ShadOrangeColorScheme.light(),
+                  ),
+                  cupertinoThemeBuilder: (context, theme) {
+                    return theme.copyWith(applyThemeToAll: true);
+                  },
+                  materialThemeBuilder: (context, theme) {
+                    return theme.copyWith(
+                      appBarTheme: const AppBarTheme(toolbarHeight: 52),
+                    );
+                  },
+                  locale: context.locale,
+                  supportedLocales: context.supportedLocales,
+                  localizationsDelegates: context.localizationDelegates,
+                  routerConfig: router,
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
