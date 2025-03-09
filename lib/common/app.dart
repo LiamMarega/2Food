@@ -21,13 +21,13 @@ class App extends ConsumerWidget {
           theme: ThemeData(
             colorScheme: const ColorScheme.light(
               primary: Color(
-                  0xFFFF5722), // Orange color to match ShadOrangeColorScheme
+                  0xFFFF5722,), // Orange color to match ShadOrangeColorScheme
             ),
           ),
           darkTheme: ThemeData.dark().copyWith(
             colorScheme: const ColorScheme.dark(
               primary: Color(
-                  0xFFFF5722), // Orange color to match ShadOrangeColorScheme
+                  0xFFFF5722,), // Orange color to match ShadOrangeColorScheme
             ),
           ),
           locale: context.locale,
