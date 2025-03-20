@@ -65,11 +65,11 @@ class _MenuDetailDialogState extends ConsumerState<MenuDetailDialog> {
     final promotion = hasDiscount ? widget.menuItem.promotions!.first : null;
 
     // Verificar si la promoción está activa (dentro del rango de fechas)
-    final isPromotionActive = hasDiscount
-        ? (promotion!.endTime == null ||
-                DateTime.now().isBefore(promotion.endTime!)) &&
-            DateTime.now().isAfter(promotion.startTime)
-        : false;
+    final isPromotionActive = hasDiscount &&
+        promotion != null &&
+        DateTime.now().isAfter(promotion.startTime) &&
+        (promotion.endTime == null ||
+            DateTime.now().isBefore(promotion.endTime!));
 
     // Calcular el precio con descuento según el tipo de promoción
     var discountedPrice = widget.menuItem.price;
@@ -407,7 +407,7 @@ class _MenuDetailDialogState extends ConsumerState<MenuDetailDialog> {
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 10,
                     offset: const Offset(0, -5),
                   ),

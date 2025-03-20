@@ -34,8 +34,9 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   void dispose() {
-    _scrollController.removeListener(_onScroll);
-    _scrollController.dispose();
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
     super.dispose();
   }
 
@@ -362,7 +363,6 @@ class HeroLayoutCard extends StatelessWidget {
         width: width * 7 / 8,
         child: GestureDetector(
           onTap: () {
-            print('tapped');
             context.go(
               '/restaurant/${restaurant.id}',
               extra: restaurant,
