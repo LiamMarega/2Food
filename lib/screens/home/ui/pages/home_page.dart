@@ -175,16 +175,30 @@ class _HomePageState extends ConsumerState<HomePage> {
                     focusNode,
                     onFieldSubmitted,
                   ) {
-                    return ShadInput(
+                    return TextField(
                       controller: textEditingController,
                       focusNode: focusNode,
-                      placeholder: const Text(
-                        'Search for food or restaurants...',
-                        style: TextStyle(
-                          color: Colors.white,
+                      decoration: InputDecoration(
+                        hintText: 'Search for food or restaurants...',
+                        hintStyle: const TextStyle(color: Colors.white),
+                        prefixIcon:
+                            const Icon(Icons.search, color: Colors.white),
+                        filled: true,
+                        fillColor: Colors.grey[800],
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide.none,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide.none,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide.none,
                         ),
                       ),
-                      prefix: const Icon(Icons.search),
+                      style: const TextStyle(color: Colors.white),
                       onChanged: (value) {},
                     );
                   },

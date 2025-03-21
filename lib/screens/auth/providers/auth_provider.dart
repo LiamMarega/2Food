@@ -27,6 +27,10 @@ class AuthStateError extends AuthState {
   final String message;
 }
 
+class AuthStateOTPSent extends AuthState {
+  const AuthStateOTPSent();
+}
+
 @Riverpod(keepAlive: true)
 class Auth extends _$Auth {
   @override
@@ -83,6 +87,46 @@ class Auth extends _$Auth {
           .signInWithPassword(email: email, password: password);
       if (response.user != null) {
         state = AuthStateAuthenticated(response.user!);
+      }
+    } on AuthException catch (e) {
+      state = AuthStateError(e.message);
+    } catch (e) {
+      state = AuthStateError(e.toString());
+    }
+  }
+
+  Future<void> signInWithPhone(String name, String phone) async {
+    state = const AuthStateLoading();
+    try {
+      // Enviar el código OTP al número de teléfono
+      await Supabase.instance.client.auth.signInWithOtp(
+        phone: phone,
+        data: {'name': name},
+      );
+
+      // Indicar que el OTP fue enviado
+      state = const AuthStateOTPSent();
+    } on AuthException catch (e) {
+      state = AuthStateError(e.message);
+    } catch (e) {
+      state = AuthStateError(e.toString());
+    }
+  }
+
+  Future<void> verifyOTP(String phone, String token) async {
+    state = const AuthStateLoading();
+    try {
+      final response = await Supabase.instance.client.auth.verifyOTP(
+        phone: phone,
+        token: token,
+        type: OtpType.sms,
+      );
+
+      final user = response.user;
+      if (user != null) {
+        state = AuthStateAuthenticated(user);
+      } else {
+        state = const AuthStateError('Error al verificar el código OTP');
       }
     } on AuthException catch (e) {
       state = AuthStateError(e.message);

@@ -16,49 +16,27 @@ class App extends ConsumerWidget {
       path: 'assets/translations',
       fallbackLocale: const Locale('es'),
       child: Builder(
-        builder: (context) => MaterialApp.router(
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            colorScheme: const ColorScheme.light(
-              primary: Color(
-                0xFFFF5722,
-              ), // Orange color to match ShadOrangeColorScheme
-            ),
-          ),
-          darkTheme: ThemeData.dark().copyWith(
-            colorScheme: const ColorScheme.dark(
-              primary: Color(
-                0xFFFF5722,
-              ), // Orange color to match ShadOrangeColorScheme
-            ),
-          ),
+        builder: (context) => ShadApp.materialRouter(
+          routerConfig: router,
+          materialThemeBuilder: (context, theme) {
+            return ThemeData(
+              colorScheme: ColorScheme.light(
+                primary: const Color(0xFFFFB300),
+                secondary: const Color(0xFFFFB300),
+                background: theme.colorScheme.background,
+                surface: theme.colorScheme.background,
+                onBackground: theme.colorScheme.onBackground,
+                onSurface: theme.colorScheme.onBackground,
+              ),
+            );
+          },
           locale: context.locale,
           supportedLocales: context.supportedLocales,
           localizationsDelegates: context.localizationDelegates,
-          routerConfig: router,
+          debugShowCheckedModeBanner: false,
           builder: (context, child) {
-            // Wrap the app with a ScaffoldMessenger
             return ScaffoldMessenger(
-              child: Builder(
-                builder: (innerContext) => ShadApp.cupertinoRouter(
-                  darkTheme: ShadThemeData(
-                    brightness: Brightness.dark,
-                    colorScheme: const ShadOrangeColorScheme.light(),
-                  ),
-                  cupertinoThemeBuilder: (context, theme) {
-                    return theme.copyWith(applyThemeToAll: true);
-                  },
-                  materialThemeBuilder: (context, theme) {
-                    return theme.copyWith(
-                      appBarTheme: const AppBarTheme(toolbarHeight: 52),
-                    );
-                  },
-                  locale: context.locale,
-                  supportedLocales: context.supportedLocales,
-                  localizationsDelegates: context.localizationDelegates,
-                  routerConfig: router,
-                ),
-              ),
+              child: child ?? const SizedBox.shrink(),
             );
           },
         ),

@@ -53,3 +53,4 @@ flutter:
   generate: true
   assets:
     - assets/translations/
+    - assets/images/
