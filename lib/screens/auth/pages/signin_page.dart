@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:snapfood/screens/auth/providers/auth_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SigninPage extends ConsumerStatefulWidget {
   const SigninPage({super.key});
@@ -64,9 +65,9 @@ class _SigninPageState extends ConsumerState<SigninPage> {
         child: Stack(
           children: [
             Container(
-              decoration: const BoxDecoration(
-                color: Color(0xFFFFB300),
-                borderRadius: BorderRadius.only(
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(30),
                   bottomRight: Radius.circular(30),
                 ),
@@ -98,7 +99,7 @@ class _SigninPageState extends ConsumerState<SigninPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Welcome!',
+                              'signin.welcome'.tr(),
                               style: theme.textTheme.headlineMedium?.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
@@ -107,8 +108,8 @@ class _SigninPageState extends ConsumerState<SigninPage> {
                             const SizedBox(height: 5),
                             Text(
                               showOTPField
-                                  ? 'Enter OTP'
-                                  : 'Sign in to Continue',
+                                  ? 'signin.enterOTP'.tr()
+                                  : 'signin.signInToContinue'.tr(),
                               style: theme.textTheme.titleMedium?.copyWith(
                                 fontWeight: FontWeight.w500,
                                 color: Colors.black,
@@ -124,15 +125,16 @@ class _SigninPageState extends ConsumerState<SigninPage> {
                               width: 80,
                               height: 80,
                               decoration: BoxDecoration(
-                                color: const Color(0xFFFFB300)
+                                color: Theme.of(context)
+                                    .primaryColor
                                     .withValues(alpha: 0.2),
                                 shape: BoxShape.circle,
                               ),
                             ),
                             Image.asset(
-                              'assets/images/food_icon.png',
-                              width: 60,
-                              height: 60,
+                              'assets/images/food_scene.png',
+                              width: 100,
+                              height: 100,
                             ),
                           ],
                         ),
@@ -148,7 +150,7 @@ class _SigninPageState extends ConsumerState<SigninPage> {
                               controller: nameController,
                               style: const TextStyle(color: Colors.black),
                               decoration: InputDecoration(
-                                hintText: 'Name',
+                                hintText: 'signin.name'.tr(),
                                 hintStyle:
                                     const TextStyle(color: Colors.black54),
                                 prefixIcon: const Icon(
@@ -190,7 +192,7 @@ class _SigninPageState extends ConsumerState<SigninPage> {
                               keyboardType: TextInputType.phone,
                               style: const TextStyle(color: Colors.black),
                               decoration: InputDecoration(
-                                hintText: 'Mobile No.',
+                                hintText: 'signin.mobileNo'.tr(),
                                 hintStyle:
                                     const TextStyle(color: Colors.black54),
                                 prefixIcon: const Icon(
@@ -202,21 +204,18 @@ class _SigninPageState extends ConsumerState<SigninPage> {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30),
                                   borderSide: const BorderSide(
-                                    color: Colors.black,
                                     width: 0.5,
                                   ),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30),
                                   borderSide: const BorderSide(
-                                    color: Colors.black,
                                     width: 0.5,
                                   ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30),
                                   borderSide: const BorderSide(
-                                    color: Colors.black,
                                     width: 0.5,
                                   ),
                                 ),
@@ -232,7 +231,7 @@ class _SigninPageState extends ConsumerState<SigninPage> {
                               keyboardType: TextInputType.number,
                               style: const TextStyle(color: Colors.black),
                               decoration: InputDecoration(
-                                hintText: 'Enter OTP',
+                                hintText: 'signin.enterOTPPlaceholder'.tr(),
                                 hintStyle:
                                     const TextStyle(color: Colors.black54),
                                 prefixIcon: const Icon(
@@ -244,21 +243,18 @@ class _SigninPageState extends ConsumerState<SigninPage> {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30),
                                   borderSide: const BorderSide(
-                                    color: Colors.black,
                                     width: 0.5,
                                   ),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30),
                                   borderSide: const BorderSide(
-                                    color: Colors.black,
                                     width: 0.5,
                                   ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30),
                                   borderSide: const BorderSide(
-                                    color: Colors.black,
                                     width: 0.5,
                                   ),
                                 ),
@@ -283,19 +279,19 @@ class _SigninPageState extends ConsumerState<SigninPage> {
                     // Already have account row
                     Padding(
                       padding: const EdgeInsets.only(top: 20),
-                      child: Row(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Already have an account? ',
+                            'signin.alreadyHaveAccount'.tr(),
                             style: theme.textTheme.bodyMedium,
                           ),
                           GestureDetector(
                             onTap: () => context.go('/auth/login'),
                             child: Text(
-                              'Login',
+                              'signin.login'.tr(),
                               style: theme.textTheme.bodyMedium?.copyWith(
-                                color: const Color(0xFFFFB300),
+                                color: Theme.of(context).primaryColor,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -310,9 +306,9 @@ class _SigninPageState extends ConsumerState<SigninPage> {
                       children: [
                         Container(
                           height: 100,
-                          decoration: const BoxDecoration(
-                            color: Color(0xFFFFB300),
-                            borderRadius: BorderRadius.only(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius: const BorderRadius.only(
                               bottomLeft: Radius.circular(30),
                               bottomRight: Radius.circular(30),
                             ),
@@ -336,9 +332,8 @@ class _SigninPageState extends ConsumerState<SigninPage> {
                                     );
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                        'Please agree to terms and conditions'),
+                                  SnackBar(
+                                    content: Text('signin.agreeTerms'.tr()),
                                   ),
                                 );
                               }
@@ -387,9 +382,9 @@ class _SigninPageState extends ConsumerState<SigninPage> {
                                     borderRadius: BorderRadius.circular(3),
                                   ),
                                 ),
-                                const Text(
-                                  'I agree with Terms & Conditions!',
-                                  style: TextStyle(
+                                Text(
+                                  'signin.agreeTerms'.tr(),
+                                  style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
                                   ),

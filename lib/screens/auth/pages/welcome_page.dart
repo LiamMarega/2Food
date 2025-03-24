@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
@@ -9,7 +10,7 @@ class WelcomePage extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFB300), // Yellow background color
+      backgroundColor: Theme.of(context).primaryColor,
       body: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () => FocusScope.of(context).unfocus(),
@@ -38,14 +39,14 @@ class WelcomePage extends StatelessWidget {
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: 'Welcome to ',
+                            text: 'welcome.title'.tr(),
                             style: theme.textTheme.headlineMedium?.copyWith(
                               fontWeight: FontWeight.w500,
                               color: Colors.black,
                             ),
                           ),
                           TextSpan(
-                            text: 'Waitly',
+                            text: 'welcome.appName'.tr(),
                             style: theme.textTheme.headlineMedium?.copyWith(
                               fontWeight: FontWeight.w600,
                               fontStyle: FontStyle.italic,
@@ -64,9 +65,10 @@ class WelcomePage extends StatelessWidget {
                         Container(
                           width: 280,
                           height: 80,
-                          decoration: const BoxDecoration(
-                            color: Color(0xFFFFB300),
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
                           ),
                         ),
                         Positioned(
@@ -80,8 +82,8 @@ class WelcomePage extends StatelessWidget {
                             child: Center(
                               child: Image.asset(
                                 'assets/images/food_scene.png',
-                                width: 100,
-                                height: 100,
+                                width: 300,
+                                height: 300,
                               ),
                             ),
                           ),
@@ -96,14 +98,14 @@ class WelcomePage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Unlock your dineline',
+                          'welcome.subtitle'.tr(),
                           style: theme.textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                         const SizedBox(height: 5),
                         Text(
-                          'Sign in now!',
+                          'welcome.signInPrompt'.tr(),
                           style: theme.textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.w500,
                           ),
@@ -121,9 +123,9 @@ class WelcomePage extends StatelessWidget {
                         child: Container(
                           width: 70,
                           height: 140,
-                          decoration: const BoxDecoration(
-                            color: Color(0xFFFFB300),
-                            borderRadius: BorderRadius.only(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(100),
                               bottomRight: Radius.circular(30),
                             ),

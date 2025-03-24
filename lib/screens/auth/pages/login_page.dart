@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -90,7 +91,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Welcome Back!',
+                                  'login.welcomeBack'.tr(),
                                   style:
                                       theme.textTheme.headlineMedium?.copyWith(
                                     fontWeight: FontWeight.bold,
@@ -99,7 +100,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 ),
                                 const SizedBox(height: 5),
                                 Text(
-                                  'Login to Continue',
+                                  'login.loginToContinue'.tr(),
                                   style: theme.textTheme.titleMedium?.copyWith(
                                     fontWeight: FontWeight.w500,
                                     color: Colors.black,
@@ -139,7 +140,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 enabled: !isLoading,
                                 style: const TextStyle(color: Colors.black),
                                 decoration: InputDecoration(
-                                  hintText: 'Email',
+                                  hintText: 'login.email'.tr(),
                                   hintStyle:
                                       const TextStyle(color: Colors.black54),
                                   prefixIcon: const Icon(
@@ -151,21 +152,18 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(30),
                                     borderSide: const BorderSide(
-                                      color: Colors.black,
                                       width: 0.5,
                                     ),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(30),
                                     borderSide: const BorderSide(
-                                      color: Colors.black,
                                       width: 0.5,
                                     ),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(30),
                                     borderSide: const BorderSide(
-                                      color: Colors.black,
                                       width: 0.5,
                                     ),
                                   ),
@@ -182,7 +180,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 obscureText: true,
                                 style: const TextStyle(color: Colors.black),
                                 decoration: InputDecoration(
-                                  hintText: 'Password',
+                                  hintText: 'login.password'.tr(),
                                   hintStyle:
                                       const TextStyle(color: Colors.black54),
                                   prefixIcon: const Icon(
@@ -194,21 +192,18 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(30),
                                     borderSide: const BorderSide(
-                                      color: Colors.black,
                                       width: 0.5,
                                     ),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(30),
                                     borderSide: const BorderSide(
-                                      color: Colors.black,
                                       width: 0.5,
                                     ),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(30),
                                     borderSide: const BorderSide(
-                                      color: Colors.black,
                                       width: 0.5,
                                     ),
                                   ),

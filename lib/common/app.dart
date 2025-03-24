@@ -23,10 +23,8 @@ class App extends ConsumerWidget {
               colorScheme: ColorScheme.light(
                 primary: const Color(0xFFFFB300),
                 secondary: const Color(0xFFFFB300),
-                background: theme.colorScheme.background,
-                surface: theme.colorScheme.background,
-                onBackground: theme.colorScheme.onBackground,
-                onSurface: theme.colorScheme.onBackground,
+                surface: theme.colorScheme.surface,
+                onSurface: theme.colorScheme.onSurface,
               ),
             );
           },
