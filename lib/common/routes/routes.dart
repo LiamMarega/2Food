@@ -7,6 +7,7 @@ import 'package:snapfood/screens/auth/routes/auth_routes.dart';
 import 'package:snapfood/screens/home/routes/home_routes.dart';
 import 'package:snapfood/screens/payments/routes/payment_routes.dart';
 import 'package:snapfood/screens/payments/ui/page/payment_screen.dart';
+import 'package:snapfood/screens/profile/profile_page.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final router = RouterNotifier(ref);
@@ -82,7 +83,7 @@ class RouterNotifier extends ChangeNotifier {
             GoRoute(
               path: '/profile',
               builder: (context, state) => const Center(
-                child: Text('Profile Page'),
+                child: ProfilePage(),
               ),
             ),
           ],
