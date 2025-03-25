@@ -1,5 +1,30 @@
 {
   "counterAppBarTitle": "Contador",
   "testButtonLabel": "Prueba",
-  "authButtonLabel": "Autenticación"
+  "authButtonLabel": "Autenticación",
+  "welcome": {
+    "title": "Bienvenido a",
+    "appName": "2Food",
+    "subtitle": "Desbloquea tu línea de comida",
+    "signInPrompt": "¡Inicia sesión ahora!"
+  },
+  "login": {
+    "welcomeBack": "¡Bienvenido de nuevo!",
+    "loginToContinue": "Inicia sesión para continuar",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "login": "Iniciar sesión"
+  },
+  "signin": {
+    "welcome": "¡Bienvenido!",
+    "signInToContinue": "Regístrate para continuar",
+    "enterOTP": "Ingresa el OTP",
+    "name": "Nombre",
+    "mobileNo": "Número de teléfono",
+    "enterOTPPlaceholder": "Ingresa el OTP",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "login": "Iniciar sesión",
+    "agreeTerms": "¡Acepto los términos y condiciones!"
+  }
 } 

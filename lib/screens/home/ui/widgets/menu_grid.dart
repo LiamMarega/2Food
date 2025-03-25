@@ -115,7 +115,7 @@ class MenuItemCard extends StatelessWidget {
                   right: 8,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.5),
+                      color: Colors.black.withValues(alpha: 0.5),
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(
@@ -160,7 +160,7 @@ class MenuItemCard extends StatelessWidget {
                                   color: Theme.of(context)
                                       .colorScheme
                                       .onPrimary
-                                      .withOpacity(0.8),
+                                      .withValues(alpha: 0.8),
                                 ),
                               ),
                             ),
@@ -387,7 +387,7 @@ class _FireEffectContainerState extends State<FireEffectContainer>
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.orange.withOpacity(0.3),
+                    color: Colors.orange.withValues(alpha: 0.3),
                     blurRadius: 8,
                     spreadRadius: 2,
                   ),
@@ -418,11 +418,11 @@ class _FireEffectContainerState extends State<FireEffectContainer>
                       width: particle.size,
                       height: particle.size,
                       decoration: BoxDecoration(
-                        color: Colors.amber.withOpacity(0.8),
+                        color: Colors.amber.withValues(alpha: 0.8),
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.orange.withOpacity(0.5),
+                            color: Colors.orange.withValues(alpha: 0.5),
                             blurRadius: 3,
                             spreadRadius: 1,
                           ),

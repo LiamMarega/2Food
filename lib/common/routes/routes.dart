@@ -7,6 +7,7 @@ import 'package:snapfood/screens/auth/routes/auth_routes.dart';
 import 'package:snapfood/screens/home/routes/home_routes.dart';
 import 'package:snapfood/screens/payments/routes/payment_routes.dart';
 import 'package:snapfood/screens/payments/ui/page/payment_screen.dart';
+import 'package:snapfood/screens/profile/profile_page.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final router = RouterNotifier(ref);
@@ -14,6 +15,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     refreshListenable: router,
     redirect: router._redirect,
     routes: router._routes,
+    initialLocation: '/',
   );
 });
 
@@ -30,10 +32,21 @@ class RouterNotifier extends ChangeNotifier {
       _ => false,
     };
 
-    final isLoggingIn = state.matchedLocation == '/login';
+    final isAuthPath = state.matchedLocation.startsWith('/auth');
 
-    if (!isAuth && !isLoggingIn) return '/login';
-    if (isAuth && isLoggingIn) return '/';
+    // Si el usuario está autenticado y trata de acceder a una ruta de auth,
+    // redirigir a la página principal
+    if (isAuth && isAuthPath) {
+      return '/';
+    }
+
+    // Si el usuario no está autenticado y trata de acceder a una ruta protegida,
+    // redirigir a la página de bienvenida
+    if (!isAuth && !isAuthPath) {
+      return '/auth/welcome';
+    }
+
+    // En cualquier otro caso, permitir la navegación
     return null;
   }
 
@@ -70,7 +83,7 @@ class RouterNotifier extends ChangeNotifier {
             GoRoute(
               path: '/profile',
               builder: (context, state) => const Center(
-                child: Text('Profile Page'),
+                child: ProfilePage(),
               ),
             ),
           ],

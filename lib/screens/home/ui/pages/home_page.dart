@@ -6,9 +6,9 @@ import 'package:go_router/go_router.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:snapfood/common/models/generated_classes.dart';
 import 'package:snapfood/common/utils/media_query.dart';
-import 'package:snapfood/screens/home/ui/pages/restaurant_detail.dart';
 import 'package:snapfood/screens/home/ui/providers/home_provider.dart';
 import 'package:snapfood/screens/home/ui/widgets/category_tabs.dart';
+import 'package:snapfood/screens/home/ui/widgets/food_card.dart';
 import 'package:snapfood/screens/home/ui/widgets/menu_grid.dart';
 import 'package:snapfood/screens/home/ui/widgets/promo_banner.dart';
 import 'package:snapfood/screens/home/ui/widgets/upcoming_events.dart';
@@ -34,8 +34,9 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   void dispose() {
-    _scrollController.removeListener(_onScroll);
-    _scrollController.dispose();
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
     super.dispose();
   }
 
@@ -174,16 +175,30 @@ class _HomePageState extends ConsumerState<HomePage> {
                     focusNode,
                     onFieldSubmitted,
                   ) {
-                    return ShadInput(
+                    return TextField(
                       controller: textEditingController,
                       focusNode: focusNode,
-                      placeholder: const Text(
-                        'Search for food or restaurants...',
-                        style: TextStyle(
-                          color: Colors.white,
+                      decoration: InputDecoration(
+                        hintText: 'Search for food or restaurants...',
+                        hintStyle: const TextStyle(color: Colors.white),
+                        prefixIcon:
+                            const Icon(Icons.search, color: Colors.white),
+                        filled: true,
+                        fillColor: Colors.grey[800],
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide.none,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide.none,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide.none,
                         ),
                       ),
-                      prefix: const Icon(Icons.search),
+                      style: const TextStyle(color: Colors.white),
                       onChanged: (value) {},
                     );
                   },
@@ -362,7 +377,6 @@ class HeroLayoutCard extends StatelessWidget {
         width: width * 7 / 8,
         child: GestureDetector(
           onTap: () {
-            print('tapped');
             context.go(
               '/restaurant/${restaurant.id}',
               extra: restaurant,

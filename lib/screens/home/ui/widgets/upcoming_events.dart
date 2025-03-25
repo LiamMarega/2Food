@@ -98,17 +98,17 @@ class EventCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
           child: Shimmer.fromColors(
-            baseColor: colorScheme.primary.withOpacity(0.1),
-            highlightColor: colorScheme.primary.withOpacity(0.5),
+            baseColor: colorScheme.primary.withValues(alpha: 0.1),
+            highlightColor: colorScheme.primary.withValues(alpha: 0.5),
             period: const Duration(seconds: 5),
             direction: ShimmerDirection.ttb,
             child: Container(
               padding: const EdgeInsets.all(5),
               decoration: BoxDecoration(
-                color: colorScheme.primary.withOpacity(0.2),
+                color: colorScheme.primary.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: colorScheme.primary.withOpacity(0.5),
+                  color: colorScheme.primary.withValues(alpha: 0.5),
                   width: 3,
                 ),
               ),
@@ -125,7 +125,7 @@ class EventCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: colorScheme.primary.withOpacity(0.1),
+                color: colorScheme.primary.withValues(alpha: 0.1),
                 blurRadius: 8,
                 offset: const Offset(0, 4),
               ),
@@ -137,7 +137,7 @@ class EventCard extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
               side: BorderSide(
-                color: colorScheme.primary.withOpacity(0.1),
+                color: colorScheme.primary.withValues(alpha: 0.1),
               ),
             ),
             clipBehavior: Clip.antiAlias,
@@ -145,8 +145,8 @@ class EventCard extends StatelessWidget {
               onTap: () {
                 // TODO: Navigate to event details
               },
-              splashColor: colorScheme.primary.withOpacity(0.1),
-              highlightColor: colorScheme.primary.withOpacity(0.05),
+              splashColor: colorScheme.primary.withValues(alpha: 0.1),
+              highlightColor: colorScheme.primary.withValues(alpha: 0.05),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -224,7 +224,7 @@ class EventCard extends StatelessWidget {
                             PhosphorIcon(
                               PhosphorIcons.calendar(),
                               size: 16,
-                              color: colorScheme.primary.withOpacity(0.7),
+                              color: colorScheme.primary.withValues(alpha: 0.7),
                             ),
                             const SizedBox(width: 4),
                             Text(
@@ -232,7 +232,8 @@ class EventCard extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,
-                                color: colorScheme.primary.withOpacity(0.7),
+                                color:
+                                    colorScheme.primary.withValues(alpha: 0.7),
                               ),
                             ),
                           ],
