@@ -237,7 +237,7 @@ class _MenuDetailDialogState extends ConsumerState<MenuDetailDialog> {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.amber.shade800,
+                            color: Theme.of(context).primaryColor,
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
@@ -280,7 +280,7 @@ class _MenuDetailDialogState extends ConsumerState<MenuDetailDialog> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'La Taberna',
+                            'McDonalds',
                             style: Theme.of(context)
                                 .textTheme
                                 .titleMedium
@@ -459,7 +459,7 @@ class _MenuDetailDialogState extends ConsumerState<MenuDetailDialog> {
                             );
                       },
                       child: Text(
-                        'Añadir \$${(isPromotionActive ? discountedPrice : widget.menuItem.price).toInt() * quantity}',
+                        'Comprar \$${(isPromotionActive ? discountedPrice : widget.menuItem.price).toInt() * quantity}',
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,

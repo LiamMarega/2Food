@@ -175,7 +175,7 @@ class PaymentService {
       log('Creating payment preference for restaurant: $restaurantId');
 
       final res = await _client.functions.invoke(
-        'create-preferences',
+        'create-preference',
         body: {
           'marketplace_id': restaurantId,
           'title': title,

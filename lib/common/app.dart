@@ -21,8 +21,9 @@ class App extends ConsumerWidget {
           materialThemeBuilder: (context, theme) {
             return ThemeData(
               colorScheme: ColorScheme.light(
-                primary: const Color(0xFFFFB300),
-                secondary: const Color(0xFFFFB300),
+                primary: const Color(0xFF295F98),
+                secondary: const Color(0xFFCDC2A5),
+                tertiary: const Color(0xFFFFCF50),
                 surface: theme.colorScheme.surface,
                 onSurface: theme.colorScheme.onSurface,
               ),

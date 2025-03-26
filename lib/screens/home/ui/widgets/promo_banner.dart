@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:snapfood/common/widgets/cache_images.dart';
 
 class PromoItem {
   final String imageUrl;
@@ -113,30 +113,18 @@ class _PromoBannerState extends State<PromoBanner> {
                   ),
                   child: Stack(
                     children: [
-                      Image.network(
+                      CachedNetworkImage(
                         promo.imageUrl,
                         height: 160,
                         width: double.infinity,
-                        fit: BoxFit.cover,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Container(
-                            height: 160,
-                            width: double.infinity,
-                            color: Colors.grey[300],
-                            child: const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          );
-                        },
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            height: 160,
-                            width: double.infinity,
-                            color: Colors.grey[300],
-                            child: const Icon(Icons.error),
-                          );
-                        },
+                        placeholder: Container(
+                          height: 160,
+                          width: double.infinity,
+                          color: Colors.grey[300],
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
                       ),
                       Positioned.fill(
                         child: Container(
@@ -157,23 +145,6 @@ class _PromoBannerState extends State<PromoBanner> {
             ),
           ),
           const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(
-              widget.promos.length,
-              (index) => Container(
-                width: 8,
-                height: 8,
-                margin: const EdgeInsets.symmetric(horizontal: 4),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: _currentPage == index
-                      ? Theme.of(context).primaryColor
-                      : Colors.grey[300],
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );

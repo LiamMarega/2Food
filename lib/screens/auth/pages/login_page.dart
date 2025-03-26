@@ -55,9 +55,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           child: Stack(
             children: [
               Container(
-                decoration: const BoxDecoration(
-                  color: Color(0xFFFFB300),
-                  borderRadius: BorderRadius.only(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(30),
                     bottomRight: Radius.circular(30),
                   ),
@@ -116,7 +116,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                   width: 80,
                                   height: 80,
                                   decoration: BoxDecoration(
-                                    color: const Color(0xFFFFB300)
+                                    color: Theme.of(context)
+                                        .primaryColor
                                         .withValues(alpha: 0.2),
                                     shape: BoxShape.circle,
                                   ),
@@ -232,9 +233,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           children: [
                             Container(
                               height: 100,
-                              decoration: const BoxDecoration(
-                                color: Color(0xFFFFB300),
-                                borderRadius: BorderRadius.only(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColor,
+                                borderRadius: const BorderRadius.only(
                                   bottomLeft: Radius.circular(30),
                                   bottomRight: Radius.circular(30),
                                 ),

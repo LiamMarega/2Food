@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:snapfood/screens/auth/providers/auth_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -278,13 +279,13 @@ class _SigninPageState extends ConsumerState<SigninPage> {
                       ),
                     // Already have account row
                     Padding(
-                      padding: const EdgeInsets.only(top: 20),
+                      padding: const EdgeInsets.only(top: 35),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             'signin.alreadyHaveAccount'.tr(),
-                            style: theme.textTheme.bodyMedium,
+                            style: ShadTheme.of(context).textTheme.large,
                           ),
                           GestureDetector(
                             onTap: () => context.go('/auth/login'),
@@ -293,6 +294,7 @@ class _SigninPageState extends ConsumerState<SigninPage> {
                               style: theme.textTheme.bodyMedium?.copyWith(
                                 color: Theme.of(context).primaryColor,
                                 fontWeight: FontWeight.bold,
+                                fontSize: 16,
                               ),
                             ),
                           ),
