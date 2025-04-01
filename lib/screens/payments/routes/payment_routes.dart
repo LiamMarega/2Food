@@ -13,15 +13,18 @@ final paymentRoutes = [
     },
   ),
   GoRoute(
-    path: 'payment-status/approved',
+    path: '/payment-status/approved',
+    name: 'payment-approved',
     builder: (context, state) => const ApprovedScreen(),
   ),
   GoRoute(
-    path: 'payment-status/pending',
+    path: '/payment-status/pending',
+    name: 'payment-pending',
     builder: (context, state) => const PendingScreen(),
   ),
   GoRoute(
-    path: 'payment-status/rejected',
+    path: '/payment-status/rejected',
+    name: 'payment-rejected',
     builder: (context, state) => const RejectedScreen(),
   ),
 ];
