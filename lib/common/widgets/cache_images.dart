@@ -56,7 +56,10 @@ class CachedNetworkImage extends StatelessWidget {
             return errorWidget != null
                 ? errorWidget!(context, imageUrl, state.extendedImageLoadState)
                 : _buildErrorWidget(
-                    context, imageUrl, state.extendedImageLoadState);
+                    context,
+                    imageUrl,
+                    state.extendedImageLoadState,
+                  );
         }
       },
     );
@@ -64,11 +67,13 @@ class CachedNetworkImage extends StatelessWidget {
 
   Widget _buildErrorWidget(BuildContext context, String url, dynamic error) {
     if (safeError) {
-      return Image.network(imageUrl,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) => const Icon(
-                CupertinoIcons.wifi_exclamationmark,
-              ));
+      return Image.network(
+        imageUrl,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) => const Icon(
+          CupertinoIcons.wifi_exclamationmark,
+        ),
+      );
     } else {
       return const Icon(CupertinoIcons.wifi_exclamationmark);
     }

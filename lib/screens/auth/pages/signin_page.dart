@@ -163,21 +163,18 @@ class _SigninPageState extends ConsumerState<SigninPage> {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30),
                                   borderSide: const BorderSide(
-                                    color: Colors.black,
                                     width: 0.5,
                                   ),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30),
                                   borderSide: const BorderSide(
-                                    color: Colors.black,
                                     width: 0.5,
                                   ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30),
                                   borderSide: const BorderSide(
-                                    color: Colors.black,
                                     width: 0.5,
                                   ),
                                 ),
@@ -399,7 +396,7 @@ class _SigninPageState extends ConsumerState<SigninPage> {
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

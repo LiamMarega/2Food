@@ -172,7 +172,12 @@ class PaymentService {
     required String restaurantId,
   }) async {
     try {
-      log('Creating payment preference for restaurant: $restaurantId');
+      final currentUser = _client.auth.currentUser;
+
+      log('user_id: ${currentUser?.id}');
+      log('email: ${currentUser?.toJson()}');
+
+      log('Creating payment preference for restaurant: $restaurantId / ${currentUser?.id}');
 
       final res = await _client.functions.invoke(
         'create-preference',
@@ -181,6 +186,7 @@ class PaymentService {
           'title': title,
           'quantity': quantity,
           'unit_price': price,
+          'user_id': currentUser?.id,
           'currency_id': 'ARS',
         },
       );
