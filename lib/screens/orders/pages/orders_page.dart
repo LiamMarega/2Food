@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -34,9 +35,9 @@ class _OrdersPageState extends ConsumerState<OrdersPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Orders',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Text(
+          'ordersPage.title'.tr(),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         actions: [
@@ -93,7 +94,7 @@ class OrderListView extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'Error loading orders',
+              'ordersPage.actions.errorLoading'.tr(),
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 8),
@@ -104,7 +105,7 @@ class OrderListView extends ConsumerWidget {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () => ref.read(orderProvider.notifier).fetchOrders(),
-              child: const Text('Retry'),
+              child: Text('ordersPage.actions.retry'.tr()),
             ),
           ],
         ),
@@ -149,7 +150,7 @@ class OrderListTab extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'No orders found',
+              'ordersPage.orderInfo.noOrders'.tr(),
               style: TextStyle(
                 fontSize: 18,
                 color: Colors.grey[600],

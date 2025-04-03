@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:snapfood/common/models/order.dart';
@@ -67,7 +68,7 @@ class OrderItemCard extends StatelessWidget {
                     children: [
                       Text(
                         orderData != null
-                            ? 'Order #${orderData.id}'
+                            ? '${'ordersPage.orderInfo.orderNumber'.tr()}${orderData.id}'
                             : order.productName,
                         style: const TextStyle(
                           fontSize: 18,
@@ -86,7 +87,7 @@ class OrderItemCard extends StatelessWidget {
                           Expanded(
                             child: Text(
                               orderData != null
-                                  ? 'From restaurant: ${orderData.restaurant_id}'
+                                  ? '${'ordersPage.orderInfo.fromRestaurant'.tr()} ${orderData.restaurant_id}'
                                   : order.storeName,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -184,23 +185,23 @@ class OrderItemCard extends StatelessWidget {
   Widget _getStatusBadge(OrderStatus status, ThemeData theme) {
     Color backgroundColor;
     Color textColor;
-    String text;
+    String translationKey;
 
     switch (status) {
       case OrderStatus.paid:
         backgroundColor = Colors.green[100]!;
         textColor = Colors.green[800]!;
-        text = 'Paid';
+        translationKey = 'ordersPage.orderStatus.paid';
         break;
       case OrderStatus.pending:
         backgroundColor = Colors.orange[100]!;
         textColor = Colors.orange[800]!;
-        text = 'Pending';
+        translationKey = 'ordersPage.orderStatus.pending';
         break;
       case OrderStatus.rejected:
         backgroundColor = Colors.red[100]!;
         textColor = Colors.red[800]!;
-        text = 'Rejected';
+        translationKey = 'ordersPage.orderStatus.rejected';
         break;
     }
 
@@ -211,7 +212,7 @@ class OrderItemCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Text(
-        text,
+        translationKey.tr(),
         style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w500,
@@ -234,19 +235,23 @@ class DeliveryMethodBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     Color badgeColor;
     IconData badgeIcon;
+    String translationKey;
 
     switch (deliveryMethod) {
       case DeliveryMethod.delivery:
         badgeColor = Colors.green[100]!;
         badgeIcon = Icons.delivery_dining;
+        translationKey = 'ordersPage.deliveryMethod.delivery';
         break;
       case DeliveryMethod.pickUp:
         badgeColor = Colors.grey[100]!;
         badgeIcon = Icons.store;
+        translationKey = 'ordersPage.deliveryMethod.pickUp';
         break;
       case DeliveryMethod.takeAway:
         badgeColor = Colors.blue[100]!;
         badgeIcon = Icons.takeout_dining;
+        translationKey = 'ordersPage.deliveryMethod.takeAway';
         break;
     }
 
@@ -266,7 +271,7 @@ class DeliveryMethodBadge extends StatelessWidget {
           ),
           const SizedBox(width: 6),
           Text(
-            deliveryMethod.name,
+            translationKey.tr(),
             style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w500,

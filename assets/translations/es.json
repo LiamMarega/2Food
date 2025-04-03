@@ -26,5 +26,41 @@
     "alreadyHaveAccount": "¿Ya tienes una cuenta?",
     "login": "Iniciar sesión",
     "agreeTerms": "¡Acepto los términos y condiciones!"
+  },
+  "ordersPage": {
+    "title": "Pedidos",
+    "tabs": {
+      "active": "Activos",
+      "completed": "Completados",
+      "canceled": "Cancelados"
+    },
+    "orderStatus": {
+      "paid": "Pagado",
+      "pending": "Pendiente",
+      "rejected": "Rechazado"
+    },
+    "deliveryMethod": {
+      "delivery": "Entrega",
+      "pickUp": "Recoger",
+      "takeAway": "Para llevar"
+    },
+    "orderInfo": {
+      "orderNumber": "Pedido #",
+      "fromRestaurant": "Del restaurante:",
+      "noOrders": "No hay pedidos"
+    },
+    "actions": {
+      "cancelOrder": "Cancelar Pedido",
+      "trackDriver": "Seguir Repartidor",
+      "reminder": "Recordarme 30 minutos antes",
+      "retry": "Reintentar",
+      "confirmCancel": "¿Estás seguro de que deseas cancelar este pedido?",
+      "yes": "Sí",
+      "no": "No",
+      "goBack": "Volver",
+      "trackDriverTitle": "Seguir Repartidor",
+      "trackDriverDescription": "La funcionalidad de seguimiento del repartidor se implementará aquí",
+      "errorLoading": "Error al cargar los pedidos"
+    }
   }
 } 

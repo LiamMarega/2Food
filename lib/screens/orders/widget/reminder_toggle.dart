@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:snapfood/screens/orders/providers/order_provider.dart';
@@ -30,14 +31,14 @@ class _ReminderToggleState extends ConsumerState<ReminderToggle> {
 
     for (final category in orderState.orders.keys) {
       final categoryOrders = orderState.orders[category]!;
-      final order = categoryOrders.firstWhere(
-        (order) => order.id == widget.orderId,
-        orElse: () => throw Exception('Order not found'),
-      );
-
-      setState(() {
-        _isEnabled = order.reminderEnabled;
-      });
+      for (final order in categoryOrders) {
+        if (order.id == widget.orderId) {
+          setState(() {
+            _isEnabled = order.reminderEnabled;
+          });
+          break;
+        }
+      }
     }
   }
 
@@ -59,7 +60,7 @@ class _ReminderToggleState extends ConsumerState<ReminderToggle> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            'Remind me 30 minutes earlier',
+            'ordersPage.actions.reminder'.tr(),
             style: TextStyle(
               fontSize: 14,
               color: Colors.grey[700],

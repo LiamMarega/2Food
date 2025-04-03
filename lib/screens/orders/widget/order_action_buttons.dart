@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:snapfood/screens/orders/providers/order_provider.dart';
@@ -31,7 +32,7 @@ class OrderActionButtons extends ConsumerWidget {
                 ),
                 padding: const EdgeInsets.symmetric(vertical: 12),
               ),
-              child: const Text('Cancel Order'),
+              child: Text('ordersPage.actions.cancelOrder'.tr()),
             ),
           ),
           const SizedBox(width: 12),
@@ -47,7 +48,7 @@ class OrderActionButtons extends ConsumerWidget {
                 ),
                 padding: const EdgeInsets.symmetric(vertical: 12),
               ),
-              child: const Text('Track Driver'),
+              child: Text('ordersPage.actions.trackDriver'.tr()),
             ),
           ),
         ],
@@ -60,12 +61,12 @@ class OrderActionButtons extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Cancel Order'),
-        content: const Text('Are you sure you want to cancel this order?'),
+        title: Text('ordersPage.actions.cancelOrder'.tr()),
+        content: Text('ordersPage.actions.confirmCancel'.tr()),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('No'),
+            child: Text('ordersPage.actions.no'.tr()),
           ),
           TextButton(
             onPressed: () {
@@ -73,7 +74,7 @@ class OrderActionButtons extends ConsumerWidget {
               ref.read(orderProvider.notifier).cancelOrder(orderId);
               Navigator.pop(context);
             },
-            child: const Text('Yes'),
+            child: Text('ordersPage.actions.yes'.tr()),
           ),
         ],
       ),
@@ -100,7 +101,7 @@ class TrackDriverPlaceholder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Track Driver'),
+        title: Text('ordersPage.actions.trackDriverTitle'.tr()),
       ),
       body: Center(
         child: Column(
@@ -112,8 +113,8 @@ class TrackDriverPlaceholder extends StatelessWidget {
               color: Colors.grey,
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Driver tracking functionality would be implemented here',
+            Text(
+              'ordersPage.actions.trackDriverDescription'.tr(),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 32),
@@ -123,7 +124,7 @@ class TrackDriverPlaceholder extends StatelessWidget {
                 backgroundColor: Theme.of(context).primaryColor,
                 foregroundColor: Colors.white,
               ),
-              child: const Text('Go Back'),
+              child: Text('ordersPage.actions.goBack'.tr()),
             ),
           ],
         ),

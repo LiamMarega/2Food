@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class OrderTabBar extends StatelessWidget {
@@ -22,10 +23,10 @@ class OrderTabBar extends StatelessWidget {
         ),
         child: TabBar(
           controller: controller,
-          tabs: const [
-            Tab(text: 'Active'),
-            Tab(text: 'Completed'),
-            Tab(text: 'Canceled'),
+          tabs: [
+            Tab(text: 'ordersPage.tabs.active'.tr()),
+            Tab(text: 'ordersPage.tabs.completed'.tr()),
+            Tab(text: 'ordersPage.tabs.canceled'.tr()),
           ],
           indicator: BoxDecoration(
             color: primaryColor,
