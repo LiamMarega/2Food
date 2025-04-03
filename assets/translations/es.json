@@ -61,6 +61,21 @@
       "trackDriverTitle": "Seguir Repartidor",
       "trackDriverDescription": "La funcionalidad de seguimiento del repartidor se implementará aquí",
       "errorLoading": "Error al cargar los pedidos"
+    },
+    "detailSheet": {
+      "orderDetails": "Detalles del Pedido",
+      "orderNumber": "Número de Pedido",
+      "orderDate": "Fecha del Pedido",
+      "orderStatus": "Estado",
+      "orderTotal": "Total",
+      "restaurant": "Restaurante",
+      "deliveryMethod": "Método de Entrega",
+      "paymentInfo": "Información de Pago",
+      "paymentMethod": "Método de Pago",
+      "paymentId": "ID de Pago",
+      "close": "Cerrar",
+      "noOrderData": "No hay datos disponibles para este pedido",
+      "noPaymentInfo": "No hay información de pago disponible"
     }
   }
 } 
