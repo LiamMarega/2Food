@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:snapfood/screens/auth/providers/auth_provider.dart';
 import 'package:snapfood/screens/auth/routes/auth_routes.dart';
 import 'package:snapfood/screens/home/routes/home_routes.dart';
+import 'package:snapfood/screens/orders/pages/orders_page.dart';
 import 'package:snapfood/screens/payments/routes/payment_routes.dart';
 import 'package:snapfood/screens/payments/ui/page/payment_screen.dart';
 import 'package:snapfood/screens/profile/profile_page.dart';
@@ -75,11 +76,8 @@ class RouterNotifier extends ChangeNotifier {
               ),
             ),
             GoRoute(
-              path: '/orders',
-              builder: (context, state) => const Center(
-                child: Text('Orders Page'),
-              ),
-            ),
+                path: '/orders',
+                builder: (context, state) => const OrdersPage()),
             GoRoute(
               path: '/profile',
               builder: (context, state) => const Center(

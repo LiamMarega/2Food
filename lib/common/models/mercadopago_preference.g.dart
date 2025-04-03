@@ -7,8 +7,7 @@ part of 'mercadopago_preference.dart';
 // **************************************************************************
 
 _$MercadoPagoPreferenceImpl _$$MercadoPagoPreferenceImplFromJson(
-  Map<String, dynamic> json,
-) =>
+        Map<String, dynamic> json) =>
     _$MercadoPagoPreferenceImpl(
       id: json['id'] as String,
       initPoint: json['initPoint'] as String,
@@ -16,8 +15,7 @@ _$MercadoPagoPreferenceImpl _$$MercadoPagoPreferenceImplFromJson(
     );
 
 Map<String, dynamic> _$$MercadoPagoPreferenceImplToJson(
-  _$MercadoPagoPreferenceImpl instance,
-) =>
+        _$MercadoPagoPreferenceImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'initPoint': instance.initPoint,
