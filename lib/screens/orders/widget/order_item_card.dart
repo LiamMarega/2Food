@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:snapfood/common/models/order.dart';
 import 'package:snapfood/screens/orders/widget/order_action_buttons.dart';
-import 'package:snapfood/screens/orders/widget/order_model.dart';
+import 'package:snapfood/screens/orders/models/order_model.dart';
 import 'package:snapfood/screens/orders/widget/reminder_toggle.dart';
 
 class OrderItemCard extends StatelessWidget {

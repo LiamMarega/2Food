@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:snapfood/common/models/order.dart';
-import 'package:snapfood/screens/orders/widget/order_model.dart';
+import 'package:snapfood/screens/orders/models/order_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 // Order state

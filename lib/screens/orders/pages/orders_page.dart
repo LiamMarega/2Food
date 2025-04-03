@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:snapfood/screens/orders/widget/order_tab_bar.dart';
 import 'package:snapfood/screens/orders/widget/order_item_card.dart';
-import 'package:snapfood/screens/orders/widget/order_model.dart';
+import 'package:snapfood/screens/orders/models/order_model.dart';
 import 'package:snapfood/screens/orders/providers/order_provider.dart';
 
 class OrdersPage extends ConsumerStatefulWidget {
