@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:snapfood/common/models/generated_classes.dart';
 import 'package:snapfood/common/utils/media_query.dart';
 import 'package:snapfood/screens/home/ui/providers/home_provider.dart';
@@ -21,248 +22,278 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-  final ScrollController _scrollController = ScrollController();
-  double _scrollOffset = 0;
-  final double _searchBarHeight =
-      80; // Altura aproximada de la barra de búsqueda
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-  }
-
-  @override
-  void dispose() {
-    _scrollController
-      ..removeListener(_onScroll)
-      ..dispose();
-    super.dispose();
-  }
-
-  void _onScroll() {
-    setState(() {
-      _scrollOffset = _scrollController.offset;
-    });
-  }
+  final scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
     final homeState = ref.watch(homeProvider);
-    const parallaxFactor = 0.5;
-    final searchBarOffset = -min(_scrollOffset, _searchBarHeight);
+    final theme = ShadTheme.of(context);
 
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
-      extendBody: true,
-      extendBodyBehindAppBar: true,
+      backgroundColor: Theme.of(context).colorScheme.primary,
       body: SafeArea(
-        child: Stack(
+        child: Column(
           children: [
-            // Contenido desplazable con efecto parallax
-            CustomScrollView(
-              controller: _scrollController,
-              physics: const ClampingScrollPhysics(),
-              slivers: [
-                // Espacio para permitir que el contenido comience debajo de la barra de búsqueda
-                SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: _searchBarHeight + 20,
-                  ), // Altura de la barra + espacio adicional
-                ),
-                // Contenedor principal con todo el contenido
-                SliverToBoxAdapter(
-                  child: Transform.translate(
-                    offset: Offset(0, _scrollOffset * parallaxFactor),
-                    child: Container(
-                      padding: const EdgeInsets.only(top: 25),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(50),
-                          topRight: Radius.circular(50),
+            // Header with user greeting and location
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Hola, Liam 👋',
+                          style: theme.textTheme.p.copyWith(
+                            fontSize: 20,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.1),
-                            blurRadius: 10,
-                            offset: const Offset(0, -5),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          // Promo Banner
-                          const PromoBanner(),
-                          const SizedBox(height: 16),
-
-                          // Category Tabs
-                          ColoredBox(
-                            color: Theme.of(context).colorScheme.surface,
-                            child: const CategoryTabs(),
-                          ),
-
-                          // Menu Carousel (no scrollable verticalmente)
-                          Padding(
-                            padding: const EdgeInsets.all(8),
-                            child:
-                                MenuCarousel(items: homeState.promotions ?? []),
-                          ),
-
-                          // Upcoming Events
-                          const Padding(
-                            padding: EdgeInsets.all(8),
-                            child: UpcomingEvents(),
-                          ),
-
-                          // Espacio adicional al final para asegurar que todo sea visible
-                          SizedBox(height: mediaHeight(context, 0.2)),
-                        ],
-                      ),
+                        Row(
+                          children: [
+                            const Icon(
+                              LucideIcons.mapPin,
+                              size: 16,
+                              color: Colors.white,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              'Paraná',
+                              style: theme.textTheme.p.copyWith(
+                                color: Colors.white,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              ],
-            ),
-            // Barra de búsqueda que se oculta al hacer scroll
-            Positioned(
-              top: searchBarOffset, // Se mueve hacia arriba con el scroll
-              left: 0,
-              right: 0,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Autocomplete<String>(
-                  optionsBuilder: (TextEditingValue textEditingValue) {
-                    if (textEditingValue.text == '') {
-                      return const <String>[];
-                    }
-                    // Lista combinada de comidas y restaurantes en español
-                    final searchOptions = [
-                      // Foods
-                      'Pizza',
-                      'Hamburguesa',
-                      'Pasta',
-                      'Sushi',
-                      'Tacos',
-                      'Ensalada',
-                      'Bistec',
-                      'Mariscos',
-                      'Vegetariano',
-                      'Postre',
-                      // Restaurants
-                      'La Parrilla',
-                      'El Rincón Mexicano',
-                      'Sabor Italiano',
-                      'Sushi Express',
-                      'Burger King',
-                      'La Casa de las Enchiladas',
-                      'El Asador',
-                      'Mariscos del Puerto',
-                      'Vegetariano Saludable',
-                      'Dulce Tentación',
-                    ];
-                    return searchOptions.where((option) {
-                      return option.toLowerCase().contains(
-                            textEditingValue.text.toLowerCase(),
-                          );
-                    });
-                  },
-                  fieldViewBuilder: (
-                    context,
-                    textEditingController,
-                    focusNode,
-                    onFieldSubmitted,
-                  ) {
-                    return TextField(
-                      controller: textEditingController,
-                      focusNode: focusNode,
-                      decoration: InputDecoration(
-                        hintText: 'Busca comidas o restaurantes',
-                        hintStyle: const TextStyle(color: Colors.white),
-                        prefixIcon:
-                            const Icon(Icons.search, color: Colors.white),
-                        filled: true,
-                        fillColor: Colors.grey[800],
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide.none,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide.none,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide.none,
+                  Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          LucideIcons.bell,
+                          color: Colors.white,
                         ),
                       ),
-                      style: const TextStyle(color: Colors.white),
-                      onChanged: (value) {},
-                    );
-                  },
-                  optionsViewBuilder: (context, onSelected, options) {
-                    return Align(
-                      alignment: Alignment.topLeft,
-                      child: Material(
-                        elevation: 4,
-                        color: Theme.of(context).colorScheme.surface,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: SizedBox(
-                          height: min(options.length * 48, 200),
-                          width: MediaQuery.of(context).size.width - 40,
-                          child: ListView.builder(
-                            padding: EdgeInsets.zero,
-                            itemCount: options.length,
-                            itemBuilder: (context, index) {
-                              final option = options.elementAt(index);
-                              // Determine if this is a food or restaurant (simplified approach)
-                              final isRestaurant = [
-                                'La Parrilla',
-                                'El Rincón Mexicano',
-                                'Sabor Italiano',
-                                'Sushi Express',
-                                'Burger King',
-                                'La Casa de las Enchiladas',
-                                'El Asador',
-                                'Mariscos del Puerto',
-                                'Vegetariano Saludable',
-                                'Dulce Tentación',
-                              ].contains(option);
-
-                              return ListTile(
-                                leading: Icon(
-                                  isRestaurant
-                                      ? Icons.restaurant
-                                      : Icons.fastfood,
-                                  color: Theme.of(context).hintColor,
-                                ),
-                                title: Text(option),
-                                subtitle: Text(
-                                  isRestaurant ? 'Restaurant' : 'Food',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Theme.of(context).hintColor,
-                                  ),
-                                ),
-                                onTap: () {
-                                  onSelected(option);
-                                },
-                              );
-                            },
+                      Positioned(
+                        right: 10,
+                        top: 10,
+                        child: Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.destructive,
+                            shape: BoxShape.circle,
+                          ),
+                          constraints: const BoxConstraints(
+                            minWidth: 8,
+                            minHeight: 8,
                           ),
                         ),
                       ),
-                    );
-                  },
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            // Search bar
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: ShadInput(
+                prefix: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Icon(LucideIcons.search, size: 16),
+                ),
+                suffix: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Icon(LucideIcons.x, size: 16),
+                ),
+                placeholder:
+                    Text('Search any...', style: theme.textTheme.muted),
+                decoration: ShadDecoration(
+                  border: ShadBorder(radius: BorderRadius.circular(24)),
+                  color: Colors.white,
+                ),
+              ),
+            ),
+
+            // Main content with white background
+            Expanded(
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                  ),
+                ),
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Promotion Banner (Limited Time Offer)
+                      Container(
+                        margin: const EdgeInsets.all(16),
+                        // height: 160,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Row(
+                          children: [
+                            // Left side content (text)
+                            Expanded(
+                              flex: 2,
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '40% Off',
+                                      style: theme.textTheme.h1.copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Limited Time Offer!',
+                                      style: theme.textTheme.h4.copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      'Enjoy a fantastic 40% discount from us!',
+                                      style: theme.textTheme.p.copyWith(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Just for you 🙂',
+                                      style: theme.textTheme.p.copyWith(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            // Right side content (image)
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                margin: const EdgeInsets.all(16),
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: Center(
+                                  child: Icon(
+                                    LucideIcons.pizza,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    size: 48,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // Category buttons (horizontal scrolling)
+                      SizedBox(
+                        height: 110,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              _buildCategoryButton(
+                                icon: LucideIcons.coffee,
+                                label: 'Coffee',
+                                theme: theme,
+                              ),
+                              _buildCategoryButton(
+                                icon: LucideIcons.cookie,
+                                label: 'Snack',
+                                theme: theme,
+                              ),
+                              _buildCategoryButton(
+                                icon: LucideIcons.store,
+                                label: 'Cafe',
+                                theme: theme,
+                              ),
+                              _buildCategoryButton(
+                                icon: LucideIcons.percent,
+                                label: 'Promo',
+                                theme: theme,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      // Use existing components
+                      if (homeState.promotions?.isNotEmpty ?? false)
+                        MenuCarousel(items: homeState.promotions!),
+
+                      const UpcomingEvents(),
+
+                      // Add some space at the bottom
+                      SizedBox(height: mediaHeight(context, 0.1)),
+                    ],
+                  ),
                 ),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildCategoryButton({
+    required IconData icon,
+    required String label,
+    required ShadThemeData theme,
+  }) {
+    return Column(
+      children: [
+        Container(
+          width: 60,
+          height: 60,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: Colors.grey[300]!,
+            ),
+          ),
+          child: Center(
+            child: Icon(
+              icon,
+              size: 24,
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          label,
+          style: theme.textTheme.p,
+        ),
+      ],
     );
   }
 }
