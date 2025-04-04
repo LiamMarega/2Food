@@ -26,7 +26,7 @@ dependencies:
   json_annotation: ^4.9.0
   json_serializable: ^6.9.0
   location: ^8.0.0
-  meta: ^1.15.0
+  meta: ^1.16.0
   phosphor_flutter: ^2.1.0
   riverpod_annotation: ^2.3.5
   shadcn_ui: ^0.18.7
