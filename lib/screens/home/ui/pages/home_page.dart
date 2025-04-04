@@ -36,7 +36,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           children: [
             // Header with user greeting and location
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -51,23 +51,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                           ),
-                        ),
-                        Row(
-                          children: [
-                            const Icon(
-                              LucideIcons.mapPin,
-                              size: 16,
-                              color: Colors.white,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              'Paraná',
-                              style: theme.textTheme.p.copyWith(
-                                color: Colors.white,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
                         ),
                       ],
                     ),
