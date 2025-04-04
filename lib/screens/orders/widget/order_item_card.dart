@@ -197,17 +197,14 @@ class OrderItemCard extends StatelessWidget {
         backgroundColor = Colors.green[100]!;
         textColor = Colors.green[800]!;
         translationKey = 'ordersPage.orderStatus.paid';
-        break;
       case OrderStatus.pending:
         backgroundColor = Colors.orange[100]!;
         textColor = Colors.orange[800]!;
         translationKey = 'ordersPage.orderStatus.pending';
-        break;
       case OrderStatus.rejected:
         backgroundColor = Colors.red[100]!;
         textColor = Colors.red[800]!;
         translationKey = 'ordersPage.orderStatus.rejected';
-        break;
     }
 
     return Container(

@@ -53,8 +53,9 @@ class _HomePageState extends ConsumerState<HomePage> {
     final searchBarOffset = -min(_scrollOffset, _searchBarHeight);
 
     return Scaffold(
-      backgroundColor:
-          Colors.grey[900], // Usando un color gris oscuro en lugar de negro
+      backgroundColor: Theme.of(context).primaryColor,
+      extendBody: true,
+      extendBodyBehindAppBar: true,
       body: SafeArea(
         child: Stack(
           children: [
@@ -129,10 +130,8 @@ class _HomePageState extends ConsumerState<HomePage> {
               top: searchBarOffset, // Se mueve hacia arriba con el scroll
               left: 0,
               right: 0,
-              child: Container(
-                color: Colors.grey[900],
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
                 child: Autocomplete<String>(
                   optionsBuilder: (TextEditingValue textEditingValue) {
                     if (textEditingValue.text == '') {
@@ -179,22 +178,22 @@ class _HomePageState extends ConsumerState<HomePage> {
                       controller: textEditingController,
                       focusNode: focusNode,
                       decoration: InputDecoration(
-                        hintText: 'Search for food or restaurants...',
+                        hintText: 'Busca comidas o restaurantes',
                         hintStyle: const TextStyle(color: Colors.white),
                         prefixIcon:
                             const Icon(Icons.search, color: Colors.white),
                         filled: true,
                         fillColor: Colors.grey[800],
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(20),
                           borderSide: BorderSide.none,
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(20),
                           borderSide: BorderSide.none,
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(20),
                           borderSide: BorderSide.none,
                         ),
                       ),

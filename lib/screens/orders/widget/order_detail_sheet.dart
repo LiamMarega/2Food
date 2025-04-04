@@ -1,16 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:snapfood/common/models/order.dart';
 import 'package:snapfood/screens/orders/models/order_model.dart';
 
 class OrderDetailSheet extends StatelessWidget {
-  final OrderItem orderItem;
-
   const OrderDetailSheet({
     required this.orderItem,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
+
+  final OrderItem orderItem;
 
   static void show(BuildContext context, OrderItem orderItem) {
     showModalBottomSheet(
@@ -22,7 +21,6 @@ class OrderDetailSheet extends StatelessWidget {
       builder: (context) => DraggableScrollableSheet(
         initialChildSize: 0.8,
         minChildSize: 0.4,
-        maxChildSize: 1,
         expand: false,
         builder: (context, scrollController) {
           return OrderDetailSheet(orderItem: orderItem);
