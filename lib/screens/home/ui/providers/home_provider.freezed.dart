@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$HomeState {
   List<Restaurants>? get restaurants => throw _privateConstructorUsedError;
   List<MenuItem>? get promotions => throw _privateConstructorUsedError;
+  List<Event>? get events => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
 
   /// Create a copy of HomeState
@@ -35,6 +36,7 @@ abstract class $HomeStateCopyWith<$Res> {
   $Res call(
       {List<Restaurants>? restaurants,
       List<MenuItem>? promotions,
+      List<Event>? events,
       bool isLoading});
 }
 
@@ -55,6 +57,7 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
   $Res call({
     Object? restaurants = freezed,
     Object? promotions = freezed,
+    Object? events = freezed,
     Object? isLoading = null,
   }) {
     return _then(_value.copyWith(
@@ -66,6 +69,10 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
           ? _value.promotions
           : promotions // ignore: cast_nullable_to_non_nullable
               as List<MenuItem>?,
+      events: freezed == events
+          ? _value.events
+          : events // ignore: cast_nullable_to_non_nullable
+              as List<Event>?,
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
@@ -85,6 +92,7 @@ abstract class _$$HomeStateImplCopyWith<$Res>
   $Res call(
       {List<Restaurants>? restaurants,
       List<MenuItem>? promotions,
+      List<Event>? events,
       bool isLoading});
 }
 
@@ -103,6 +111,7 @@ class __$$HomeStateImplCopyWithImpl<$Res>
   $Res call({
     Object? restaurants = freezed,
     Object? promotions = freezed,
+    Object? events = freezed,
     Object? isLoading = null,
   }) {
     return _then(_$HomeStateImpl(
@@ -114,6 +123,10 @@ class __$$HomeStateImplCopyWithImpl<$Res>
           ? _value._promotions
           : promotions // ignore: cast_nullable_to_non_nullable
               as List<MenuItem>?,
+      events: freezed == events
+          ? _value._events
+          : events // ignore: cast_nullable_to_non_nullable
+              as List<Event>?,
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
@@ -128,9 +141,11 @@ class _$HomeStateImpl implements _HomeState {
   const _$HomeStateImpl(
       {final List<Restaurants>? restaurants,
       final List<MenuItem>? promotions,
+      final List<Event>? events,
       this.isLoading = false})
       : _restaurants = restaurants,
-        _promotions = promotions;
+        _promotions = promotions,
+        _events = events;
 
   final List<Restaurants>? _restaurants;
   @override
@@ -152,13 +167,23 @@ class _$HomeStateImpl implements _HomeState {
     return EqualUnmodifiableListView(value);
   }
 
+  final List<Event>? _events;
+  @override
+  List<Event>? get events {
+    final value = _events;
+    if (value == null) return null;
+    if (_events is EqualUnmodifiableListView) return _events;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   @JsonKey()
   final bool isLoading;
 
   @override
   String toString() {
-    return 'HomeState(restaurants: $restaurants, promotions: $promotions, isLoading: $isLoading)';
+    return 'HomeState(restaurants: $restaurants, promotions: $promotions, events: $events, isLoading: $isLoading)';
   }
 
   @override
@@ -170,6 +195,7 @@ class _$HomeStateImpl implements _HomeState {
                 .equals(other._restaurants, _restaurants) &&
             const DeepCollectionEquality()
                 .equals(other._promotions, _promotions) &&
+            const DeepCollectionEquality().equals(other._events, _events) &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading));
   }
@@ -179,6 +205,7 @@ class _$HomeStateImpl implements _HomeState {
       runtimeType,
       const DeepCollectionEquality().hash(_restaurants),
       const DeepCollectionEquality().hash(_promotions),
+      const DeepCollectionEquality().hash(_events),
       isLoading);
 
   /// Create a copy of HomeState
@@ -194,12 +221,15 @@ abstract class _HomeState implements HomeState {
   const factory _HomeState(
       {final List<Restaurants>? restaurants,
       final List<MenuItem>? promotions,
+      final List<Event>? events,
       final bool isLoading}) = _$HomeStateImpl;
 
   @override
   List<Restaurants>? get restaurants;
   @override
   List<MenuItem>? get promotions;
+  @override
+  List<Event>? get events;
   @override
   bool get isLoading;
 

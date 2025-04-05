@@ -233,16 +233,15 @@ class _HomePageState extends ConsumerState<HomePage> {
                         ),
                       ),
 
+                      const UpcomingEvents(),
+
+                      SizedBox(height: mediaHeight(context, 0.02)),
+
                       // Use existing components
                       if (homeState.promotions?.isNotEmpty ?? false)
                         MenuCarousel(items: homeState.promotions!),
 
-                      SizedBox(height: mediaHeight(context, 0.02)),
-
-                      const UpcomingEvents(),
-
                       // Add some space at the bottom
-
                       SizedBox(height: mediaHeight(context, 0.01)),
 
                       const CarouselRestaurants()

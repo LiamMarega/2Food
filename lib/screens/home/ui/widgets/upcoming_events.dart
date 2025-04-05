@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:snapfood/common/models/events.dart';
 import 'package:snapfood/common/utils/constants.dart';
+import 'package:snapfood/screens/home/ui/providers/home_provider.dart';
+import 'package:intl/intl.dart';
 
-class UpcomingEvents extends StatelessWidget {
+class UpcomingEvents extends ConsumerWidget {
   const UpcomingEvents({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(homeProvider);
+    final events = state.events;
+    final isLoading = state.isLoading;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -34,33 +42,140 @@ class UpcomingEvents extends StatelessWidget {
         ),
         SizedBox(
           height: 300,
-          child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            scrollDirection: Axis.horizontal,
-            children: const [
-              EventCard(
-                title: 'Secret Menu Access',
-                description:
-                    'Order a surprise dish and enjoy a unique culinary creation. Guess the ingredients!',
-                date: 'Feb 16, 2024, 7:00 PM',
-                seatsLeft: 2,
-                imageUrl:
-                    'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
+          child: isLoading || events == null
+              ? _buildLoadingList()
+              : events.isEmpty
+                  ? _buildNoEventsMessage(context)
+                  : ListView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: events.length,
+                      itemBuilder: (context, index) {
+                        final event = events[index];
+                        return Padding(
+                          padding: EdgeInsets.only(
+                              right: index == events.length - 1 ? 0 : 16),
+                          child: EventCard(
+                            title: event.name,
+                            description: event.description,
+                            date: DateFormat('MMM dd, yyyy, h:mm a')
+                                .format(event.date.toLocal()),
+                            seatsLeft: event.max_users != null &&
+                                    event.users_joined != null
+                                ? event.max_users! - event.users_joined!
+                                : null,
+                            imageUrl: event.banner ?? '',
+                            price: event.price,
+                            currency: event.currency ?? 'USD',
+                          ),
+                        );
+                      },
+                    ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLoadingList() {
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      scrollDirection: Axis.horizontal,
+      itemCount: 3,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: EdgeInsets.only(right: index == 2 ? 0 : 16),
+          child: EventCardSkeleton(),
+        );
+      },
+    );
+  }
+
+  Widget _buildNoEventsMessage(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          PhosphorIcon(
+            PhosphorIcons.calendar(),
+            size: 48,
+            color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'No hay eventos próximos',
+            style: TextStyle(
+              fontSize: 16,
+              color: Theme.of(context).colorScheme.primary.withOpacity(0.7),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class EventCardSkeleton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Container(
+      width: 280,
+      height: 280,
+      decoration: BoxDecoration(
+        borderRadius: kDefaultBorderRadius,
+      ),
+      child: Shimmer.fromColors(
+        baseColor: colorScheme.primary.withValues(alpha: 0.1),
+        highlightColor: colorScheme.primary.withValues(alpha: 0.3),
+        child: Card(
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: kDefaultBorderRadius,
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 150,
+                color: Colors.white,
               ),
-              SizedBox(width: 16),
-              EventCard(
-                title: 'Mystery Dish Challenge',
-                description:
-                    'Order and unlock access to exclusive dishes not listed on the regular menu.',
-                date: 'Feb 18, 2024, 8:00 PM',
-                seatsLeft: 5,
-                imageUrl:
-                    'https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 20,
+                      width: 200,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      height: 14,
+                      width: 240,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(height: 4),
+                    Container(
+                      height: 14,
+                      width: 160,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      height: 16,
+                      width: 120,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
         ),
-      ],
+      ),
     );
   }
 }
@@ -69,8 +184,10 @@ class EventCard extends StatelessWidget {
   final String title;
   final String description;
   final String date;
-  final int seatsLeft;
+  final int? seatsLeft;
   final String imageUrl;
+  final double? price;
+  final String currency;
 
   const EventCard({
     required this.title,
@@ -78,6 +195,8 @@ class EventCard extends StatelessWidget {
     required this.date,
     required this.seatsLeft,
     required this.imageUrl,
+    required this.price,
+    required this.currency,
     super.key,
   });
 
@@ -174,7 +293,7 @@ class EventCard extends StatelessWidget {
                           );
                         },
                       ),
-                      if (seatsLeft <= 3)
+                      if (seatsLeft != null && seatsLeft! <= 3)
                         Positioned(
                           top: 8,
                           left: 8,
@@ -184,6 +303,29 @@ class EventCard extends StatelessWidget {
                             label: Text(
                               '$seatsLeft Asientos Disponibles',
                               style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      // Price badge
+                      if (price != null)
+                        Positioned(
+                          bottom: 8,
+                          right: 8,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: colorScheme.primary,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Text(
+                              '${currency.toUpperCase()} ${price!.toStringAsFixed(2)}',
+                              style: const TextStyle(
+                                color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -224,13 +366,16 @@ class EventCard extends StatelessWidget {
                               color: colorScheme.primary.withValues(alpha: 0.7),
                             ),
                             const SizedBox(width: 4),
-                            Text(
-                              date,
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                color:
-                                    colorScheme.primary.withValues(alpha: 0.7),
+                            Expanded(
+                              child: Text(
+                                date,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  color: colorScheme.primary
+                                      .withValues(alpha: 0.7),
+                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ],
