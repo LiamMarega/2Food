@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:snapfood/common/utils/media_query.dart';
@@ -18,10 +19,11 @@ class _HomePageState extends ConsumerState<HomePage> {
   final scrollController = ScrollController();
 
   final categories = [
-    (icon: LucideIcons.coffee, label: 'Coffee'),
-    (icon: LucideIcons.cookie, label: 'Snack'),
-    (icon: LucideIcons.store, label: 'Cafe'),
+    (icon: LucideIcons.pizza, label: 'Pizza'),
+    (icon: LucideIcons.cookie, label: 'Snacks'),
+    (icon: PhosphorIcons.hamburger_bold, label: 'Burguers'),
     (icon: LucideIcons.percent, label: 'Promo'),
+    (icon: LucideIcons.beer, label: 'Cerveza'),
   ];
 
   @override
@@ -44,13 +46,18 @@ class _HomePageState extends ConsumerState<HomePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Hola, Liam 👋',
-                          style: theme.textTheme.p.copyWith(
-                            fontSize: 20,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        Row(
+                          children: [
+                            Text(
+                              'Hola, Liam ',
+                              style: theme.textTheme.p.copyWith(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const WavingHandEmoji(),
+                          ],
                         ),
                       ],
                     ),
@@ -203,11 +210,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: categories.length,
-                            prototypeItem: _buildCategoryButton(
-                              icon: LucideIcons.hardDriveUpload,
-                              label: 'Pizzassss',
-                              theme: theme,
-                            ),
                             itemBuilder: (context, index) {
                               return Padding(
                                 padding:
@@ -275,6 +277,68 @@ class _HomePageState extends ConsumerState<HomePage> {
           style: theme.textTheme.p,
         ),
       ],
+    );
+  }
+}
+
+class WavingHandEmoji extends StatefulWidget {
+  const WavingHandEmoji({super.key});
+
+  @override
+  State<WavingHandEmoji> createState() => _WavingHandEmojiState();
+}
+
+class _WavingHandEmojiState extends State<WavingHandEmoji>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    )..repeat(
+        count: 2,
+        reverse: true,
+      );
+
+    _animation = TweenSequence<double>([
+      TweenSequenceItem(
+        tween: Tween(begin: 0, end: 0.3),
+        weight: 1,
+      ),
+      TweenSequenceItem(
+        tween: Tween(begin: 0.3, end: -0.3),
+        weight: 1,
+      ),
+      TweenSequenceItem(
+        tween: Tween(begin: -0.3, end: 0),
+        weight: 1,
+      ),
+    ]).animate(_controller);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return Transform.rotate(
+          angle: _animation.value,
+          child: const Text(
+            '👋',
+            style: TextStyle(fontSize: 20),
+          ),
+        );
+      },
     );
   }
 }

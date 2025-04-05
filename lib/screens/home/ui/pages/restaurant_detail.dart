@@ -274,7 +274,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                   Expanded(
                     child: ShadInput(
                       controller: _searchController,
-                      placeholder: const Text('Search dishes...'),
+                      placeholder: const Text('Buscar comidas...'),
                       prefix: const Icon(Icons.search),
                       onChanged: (value) {
                         //
