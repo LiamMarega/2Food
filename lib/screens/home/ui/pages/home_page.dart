@@ -157,14 +157,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      '40% Off',
+                                      '20% Off',
                                       style: theme.textTheme.h1.copyWith(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                     Text(
-                                      'Limited Time Offer!',
+                                      '¡Oferta por tiempo limitado!',
                                       style: theme.textTheme.h4.copyWith(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
@@ -172,13 +172,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     ),
                                     const SizedBox(height: 8),
                                     Text(
-                                      'Enjoy a fantastic 40% discount from us!',
-                                      style: theme.textTheme.p.copyWith(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    Text(
-                                      'Just for you 🙂',
+                                      '¡Disfruta de un fantástico 20% de descuento!',
                                       style: theme.textTheme.p.copyWith(
                                         color: Colors.white,
                                       ),
@@ -196,12 +190,35 @@ class _HomePageState extends ConsumerState<HomePage> {
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(16),
                                 ),
-                                child: Center(
-                                  child: Icon(
-                                    LucideIcons.pizza,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    size: 48,
+                                child: MouseRegion(
+                                  onEnter: (_) => setState(() {}),
+                                  onExit: (_) => setState(() {}),
+                                  child: GestureDetector(
+                                    onTapDown: (_) => setState(() {}),
+                                    onTapUp: (_) => setState(() {}),
+                                    onTapCancel: () => setState(() {}),
+                                    child: TweenAnimationBuilder(
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      tween: Tween<double>(
+                                        begin: 0.5,
+                                        end: 1,
+                                      ),
+                                      builder: (context, value, child) {
+                                        return Transform.scale(
+                                          scale: value,
+                                          child: Center(
+                                            child: Icon(
+                                              LucideIcons.venetianMask,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              size: 48,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   ),
                                 ),
                               ),
