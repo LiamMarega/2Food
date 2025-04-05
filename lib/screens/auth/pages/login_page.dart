@@ -109,26 +109,26 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               ],
                             ),
                             const SizedBox(width: 15),
-                            Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Container(
-                                  width: 80,
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .primaryColor
-                                        .withValues(alpha: 0.2),
-                                    shape: BoxShape.circle,
-                                  ),
-                                ),
-                                SvgPicture.asset(
-                                  'assets/images/food_scene.png',
-                                  width: 100,
-                                  height: 100,
-                                ),
-                              ],
-                            ),
+                            // Stack(
+                            //   alignment: Alignment.center,
+                            //   children: [
+                            //     Container(
+                            //       width: 80,
+                            //       height: 80,
+                            //       decoration: BoxDecoration(
+                            //         color: Theme.of(context)
+                            //             .primaryColor
+                            //             .withValues(alpha: 0.2),
+                            //         shape: BoxShape.circle,
+                            //       ),
+                            //     ),
+                            //     SvgPicture.asset(
+                            //       'assets/images/food_scene.png',
+                            //       width: 100,
+                            //       height: 100,
+                            //     ),
+                            //   ],
+                            // ),
                           ],
                         ),
                         const SizedBox(height: 60),

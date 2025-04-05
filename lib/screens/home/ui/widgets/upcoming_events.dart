@@ -115,6 +115,8 @@ class UpcomingEvents extends ConsumerWidget {
 }
 
 class EventCardSkeleton extends StatelessWidget {
+  const EventCardSkeleton({super.key});
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
