@@ -5,6 +5,7 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:snapfood/common/utils/media_query.dart';
 import 'package:snapfood/screens/home/ui/providers/home_provider.dart';
 import 'package:snapfood/screens/home/ui/widgets/carousels/carousel_restaurants.dart';
+import 'package:snapfood/screens/home/ui/widgets/home_page_skeleton.dart';
 import 'package:snapfood/screens/home/ui/widgets/menu_grid.dart';
 import 'package:snapfood/screens/home/ui/widgets/upcoming_events.dart';
 
@@ -30,6 +31,13 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     final homeState = ref.watch(homeProvider);
     final theme = ShadTheme.of(context);
+
+    // Show skeleton loading while data is loading
+    if (homeState.isLoading ||
+        homeState.promotions == null ||
+        homeState.restaurants == null) {
+      return const HomePageSkeleton();
+    }
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
