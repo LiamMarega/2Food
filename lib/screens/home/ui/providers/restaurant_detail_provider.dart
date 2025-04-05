@@ -47,11 +47,15 @@ class RestaurantDetail extends _$RestaurantDetail {
           .from('menu_items')
           .select()
           .eq('restaurantId', restaurantId)
-          .withConverter((data) => (data as List)
-              .map((item) => MenuItem.fromJson(item as Map<String, dynamic>))
-              .toList());
+          .withConverter(
+            (data) => (data as List)
+                .map((item) => MenuItem.fromJson(item as Map<String, dynamic>))
+                .toList(),
+          );
 
-      state = AsyncData(state.value!.copyWith(
+      final currentState = state.valueOrNull ??
+          RestaurantDetailState(restaurantId: restaurantId);
+      state = AsyncData(currentState.copyWith(
         menuItems: menuItems,
       ));
     } catch (e) {
