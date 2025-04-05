@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:snapfood/common/utils/constants.dart';
 
 class UpcomingEvents extends StatelessWidget {
   const UpcomingEvents({super.key});
@@ -26,12 +27,11 @@ class UpcomingEvents extends StatelessWidget {
                 onPressed: () {
                   // TODO: Navigate to all events
                 },
-                child: const Text('See all'),
+                child: const Text('Ver todos'),
               ),
             ],
           ),
         ),
-        const SizedBox(height: 12),
         SizedBox(
           height: 300,
           child: ListView(
@@ -92,7 +92,7 @@ class EventCard extends StatelessWidget {
           width: 280,
           height: 300, // Ajusta esta altura según sea necesario
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: kDefaultBorderRadius,
           ),
           child: Shimmer.fromColors(
             baseColor: colorScheme.primary.withValues(alpha: 0.1),
@@ -103,7 +103,7 @@ class EventCard extends StatelessWidget {
               padding: const EdgeInsets.all(5),
               decoration: BoxDecoration(
                 color: colorScheme.primary.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: kDefaultBorderRadius,
                 border: Border.all(
                   color: colorScheme.primary.withValues(alpha: 0.5),
                   width: 3,
@@ -119,7 +119,7 @@ class EventCard extends StatelessWidget {
           padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
             color: Colors.transparent,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: kDefaultBorderRadius,
             boxShadow: [
               BoxShadow(
                 color: colorScheme.primary.withValues(alpha: 0.1),
@@ -132,7 +132,7 @@ class EventCard extends StatelessWidget {
             elevation: 0,
             color: Colors.white,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: kDefaultBorderRadius,
               side: BorderSide(
                 color: colorScheme.primary.withValues(alpha: 0.1),
               ),

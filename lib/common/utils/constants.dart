@@ -30,6 +30,8 @@ const OutlineInputBorder kDefaultOutlineInputBorder = OutlineInputBorder(
   ),
 );
 
+BorderRadius kDefaultBorderRadius = BorderRadius.circular(20);
+
 const InputDecoration otpInputDecoration = InputDecoration(
   contentPadding: EdgeInsets.zero,
   counterText: '',

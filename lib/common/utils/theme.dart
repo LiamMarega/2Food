@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:snapfood/common/utils/constants.dart';
 
 ThemeData buildThemeData() {
   return ThemeData(
     primaryColor: accentColor,
-
     scaffoldBackgroundColor: Colors.white,
     fontFamily: 'SF Pro Text',
-    // textTheme: textTheme().apply(displayColor: titleColor),
+    brightness: Brightness.light,
     appBarTheme: const AppBarTheme(
       color: Colors.white,
       elevation: 0,
       centerTitle: true,
+      systemOverlayStyle: SystemUiOverlayStyle.dark,
       iconTheme: IconThemeData(color: Colors.black),
     ),
     inputDecorationTheme: inputDecorationTheme,

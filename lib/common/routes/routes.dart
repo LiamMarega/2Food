@@ -2,6 +2,7 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:snapfood/screens/auth/providers/auth_provider.dart';
 import 'package:snapfood/screens/auth/routes/auth_routes.dart';
 import 'package:snapfood/screens/home/routes/home_routes.dart';
@@ -103,16 +104,16 @@ class ScaffoldWithNavBar extends StatelessWidget {
       body: child,
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        child: const Icon(Icons.question_mark_sharp),
+        child: const Icon(LucideIcons.venetianMask),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: AnimatedBottomNavigationBar(
         blurEffect: true,
         icons: const [
-          Icons.home_outlined,
-          Icons.search_outlined,
-          Icons.receipt_long_outlined,
-          Icons.person_outline,
+          LucideIcons.house,
+          LucideIcons.search,
+          LucideIcons.receipt,
+          LucideIcons.userRound,
         ],
         activeIndex: _calculateSelectedIndex(context),
         gapLocation: GapLocation.center,

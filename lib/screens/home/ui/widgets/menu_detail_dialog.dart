@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:snapfood/common/models/menu_item.dart';
+import 'package:snapfood/common/utils/constants.dart';
 import 'package:snapfood/common/utils/media_query.dart';
 import 'package:snapfood/screens/payments/ui/providers/payment_provider.dart';
 
@@ -238,7 +239,7 @@ class _MenuDetailDialogState extends ConsumerState<MenuDetailDialog> {
                           ),
                           decoration: BoxDecoration(
                             color: Theme.of(context).primaryColor,
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: kDefaultBorderRadius,
                           ),
                           child: Text(
                             discountLabel,
@@ -315,7 +316,7 @@ class _MenuDetailDialogState extends ConsumerState<MenuDetailDialog> {
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey.shade300),
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: kDefaultBorderRadius,
                       ),
                       child: Row(
                         children: [
@@ -352,7 +353,7 @@ class _MenuDetailDialogState extends ConsumerState<MenuDetailDialog> {
                           padding: const EdgeInsets.symmetric(vertical: 12),
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey.shade300),
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: kDefaultBorderRadius,
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -373,7 +374,7 @@ class _MenuDetailDialogState extends ConsumerState<MenuDetailDialog> {
                           padding: const EdgeInsets.symmetric(vertical: 12),
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey.shade300),
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: kDefaultBorderRadius,
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,

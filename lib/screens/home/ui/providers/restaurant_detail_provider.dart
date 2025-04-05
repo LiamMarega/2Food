@@ -27,8 +27,7 @@ class RestaurantDetail extends _$RestaurantDetail {
   }
 
   Future<RestaurantDetailState> _fetchRestaurantDetails(
-    String restaurantId,
-  ) async {
+      String restaurantId) async {
     final data = await Supabase.instance.client
         .from('restaurants')
         .select()
@@ -44,11 +43,17 @@ class RestaurantDetail extends _$RestaurantDetail {
   Future<void> fetchMenuItems(String restaurantId) async {
     state = const AsyncLoading();
     try {
-      state = AsyncData(
-        state.value!.copyWith(
-            // menuItems: menuItems,
-            ),
-      );
+      final menuItems = await Supabase.instance.client
+          .from('menu_items')
+          .select()
+          .eq('restaurantId', restaurantId)
+          .withConverter((data) => (data as List)
+              .map((item) => MenuItem.fromJson(item as Map<String, dynamic>))
+              .toList());
+
+      state = AsyncData(state.value!.copyWith(
+        menuItems: menuItems,
+      ));
     } catch (e) {
       log('Error fetching menu items: $e');
       state = AsyncError(e, StackTrace.current);

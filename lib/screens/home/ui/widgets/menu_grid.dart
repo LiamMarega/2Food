@@ -4,6 +4,7 @@ import 'dart:math' show Random;
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:snapfood/common/models/menu_item.dart';
+import 'package:snapfood/common/utils/constants.dart';
 import 'package:snapfood/screens/home/ui/widgets/menu_detail_dialog.dart';
 
 // Renombrando la clase para reflejar que ahora es un carrusel
@@ -88,7 +89,7 @@ class MenuItemCard extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         color: Theme.of(context).colorScheme.surface,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: kDefaultBorderRadius,
         ),
         elevation: 2,
         child: Column(

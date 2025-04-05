@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:snapfood/common/models/order.dart';
+import 'package:snapfood/common/utils/constants.dart';
 import 'package:snapfood/screens/orders/widget/order_action_buttons.dart';
 import 'package:snapfood/screens/orders/models/order_model.dart';
 import 'package:snapfood/screens/orders/widget/order_detail_sheet.dart';
@@ -43,11 +44,11 @@ class OrderItemCard extends StatelessWidget {
                     width: 70,
                     height: 70,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: kDefaultBorderRadius,
                       color: Colors.grey[200],
                     ),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: kDefaultBorderRadius,
                       child: Image.network(
                         order.imageUrl,
                         fit: BoxFit.cover,

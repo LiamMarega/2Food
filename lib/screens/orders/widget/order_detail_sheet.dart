@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:snapfood/common/models/order.dart';
+import 'package:snapfood/common/utils/constants.dart';
 import 'package:snapfood/screens/orders/models/order_model.dart';
 
 class OrderDetailSheet extends StatelessWidget {
@@ -113,7 +114,7 @@ class OrderDetailSheet extends StatelessWidget {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: kDefaultBorderRadius,
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -206,7 +207,7 @@ class OrderDetailSheet extends StatelessWidget {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: kDefaultBorderRadius,
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -254,7 +255,7 @@ class OrderDetailSheet extends StatelessWidget {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: kDefaultBorderRadius,
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -327,7 +328,7 @@ class OrderDetailSheet extends StatelessWidget {
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: kDefaultBorderRadius,
           ),
         ),
         child: Text('ordersPage.detailSheet.close'.tr()),

@@ -1,17 +1,10 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:snapfood/common/models/generated_classes.dart';
 import 'package:snapfood/common/utils/media_query.dart';
 import 'package:snapfood/screens/home/ui/providers/home_provider.dart';
-import 'package:snapfood/screens/home/ui/widgets/category_tabs.dart';
-import 'package:snapfood/screens/home/ui/widgets/food_card.dart';
+import 'package:snapfood/screens/home/ui/widgets/carousels/carousel_restaurants.dart';
 import 'package:snapfood/screens/home/ui/widgets/menu_grid.dart';
-import 'package:snapfood/screens/home/ui/widgets/promo_banner.dart';
 import 'package:snapfood/screens/home/ui/widgets/upcoming_events.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -23,6 +16,13 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   final scrollController = ScrollController();
+
+  final categories = [
+    (icon: LucideIcons.coffee, label: 'Coffee'),
+    (icon: LucideIcons.cookie, label: 'Snack'),
+    (icon: LucideIcons.store, label: 'Cafe'),
+    (icon: LucideIcons.percent, label: 'Promo'),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -174,7 +174,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                             ),
                             // Right side content (image)
                             Expanded(
-                              flex: 1,
                               child: Container(
                                 margin: const EdgeInsets.all(16),
                                 padding: const EdgeInsets.all(16),
@@ -201,30 +200,25 @@ class _HomePageState extends ConsumerState<HomePage> {
                         height: 110,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              _buildCategoryButton(
-                                icon: LucideIcons.coffee,
-                                label: 'Coffee',
-                                theme: theme,
-                              ),
-                              _buildCategoryButton(
-                                icon: LucideIcons.cookie,
-                                label: 'Snack',
-                                theme: theme,
-                              ),
-                              _buildCategoryButton(
-                                icon: LucideIcons.store,
-                                label: 'Cafe',
-                                theme: theme,
-                              ),
-                              _buildCategoryButton(
-                                icon: LucideIcons.percent,
-                                label: 'Promo',
-                                theme: theme,
-                              ),
-                            ],
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: categories.length,
+                            prototypeItem: _buildCategoryButton(
+                              icon: LucideIcons.hardDriveUpload,
+                              label: 'Pizzassss',
+                              theme: theme,
+                            ),
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 12),
+                                child: _buildCategoryButton(
+                                  icon: categories[index].icon,
+                                  label: categories[index].label,
+                                  theme: theme,
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ),
@@ -233,10 +227,15 @@ class _HomePageState extends ConsumerState<HomePage> {
                       if (homeState.promotions?.isNotEmpty ?? false)
                         MenuCarousel(items: homeState.promotions!),
 
+                      SizedBox(height: mediaHeight(context, 0.02)),
+
                       const UpcomingEvents(),
 
                       // Add some space at the bottom
-                      SizedBox(height: mediaHeight(context, 0.1)),
+
+                      SizedBox(height: mediaHeight(context, 0.01)),
+
+                      const CarouselRestaurants()
                     ],
                   ),
                 ),
@@ -257,7 +256,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       children: [
         Container(
           width: 60,
-          height: 60,
+          height: 50,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
@@ -271,284 +270,11 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
           ),
         ),
-        const SizedBox(height: 8),
         Text(
           label,
           style: theme.textTheme.p,
         ),
       ],
-    );
-  }
-}
-
-class CarouselPromotions extends ConsumerWidget {
-  const CarouselPromotions({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final promotions =
-        ref.watch(homeProvider.select((state) => state.promotions)) ?? [];
-
-    return SizedBox(
-      height: mediaHeight(context, 0.3),
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: promotions.length,
-        itemBuilder: (context, idx) {
-          final promotion = promotions[idx];
-          return FoodCard(
-            key: Key('promotion-${promotion.id}'),
-            product: promotion,
-          );
-        },
-      ),
-    );
-  }
-}
-
-class CarouselRecommended extends StatefulWidget {
-  const CarouselRecommended({super.key});
-
-  @override
-  State<CarouselRecommended> createState() => _CarouselExampleState();
-}
-
-class _CarouselExampleState extends State<CarouselRecommended> {
-  final CarouselController controller = CarouselController(initialItem: 1);
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 300, // Fixed height for the carousel
-      child: ListView(
-        physics:
-            const NeverScrollableScrollPhysics(), // Prevent ListView scroll
-        children: <Widget>[
-          ConstrainedBox(
-            constraints: const BoxConstraints(maxHeight: 200),
-            child: Consumer(
-              builder: (context, ref, child) {
-                final restaurants = ref
-                    .watch(homeProvider.select((state) => state.restaurants));
-                return CarouselView.weighted(
-                  controller: controller,
-                  itemSnapping: true,
-                  flexWeights: const <int>[1, 7, 1],
-                  onTap: (index) {
-                    context.go(
-                      '/restaurant/${restaurants?[index].id}',
-                      extra: restaurants?[index],
-                    );
-                  },
-                  children: restaurants
-                          ?.map(
-                            (e) => HeroLayoutCard(restaurant: e),
-                          )
-                          .toList() ??
-                      [],
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class HeroLayoutCard extends StatelessWidget {
-  const HeroLayoutCard({
-    required this.restaurant,
-    super.key,
-  });
-
-  final Restaurants restaurant;
-
-  @override
-  Widget build(BuildContext context) {
-    final width = MediaQuery.sizeOf(context).width;
-    return Hero(
-      tag: 'restaurant-${restaurant.id}',
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(50),
-          boxShadow: [
-            BoxShadow(
-              color: ShadTheme.of(context).colorScheme.primary,
-              spreadRadius: 1,
-              blurRadius: 20,
-              offset: const Offset(5, 15),
-            ),
-          ],
-        ),
-        width: width * 7 / 8,
-        child: GestureDetector(
-          onTap: () {
-            context.go(
-              '/restaurant/${restaurant.id}',
-              extra: restaurant,
-            );
-          },
-          child: Transform(
-            transform: Matrix4.identity()
-              ..setEntry(3, 2, 0.001)
-              ..rotateY(0.1),
-            alignment: FractionalOffset.center,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    spreadRadius: 1,
-                    blurRadius: 10,
-                    offset: const Offset(5, 5),
-                  ),
-                  BoxShadow(
-                    color: Colors.white.withValues(alpha: 0.1),
-                    spreadRadius: 1,
-                    blurRadius: 10,
-                    offset: const Offset(-5, -5),
-                  ),
-                ],
-              ),
-              child: Card(
-                elevation: 0,
-                color: Theme.of(context).cardColor.withValues(alpha: 0.8),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50),
-                  side: BorderSide(
-                    color:
-                        Theme.of(context).dividerColor.withValues(alpha: 0.2),
-                  ),
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: Stack(
-                  alignment: AlignmentDirectional.bottomStart,
-                  children: <Widget>[
-                    SizedBox(
-                      width: double.infinity,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(50),
-                        child: Image.network(
-                          restaurant.image,
-                          fit: BoxFit.cover,
-                          height: 200,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.transparent,
-                            Colors.black.withValues(alpha: 0.8),
-                          ],
-                          stops: const [0.3, 1.0],
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.3),
-                            blurRadius: 15,
-                            spreadRadius: 5,
-                            offset: const Offset(0, -2),
-                          ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 18,
-                          vertical: 22,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Text(
-                              restaurant.name,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineMedium
-                                  ?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                shadows: [
-                                  Shadow(
-                                    color: Colors.black.withValues(alpha: 0.5),
-                                    blurRadius: 10,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              restaurant.description ?? '',
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                color: Colors.white.withValues(alpha: 0.95),
-                                shadows: [
-                                  Shadow(
-                                    color: Colors.black.withValues(alpha: 0.5),
-                                    blurRadius: 8,
-                                    offset: const Offset(0, 1),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class UncontainedLayoutCard extends StatelessWidget {
-  const UncontainedLayoutCard({
-    required this.index,
-    required this.label,
-    super.key,
-  });
-
-  final int index;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return ColoredBox(
-      color: Colors.primaries[index % Colors.primaries.length]
-          .withValues(alpha: 0.5),
-      child: Center(
-        child: Text(
-          label,
-          style: const TextStyle(color: Colors.white, fontSize: 20),
-          overflow: TextOverflow.clip,
-          softWrap: false,
-        ),
-      ),
     );
   }
 }
