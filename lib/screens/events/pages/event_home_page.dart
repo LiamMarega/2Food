@@ -1,11 +1,8 @@
-import 'dart:ui';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:snapfood/common/models/events.dart';
-import 'package:go_router/go_router.dart';
-import 'package:snapfood/common/utils/media_query.dart';
 
 class EventHomePage extends StatelessWidget {
   const EventHomePage({
@@ -152,7 +149,10 @@ class EventHomePage extends StatelessWidget {
                           ),
                           decoration: BoxDecoration(
                             color: _getAvailabilityColor(
-                                context, event.max_users!, event.users_joined),
+                              context,
+                              event.max_users!,
+                              event.users_joined,
+                            ),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
@@ -407,28 +407,74 @@ class EventHomePage extends StatelessWidget {
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: FilledButton(
-            onPressed: _isEventFull(event) || _isEventPast(event)
-                ? null
-                : () {
-                    // TODO: Implement joining the event
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('eventHomePage.joinEvent'.tr()),
-                      ),
-                    );
-                  },
-            style: FilledButton.styleFrom(
-              minimumSize: const Size(double.infinity, 56),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          padding: const EdgeInsets.all(20),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(24),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 1),
+                ),
+              ],
             ),
-            child: Text(
-              _getButtonText(event),
-              style: const TextStyle(fontSize: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '\$${event.price?.toStringAsFixed(0) ?? '0'}',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      '/persona',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                  ],
+                ),
+                FilledButton(
+                  onPressed: _isEventFull(event) || _isEventPast(event)
+                      ? null
+                      : () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('eventHomePage.joinEvent'.tr()),
+                            ),
+                          );
+                        },
+                  style: FilledButton.styleFrom(
+                    minimumSize: const Size(150, 48),
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 16,
+                    ),
+                  ),
+                  child: const Text(
+                    'Reserva tu lugar',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -464,7 +510,10 @@ class EventHomePage extends StatelessWidget {
   }
 
   Color _getAvailabilityColor(
-      BuildContext context, int maxUsers, int? usersJoined) {
+    BuildContext context,
+    int maxUsers,
+    int? usersJoined,
+  ) {
     final remaining = _getRemainingSpots(maxUsers, usersJoined);
     final ratio = remaining / maxUsers;
 
