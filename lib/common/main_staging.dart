@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:snapfood/common/app.dart';
+import 'package:snapfood/common/services/core/config/supabase_config.dart';
 import 'package:snapfood/common/utils/bootstrap.dart';
-import 'package:snapfood/core/config/supabase_config.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {

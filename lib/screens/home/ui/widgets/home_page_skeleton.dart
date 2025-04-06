@@ -385,7 +385,6 @@ class HomePageSkeleton extends StatelessWidget {
           const CustomShimmer(
             height: 120,
             width: double.infinity,
-            borderRadius: 0,
           ),
           Container(
             padding: const EdgeInsets.all(8),
@@ -434,9 +433,7 @@ class HomePageSkeleton extends StatelessWidget {
 class CustomShimmer extends StatelessWidget {
   /// Creates a new [CustomShimmer] widget
   const CustomShimmer({
-    super.key,
-    required this.height,
-    required this.width,
+    required this.height, required this.width, super.key,
     this.borderRadius = 0,
     this.baseColor,
     this.highlightColor,

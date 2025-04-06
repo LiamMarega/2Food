@@ -321,15 +321,19 @@ class _MenuDetailDialogState extends ConsumerState<MenuDetailDialog> {
                       child: Row(
                         children: [
                           const Icon(Icons.access_time, color: Colors.amber),
-                          const SizedBox(width: 8),
-                          Text(
-                            'Promoción válida hasta ${_formatDate(promotion.endTime)}',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                          const SizedBox(width: 20),
+                          SizedBox(
+                            width: 250,
+                            child: Text(
+                              'Promoción válida hasta ${_formatDate(promotion.endTime)}',
+                              textAlign: TextAlign.start,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
                           ),
                         ],
                       ),

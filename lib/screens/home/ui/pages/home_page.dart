@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:snapfood/common/utils/constants.dart';
 import 'package:snapfood/common/utils/media_query.dart';
 import 'package:snapfood/screens/home/ui/providers/home_provider.dart';
 import 'package:snapfood/screens/home/ui/widgets/carousels/carousel_restaurants.dart';
@@ -106,11 +107,11 @@ class _HomePageState extends ConsumerState<HomePage> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: ShadInput(
                 prefix: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  padding: EdgeInsets.symmetric(horizontal: 8),
                   child: Icon(LucideIcons.search, size: 16),
                 ),
                 suffix: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  padding: EdgeInsets.symmetric(horizontal: 8),
                   child: Icon(LucideIcons.x, size: 16),
                 ),
                 placeholder:
@@ -143,7 +144,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         // height: 160,
                         decoration: BoxDecoration(
                           color: Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: kDefaultBorderRadius,
                         ),
                         child: Row(
                           children: [
@@ -188,7 +189,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 padding: const EdgeInsets.all(16),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
-                                  borderRadius: BorderRadius.circular(16),
+                                  borderRadius: kDefaultBorderRadius,
                                 ),
                                 child: MouseRegion(
                                   onEnter: (_) => setState(() {}),
@@ -261,7 +262,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                       // Add some space at the bottom
                       SizedBox(height: mediaHeight(context, 0.01)),
 
-                      const CarouselRestaurants()
+                      const CarouselRestaurants(),
                     ],
                   ),
                 ),

@@ -77,5 +77,24 @@
       "noOrderData": "No hay datos disponibles para este pedido",
       "noPaymentInfo": "No hay información de pago disponible"
     }
+  },
+  "eventHomePage": {
+    "priceEntry": "Precio de entrada",
+    "perPerson": "Por persona",
+    "availableSpots": "Lugares disponibles",
+    "aboutEvent": "Acerca del evento",
+    "secretLocation": "Ubicación secreta",
+    "location": "Ubicación",
+    "locationReveal": "La ubicación se revelará pronto",
+    "exactLocationReveal": "La ubicación exacta será revelada a los asistentes antes del evento",
+    "eventDetails": "Detalles del evento",
+    "secretMenu": "Menú Secreto",
+    "secretMenuDescription": "Este evento incluye un menú especial que será revelado durante el evento.",
+    "secretAttendees": "Asistentes Secretos",
+    "secretAttendeesDescription": "La lista de asistentes se mantiene en privado. ¡Prepárate para conocer a nuevas personas!",
+    "eventEnded": "Evento finalizado",
+    "noSpotsAvailable": "No hay lugares disponibles",
+    "joinEvent": "Unirse al evento",
+    "reserveFor": "Reservar por"
   }
 } 

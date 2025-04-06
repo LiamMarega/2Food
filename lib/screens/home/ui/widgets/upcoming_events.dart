@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:snapfood/common/models/events.dart';
 import 'package:snapfood/common/utils/constants.dart';
 import 'package:snapfood/screens/home/ui/providers/home_provider.dart';
-import 'package:intl/intl.dart';
 
 class UpcomingEvents extends ConsumerWidget {
   const UpcomingEvents({super.key});
@@ -54,7 +54,8 @@ class UpcomingEvents extends ConsumerWidget {
                         final event = events[index];
                         return Padding(
                           padding: EdgeInsets.only(
-                              right: index == events.length - 1 ? 0 : 16),
+                            right: index == events.length - 1 ? 0 : 16,
+                          ),
                           child: EventCard(
                             title: event.name,
                             description: event.description,
@@ -67,6 +68,7 @@ class UpcomingEvents extends ConsumerWidget {
                             imageUrl: event.banner ?? '',
                             price: event.price,
                             currency: event.currency ?? 'USD',
+                            eventId: event.id,
                           ),
                         );
                       },
@@ -84,7 +86,7 @@ class UpcomingEvents extends ConsumerWidget {
       itemBuilder: (context, index) {
         return Padding(
           padding: EdgeInsets.only(right: index == 2 ? 0 : 16),
-          child: EventCardSkeleton(),
+          child: const EventCardSkeleton(),
         );
       },
     );
@@ -190,6 +192,7 @@ class EventCard extends StatelessWidget {
   final String imageUrl;
   final double? price;
   final String currency;
+  final String? eventId;
 
   const EventCard({
     required this.title,
@@ -199,6 +202,7 @@ class EventCard extends StatelessWidget {
     required this.imageUrl,
     required this.price,
     required this.currency,
+    required this.eventId,
     super.key,
   });
 
@@ -261,7 +265,13 @@ class EventCard extends StatelessWidget {
             clipBehavior: Clip.antiAlias,
             child: InkWell(
               onTap: () {
-                // TODO: Navigate to event details
+                context.push(
+                  '/events/$eventId',
+                  extra: {
+                    'fullscreen': true,
+                    'hideNavBar': true,
+                  },
+                );
               },
               splashColor: colorScheme.primary.withValues(alpha: 0.1),
               highlightColor: colorScheme.primary.withValues(alpha: 0.05),
@@ -270,30 +280,33 @@ class EventCard extends StatelessWidget {
                 children: [
                   Stack(
                     children: [
-                      Image.network(
-                        imageUrl,
-                        height: 150,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Container(
-                            height: 150,
-                            width: double.infinity,
-                            color: Colors.grey[300],
-                            child: const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          );
-                        },
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            height: 150,
-                            width: double.infinity,
-                            color: Colors.grey[300],
-                            child: const Icon(Icons.error),
-                          );
-                        },
+                      Hero(
+                        tag: 'event-$eventId',
+                        child: Image.network(
+                          imageUrl,
+                          height: 150,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Container(
+                              height: 150,
+                              width: double.infinity,
+                              color: Colors.grey[300],
+                              child: const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
+                          },
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(
+                              height: 150,
+                              width: double.infinity,
+                              color: Colors.grey[300],
+                              child: const Icon(Icons.error),
+                            );
+                          },
+                        ),
                       ),
                       if (seatsLeft != null && seatsLeft! <= 3)
                         Positioned(

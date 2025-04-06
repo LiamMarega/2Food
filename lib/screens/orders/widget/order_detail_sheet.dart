@@ -188,7 +188,7 @@ class OrderDetailSheet extends StatelessWidget {
                   style: theme.textTheme.titleMedium,
                 ),
                 Text(
-                  NumberFormat.currency(symbol: '\$')
+                  NumberFormat.currency(symbol: r'$')
                       .format(order.total_amount),
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
@@ -346,22 +346,18 @@ class OrderDetailSheet extends StatelessWidget {
         badgeColor = Colors.green[700]!;
         badgeIcon = Icons.delivery_dining;
         translationKey = 'ordersPage.deliveryMethod.delivery';
-        break;
       case 'pickup':
         badgeColor = Colors.grey[700]!;
         badgeIcon = Icons.store;
         translationKey = 'ordersPage.deliveryMethod.pickUp';
-        break;
       case 'takeaway':
         badgeColor = Colors.blue[700]!;
         badgeIcon = Icons.takeout_dining;
         translationKey = 'ordersPage.deliveryMethod.takeAway';
-        break;
       default:
         badgeColor = Colors.grey[700]!;
         badgeIcon = Icons.local_shipping;
         translationKey = orderType;
-        break;
     }
 
     return Container(

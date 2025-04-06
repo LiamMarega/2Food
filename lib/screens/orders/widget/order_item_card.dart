@@ -1,10 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:snapfood/common/models/order.dart';
 import 'package:snapfood/common/utils/constants.dart';
-import 'package:snapfood/screens/orders/widget/order_action_buttons.dart';
 import 'package:snapfood/screens/orders/models/order_model.dart';
+import 'package:snapfood/screens/orders/widget/order_action_buttons.dart';
 import 'package:snapfood/screens/orders/widget/order_detail_sheet.dart';
 import 'package:snapfood/screens/orders/widget/reminder_toggle.dart';
 
@@ -114,7 +113,7 @@ class OrderItemCard extends StatelessWidget {
                               ),
                               const SizedBox(width: 4),
                               Text(
-                                '${NumberFormat.currency(symbol: '\$').format(orderData.total_amount)}',
+                                NumberFormat.currency(symbol: r'$').format(orderData.total_amount),
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: theme.primaryColor,
@@ -165,7 +164,7 @@ class OrderItemCard extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: DeliveryMethodBadge(
-                        deliveryMethod: order.deliveryMethod),
+                        deliveryMethod: order.deliveryMethod,),
                   ),
                   if (orderData != null)
                     _getStatusBadge(orderData.status, theme),
@@ -245,17 +244,14 @@ class DeliveryMethodBadge extends StatelessWidget {
         badgeColor = Colors.green[100]!;
         badgeIcon = Icons.delivery_dining;
         translationKey = 'ordersPage.deliveryMethod.delivery';
-        break;
       case DeliveryMethod.pickUp:
         badgeColor = Colors.grey[100]!;
         badgeIcon = Icons.store;
         translationKey = 'ordersPage.deliveryMethod.pickUp';
-        break;
       case DeliveryMethod.takeAway:
         badgeColor = Colors.blue[100]!;
         badgeIcon = Icons.takeout_dining;
         translationKey = 'ordersPage.deliveryMethod.takeAway';
-        break;
     }
 
     return Container(

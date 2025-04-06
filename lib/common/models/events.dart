@@ -12,7 +12,7 @@ class Event with _$Event {
     required String name,
     required String description,
     required DateTime date,
-    String? banner,
+    required DateTime created_at, required DateTime updated_at, String? banner,
     int? users_joined,
     List<String>? users,
     int? max_users,
@@ -28,8 +28,6 @@ class Event with _$Event {
     Map<String, dynamic>? custom_variables,
     List<String>? tags,
     String? status,
-    required DateTime created_at,
-    required DateTime updated_at,
     String? cancellation_reason,
   }) = _Event;
 

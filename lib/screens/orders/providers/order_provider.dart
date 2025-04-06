@@ -42,7 +42,7 @@ class OrderNotifier extends StateNotifier<OrderState> {
     try {
       final data = await supabase
           .from('orders')
-          .select('*')
+          .select()
           .withConverter(Order.converter);
 
       final categorizedOrders = <String, List<OrderItem>>{
@@ -59,7 +59,6 @@ class OrderNotifier extends StateNotifier<OrderState> {
           storeName: 'Restaurant ID: ${order.restaurant_id}',
           imageUrl: 'https://placehold.co/64x64',
           deliveryMethod: _getDeliveryMethod(order.order_type),
-          reminderEnabled: false,
           orderData: order,
         );
 

@@ -2,9 +2,9 @@ import 'dart:developer';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:snapfood/common/models/events.dart';
 import 'package:snapfood/common/models/generated_classes.dart';
 import 'package:snapfood/common/models/menu_item.dart';
-import 'package:snapfood/common/models/events.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'home_provider.freezed.dart';
@@ -81,6 +81,7 @@ class Home extends _$Home {
       final rawData = await supabase
           .from('events')
           .select()
+          .eq('active', true)
           .gte('date', now)
           .order('date', ascending: true);
 
