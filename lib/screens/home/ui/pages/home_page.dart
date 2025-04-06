@@ -165,7 +165,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                       ),
                                     ),
                                     Text(
-                                      '¡Oferta por tiempo limitado!',
+                                      '¡Oferta en tu primer experiencia!',
                                       style: theme.textTheme.h4.copyWith(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
