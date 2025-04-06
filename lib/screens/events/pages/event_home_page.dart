@@ -1,5 +1,9 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:snapfood/common/models/events.dart';
@@ -11,6 +15,21 @@ class EventHomePage extends StatelessWidget {
   });
 
   final Event event;
+
+  LatLng _getEventLocation() {
+    if (event.location_coordinates != null) {
+      final lat =
+          double.tryParse(event.location_coordinates!['latitude'].toString()) ??
+              0.0;
+      final lng = double.tryParse(
+            event.location_coordinates!['longitude'].toString(),
+          ) ??
+          0.0;
+
+      return LatLng(lat, lng);
+    }
+    return const LatLng(0, 0);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -184,8 +203,8 @@ class EventHomePage extends StatelessWidget {
 
                   const SizedBox(height: 32),
 
-                  // Location section
-                  if (event.location != null)
+                  // Location map section
+                  if (event.location_coordinates != null)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -198,11 +217,22 @@ class EventHomePage extends StatelessWidget {
                                     fontWeight: FontWeight.bold,
                                   ),
                         ),
+                        if (event.is_secret_location == false &&
+                            event.location != null)
+                          Text(
+                            event.location!,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black54,
+                                ),
+                          ),
                         const SizedBox(height: 16),
                         Container(
-                          padding: const EdgeInsets.all(16),
+                          height: 200,
                           decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.surface,
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
                               color: Theme.of(context)
@@ -211,42 +241,37 @@ class EventHomePage extends StatelessWidget {
                                   .withValues(alpha: 0.3),
                             ),
                           ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                event.is_secret_location == true
-                                    ? LucideIcons.lock
-                                    : LucideIcons.mapPin,
-                                color: Theme.of(context).colorScheme.primary,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: FlutterMap(
+                              options: MapOptions(
+                                initialCenter: _getEventLocation(),
+                                initialZoom: 15,
                               ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      event.is_secret_location == true
-                                          ? 'eventHomePage.locationReveal'.tr()
-                                          : event.location!,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge
-                                          ?.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                    if (event.is_secret_location == true)
-                                      Text(
-                                        'eventHomePage.exactLocationReveal'
-                                            .tr(),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall,
+                              children: [
+                                TileLayer(
+                                  urlTemplate:
+                                      'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                  userAgentPackageName: 'com.example.app',
+                                ),
+                                MarkerLayer(
+                                  markers: [
+                                    Marker(
+                                      point: _getEventLocation(),
+                                      width: 40,
+                                      height: 40,
+                                      child: Icon(
+                                        LucideIcons.mapPin,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        size: 40,
                                       ),
+                                    ),
                                   ],
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ],
