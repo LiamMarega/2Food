@@ -337,9 +337,9 @@ class EventCard extends StatelessWidget {
                               color: colorScheme.primary,
                               borderRadius: BorderRadius.circular(16),
                             ),
-                            child: Text(
-                              '${currency.toUpperCase()} ${price!.toStringAsFixed(2)}',
-                              style: const TextStyle(
+                            child: const Text(
+                              '20% OFF',
+                              style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
