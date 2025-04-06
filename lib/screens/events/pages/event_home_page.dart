@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:go_router/go_router.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:snapfood/common/models/events.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EventHomePage extends StatelessWidget {
   const EventHomePage({
@@ -29,6 +31,11 @@ class EventHomePage extends StatelessWidget {
       return LatLng(lat, lng);
     }
     return const LatLng(0, 0);
+  }
+
+  Future<void> _openInMaps(BuildContext context) async {
+    final location = _getEventLocation();
+    await MapsLauncher.launchCoordinates(location.latitude, location.longitude);
   }
 
   @override
@@ -243,34 +250,87 @@ class EventHomePage extends StatelessWidget {
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(12),
-                            child: FlutterMap(
-                              options: MapOptions(
-                                initialCenter: _getEventLocation(),
-                                initialZoom: 15,
-                              ),
-                              children: [
-                                TileLayer(
-                                  urlTemplate:
-                                      'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                                  userAgentPackageName: 'com.example.app',
-                                ),
-                                MarkerLayer(
-                                  markers: [
-                                    Marker(
-                                      point: _getEventLocation(),
-                                      width: 40,
-                                      height: 40,
-                                      child: Icon(
-                                        LucideIcons.mapPin,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        size: 40,
+                            child: GestureDetector(
+                              onTap: () => _openInMaps(context),
+                              child: Stack(
+                                children: [
+                                  FlutterMap(
+                                    options: MapOptions(
+                                      initialCenter: _getEventLocation(),
+                                      initialZoom: 15,
+                                    ),
+                                    children: [
+                                      TileLayer(
+                                        urlTemplate:
+                                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                        userAgentPackageName: 'com.example.app',
+                                      ),
+                                      MarkerLayer(
+                                        markers: [
+                                          Marker(
+                                            point: _getEventLocation(),
+                                            width: 40,
+                                            height: 40,
+                                            child: Icon(
+                                              LucideIcons.mapPin,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              size: 40,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Positioned(
+                                    right: 8,
+                                    bottom: 8,
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 4,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(4),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black
+                                                .withValues(alpha: 0.1),
+                                            blurRadius: 4,
+                                          ),
+                                        ],
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(
+                                            LucideIcons.mapPin,
+                                            size: 16,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                          ),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            'Abrir en Maps',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall
+                                                ?.copyWith(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
