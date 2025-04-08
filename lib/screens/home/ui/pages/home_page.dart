@@ -6,6 +6,7 @@ import 'package:snapfood/common/utils/constants.dart';
 import 'package:snapfood/common/utils/media_query.dart';
 import 'package:snapfood/screens/home/ui/providers/home_provider.dart';
 import 'package:snapfood/screens/home/ui/widgets/carousels/carousel_restaurants.dart';
+import 'package:snapfood/screens/home/ui/widgets/hand_animation.dart';
 import 'package:snapfood/screens/home/ui/widgets/home_page_skeleton.dart';
 import 'package:snapfood/screens/home/ui/widgets/menu_grid.dart';
 import 'package:snapfood/screens/home/ui/widgets/upcoming_events.dart';
@@ -256,8 +257,15 @@ class _HomePageState extends ConsumerState<HomePage> {
                       SizedBox(height: mediaHeight(context, 0.02)),
 
                       // Use existing components
-                      if (homeState.promotions?.isNotEmpty ?? false)
-                        MenuCarousel(items: homeState.promotions!),
+                      if (homeState.promotions?.isNotEmpty ?? false) ...[
+                        MenuCarousel(items: [...homeState.promotions!]),
+                        MenuCarousel(
+                          items: [...homeState.promotions!]..shuffle(),
+                        ),
+                        MenuCarousel(
+                          items: [...homeState.promotions!]..shuffle(),
+                        ),
+                      ],
 
                       // Add some space at the bottom
                       SizedBox(height: mediaHeight(context, 0.01)),
@@ -302,68 +310,6 @@ class _HomePageState extends ConsumerState<HomePage> {
           style: theme.textTheme.p,
         ),
       ],
-    );
-  }
-}
-
-class WavingHandEmoji extends StatefulWidget {
-  const WavingHandEmoji({super.key});
-
-  @override
-  State<WavingHandEmoji> createState() => _WavingHandEmojiState();
-}
-
-class _WavingHandEmojiState extends State<WavingHandEmoji>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 500),
-      vsync: this,
-    )..repeat(
-        count: 2,
-        reverse: true,
-      );
-
-    _animation = TweenSequence<double>([
-      TweenSequenceItem(
-        tween: Tween(begin: 0, end: 0.3),
-        weight: 1,
-      ),
-      TweenSequenceItem(
-        tween: Tween(begin: 0.3, end: -0.3),
-        weight: 1,
-      ),
-      TweenSequenceItem(
-        tween: Tween(begin: -0.3, end: 0),
-        weight: 1,
-      ),
-    ]).animate(_controller);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _animation,
-      builder: (context, child) {
-        return Transform.rotate(
-          angle: _animation.value,
-          child: const Text(
-            '👋',
-            style: TextStyle(fontSize: 20),
-          ),
-        );
-      },
     );
   }
 }

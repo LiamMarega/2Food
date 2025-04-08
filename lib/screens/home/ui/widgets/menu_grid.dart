@@ -111,28 +111,6 @@ class MenuItemCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                // Positioned(
-                //   top: 8,
-                //   right: 8,
-                //   child: Container(
-                //     height: 20,
-                //     decoration: BoxDecoration(
-                //       color: Colors.black.withValues(alpha: 0.5),
-                //       shape: BoxShape.circle,
-                //     ),
-                //     child: IconButton(
-                //       iconSize: 10,
-                //       padding: EdgeInsets.zero,
-                //       onPressed: () {
-                //         // TODO: Implement favorite
-                //       },
-                //       icon: PhosphorIcon(
-                //         PhosphorIcons.heart(),
-                //         color: Colors.white,
-                //       ),
-                //     ),
-                //   ),
-                // ),
                 if (showOfferTag)
                   Positioned(
                     top: 0,
@@ -285,7 +263,7 @@ class MenuItemCard extends StatelessWidget {
     }
 
     // Verificar si el descuento es mayor al 30%
-    return discountPercentage >= 50;
+    return discountPercentage >= 30;
   }
 }
 
