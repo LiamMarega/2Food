@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "212712903666",
+    "project_id": "food-da905",
+    "storage_bucket": "food-da905.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:212712903666:android:5db91c33ffc220f326116b",
+        "android_client_info": {
+          "package_name": "com.example.verygoodcore.snapfood"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcUO4Dm0MlF2XeDgwZY4Vs-fP12weg4LY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

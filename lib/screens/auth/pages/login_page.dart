@@ -1,7 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:snapfood/screens/auth/providers/auth_provider.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -41,6 +43,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     if (authState is AuthStateAuthenticated) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         context.go('/');
+      });
+    }
+
+    // Navigate to Google signup page when in Google registration state
+    if (authState is AuthStateGoogleRegistration) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.go('/auth/google-signup');
       });
     }
 
@@ -108,26 +117,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               ],
                             ),
                             const SizedBox(width: 15),
-                            // Stack(
-                            //   alignment: Alignment.center,
-                            //   children: [
-                            //     Container(
-                            //       width: 80,
-                            //       height: 80,
-                            //       decoration: BoxDecoration(
-                            //         color: Theme.of(context)
-                            //             .primaryColor
-                            //             .withValues(alpha: 0.2),
-                            //         shape: BoxShape.circle,
-                            //       ),
-                            //     ),
-                            //     SvgPicture.asset(
-                            //       'assets/images/food_scene.png',
-                            //       width: 100,
-                            //       height: 100,
-                            //     ),
-                            //   ],
-                            // ),
                           ],
                         ),
                         const SizedBox(height: 60),
@@ -210,6 +199,65 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                   contentPadding: const EdgeInsets.symmetric(
                                     horizontal: 20,
                                     vertical: 16,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 50),
+                              GestureDetector(
+                                onTap: isLoading
+                                    ? null
+                                    : () {
+                                        ref
+                                            .read(authProvider.notifier)
+                                            .googleLogin();
+                                      },
+                                child: Opacity(
+                                  opacity: isLoading ? 0.7 : 1.0,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 20,
+                                      vertical: 10,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(30),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.1),
+                                          blurRadius: 15,
+                                          offset: const Offset(0, 5),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        isLoading
+                                            ? const SizedBox(
+                                                width: 24,
+                                                height: 24,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  strokeWidth: 2,
+                                                  color: Colors.red,
+                                                ),
+                                              )
+                                            : const Icon(
+                                                PhosphorIcons.google_logo,
+                                                color: Colors.red,
+                                              ),
+                                        const SizedBox(width: 10),
+                                        Text(
+                                          'login.signInWithGoogle'.tr(),
+                                          style: theme.textTheme.titleMedium
+                                              ?.copyWith(
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:snapfood/common/utils/constants.dart';
 import 'package:snapfood/screens/home/ui/providers/home_provider.dart';
@@ -24,12 +25,9 @@ class UpcomingEvents extends ConsumerWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Proximos Eventos',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: ShadTheme.of(context).textTheme.h4,
               ),
               TextButton(
                 onPressed: () {
@@ -248,8 +246,8 @@ class EventCard extends StatelessWidget {
             boxShadow: [
               BoxShadow(
                 color: colorScheme.primary.withValues(alpha: 0.1),
-                blurRadius: 8,
-                offset: const Offset(0, 4),
+                blurRadius: 5,
+                offset: const Offset(0, 2),
               ),
             ],
           ),

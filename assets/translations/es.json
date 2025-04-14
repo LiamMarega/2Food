@@ -14,7 +14,16 @@
     "email": "Correo electrónico",
     "password": "Contraseña",
     "alreadyHaveAccount": "¿Ya tienes una cuenta?",
-    "login": "Iniciar sesión"
+    "login": "Iniciar sesión",
+    "signInWithGoogle": "Inicia con Google"
+  },
+  "googleSignup": {
+    "completeRegistration": "Completar registro",
+    "verifyInformation": "Verifica tu información",
+    "fullName": "Nombre completo",
+    "email": "Correo electrónico",
+    "phoneNumber": "Número de teléfono",
+    "completeButton": "Completar registro"
   },
   "signin": {
     "welcome": "¡Bienvenido!",
@@ -26,6 +35,18 @@
     "alreadyHaveAccount": "¿Ya tienes una cuenta?",
     "login": "Iniciar sesión",
     "agreeTerms": "¡Acepto los términos y condiciones!"
+  },
+  "signup": {
+    "createAccount": "Crear una cuenta",
+    "signUpToContinue": "Regístrate para continuar",
+    "fullName": "Nombre completo",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "login": "Iniciar sesión",
+    "agreeTerms": "¡Acepto los términos y condiciones!",
+    "passwordsDoNotMatch": "Las contraseñas no coinciden"
   },
   "ordersPage": {
     "title": "Pedidos",

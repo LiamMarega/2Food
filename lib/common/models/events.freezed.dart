@@ -24,6 +24,8 @@ mixin _$Event {
   String get name => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   DateTime get date => throw _privateConstructorUsedError;
+  DateTime get created_at => throw _privateConstructorUsedError;
+  DateTime get updated_at => throw _privateConstructorUsedError;
   String? get banner => throw _privateConstructorUsedError;
   int? get users_joined => throw _privateConstructorUsedError;
   List<String>? get users => throw _privateConstructorUsedError;
@@ -42,8 +44,6 @@ mixin _$Event {
       throw _privateConstructorUsedError;
   List<String>? get tags => throw _privateConstructorUsedError;
   String? get status => throw _privateConstructorUsedError;
-  DateTime get created_at => throw _privateConstructorUsedError;
-  DateTime get updated_at => throw _privateConstructorUsedError;
   String? get cancellation_reason => throw _privateConstructorUsedError;
 
   /// Serializes this Event to a JSON map.
@@ -65,6 +65,8 @@ abstract class $EventCopyWith<$Res> {
       String name,
       String description,
       DateTime date,
+      DateTime created_at,
+      DateTime updated_at,
       String? banner,
       int? users_joined,
       List<String>? users,
@@ -81,8 +83,6 @@ abstract class $EventCopyWith<$Res> {
       Map<String, dynamic>? custom_variables,
       List<String>? tags,
       String? status,
-      DateTime created_at,
-      DateTime updated_at,
       String? cancellation_reason});
 }
 
@@ -105,6 +105,8 @@ class _$EventCopyWithImpl<$Res, $Val extends Event>
     Object? name = null,
     Object? description = null,
     Object? date = null,
+    Object? created_at = null,
+    Object? updated_at = null,
     Object? banner = freezed,
     Object? users_joined = freezed,
     Object? users = freezed,
@@ -121,8 +123,6 @@ class _$EventCopyWithImpl<$Res, $Val extends Event>
     Object? custom_variables = freezed,
     Object? tags = freezed,
     Object? status = freezed,
-    Object? created_at = null,
-    Object? updated_at = null,
     Object? cancellation_reason = freezed,
   }) {
     return _then(_value.copyWith(
@@ -141,6 +141,14 @@ class _$EventCopyWithImpl<$Res, $Val extends Event>
       date: null == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      created_at: null == created_at
+          ? _value.created_at
+          : created_at // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updated_at: null == updated_at
+          ? _value.updated_at
+          : updated_at // ignore: cast_nullable_to_non_nullable
               as DateTime,
       banner: freezed == banner
           ? _value.banner
@@ -206,14 +214,6 @@ class _$EventCopyWithImpl<$Res, $Val extends Event>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as String?,
-      created_at: null == created_at
-          ? _value.created_at
-          : created_at // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      updated_at: null == updated_at
-          ? _value.updated_at
-          : updated_at // ignore: cast_nullable_to_non_nullable
-              as DateTime,
       cancellation_reason: freezed == cancellation_reason
           ? _value.cancellation_reason
           : cancellation_reason // ignore: cast_nullable_to_non_nullable
@@ -234,6 +234,8 @@ abstract class _$$EventImplCopyWith<$Res> implements $EventCopyWith<$Res> {
       String name,
       String description,
       DateTime date,
+      DateTime created_at,
+      DateTime updated_at,
       String? banner,
       int? users_joined,
       List<String>? users,
@@ -250,8 +252,6 @@ abstract class _$$EventImplCopyWith<$Res> implements $EventCopyWith<$Res> {
       Map<String, dynamic>? custom_variables,
       List<String>? tags,
       String? status,
-      DateTime created_at,
-      DateTime updated_at,
       String? cancellation_reason});
 }
 
@@ -272,6 +272,8 @@ class __$$EventImplCopyWithImpl<$Res>
     Object? name = null,
     Object? description = null,
     Object? date = null,
+    Object? created_at = null,
+    Object? updated_at = null,
     Object? banner = freezed,
     Object? users_joined = freezed,
     Object? users = freezed,
@@ -288,8 +290,6 @@ class __$$EventImplCopyWithImpl<$Res>
     Object? custom_variables = freezed,
     Object? tags = freezed,
     Object? status = freezed,
-    Object? created_at = null,
-    Object? updated_at = null,
     Object? cancellation_reason = freezed,
   }) {
     return _then(_$EventImpl(
@@ -308,6 +308,14 @@ class __$$EventImplCopyWithImpl<$Res>
       date: null == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      created_at: null == created_at
+          ? _value.created_at
+          : created_at // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updated_at: null == updated_at
+          ? _value.updated_at
+          : updated_at // ignore: cast_nullable_to_non_nullable
               as DateTime,
       banner: freezed == banner
           ? _value.banner
@@ -373,14 +381,6 @@ class __$$EventImplCopyWithImpl<$Res>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as String?,
-      created_at: null == created_at
-          ? _value.created_at
-          : created_at // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      updated_at: null == updated_at
-          ? _value.updated_at
-          : updated_at // ignore: cast_nullable_to_non_nullable
-              as DateTime,
       cancellation_reason: freezed == cancellation_reason
           ? _value.cancellation_reason
           : cancellation_reason // ignore: cast_nullable_to_non_nullable
@@ -397,6 +397,8 @@ class _$EventImpl with DiagnosticableTreeMixin implements _Event {
       required this.name,
       required this.description,
       required this.date,
+      required this.created_at,
+      required this.updated_at,
       this.banner,
       this.users_joined,
       final List<String>? users,
@@ -413,8 +415,6 @@ class _$EventImpl with DiagnosticableTreeMixin implements _Event {
       final Map<String, dynamic>? custom_variables,
       final List<String>? tags,
       this.status,
-      required this.created_at,
-      required this.updated_at,
       this.cancellation_reason})
       : _users = users,
         _location_coordinates = location_coordinates,
@@ -432,6 +432,10 @@ class _$EventImpl with DiagnosticableTreeMixin implements _Event {
   final String description;
   @override
   final DateTime date;
+  @override
+  final DateTime created_at;
+  @override
+  final DateTime updated_at;
   @override
   final String? banner;
   @override
@@ -498,15 +502,11 @@ class _$EventImpl with DiagnosticableTreeMixin implements _Event {
   @override
   final String? status;
   @override
-  final DateTime created_at;
-  @override
-  final DateTime updated_at;
-  @override
   final String? cancellation_reason;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Event(id: $id, name: $name, description: $description, date: $date, banner: $banner, users_joined: $users_joined, users: $users, max_users: $max_users, min_age: $min_age, price: $price, currency: $currency, location: $location, location_coordinates: $location_coordinates, is_secret_location: $is_secret_location, secret_menu: $secret_menu, secret_attendees: $secret_attendees, event_type: $event_type, custom_variables: $custom_variables, tags: $tags, status: $status, created_at: $created_at, updated_at: $updated_at, cancellation_reason: $cancellation_reason)';
+    return 'Event(id: $id, name: $name, description: $description, date: $date, created_at: $created_at, updated_at: $updated_at, banner: $banner, users_joined: $users_joined, users: $users, max_users: $max_users, min_age: $min_age, price: $price, currency: $currency, location: $location, location_coordinates: $location_coordinates, is_secret_location: $is_secret_location, secret_menu: $secret_menu, secret_attendees: $secret_attendees, event_type: $event_type, custom_variables: $custom_variables, tags: $tags, status: $status, cancellation_reason: $cancellation_reason)';
   }
 
   @override
@@ -518,6 +518,8 @@ class _$EventImpl with DiagnosticableTreeMixin implements _Event {
       ..add(DiagnosticsProperty('name', name))
       ..add(DiagnosticsProperty('description', description))
       ..add(DiagnosticsProperty('date', date))
+      ..add(DiagnosticsProperty('created_at', created_at))
+      ..add(DiagnosticsProperty('updated_at', updated_at))
       ..add(DiagnosticsProperty('banner', banner))
       ..add(DiagnosticsProperty('users_joined', users_joined))
       ..add(DiagnosticsProperty('users', users))
@@ -534,8 +536,6 @@ class _$EventImpl with DiagnosticableTreeMixin implements _Event {
       ..add(DiagnosticsProperty('custom_variables', custom_variables))
       ..add(DiagnosticsProperty('tags', tags))
       ..add(DiagnosticsProperty('status', status))
-      ..add(DiagnosticsProperty('created_at', created_at))
-      ..add(DiagnosticsProperty('updated_at', updated_at))
       ..add(DiagnosticsProperty('cancellation_reason', cancellation_reason));
   }
 
@@ -549,6 +549,10 @@ class _$EventImpl with DiagnosticableTreeMixin implements _Event {
             (identical(other.description, description) ||
                 other.description == description) &&
             (identical(other.date, date) || other.date == date) &&
+            (identical(other.created_at, created_at) ||
+                other.created_at == created_at) &&
+            (identical(other.updated_at, updated_at) ||
+                other.updated_at == updated_at) &&
             (identical(other.banner, banner) || other.banner == banner) &&
             (identical(other.users_joined, users_joined) ||
                 other.users_joined == users_joined) &&
@@ -575,10 +579,6 @@ class _$EventImpl with DiagnosticableTreeMixin implements _Event {
                 .equals(other._custom_variables, _custom_variables) &&
             const DeepCollectionEquality().equals(other._tags, _tags) &&
             (identical(other.status, status) || other.status == status) &&
-            (identical(other.created_at, created_at) ||
-                other.created_at == created_at) &&
-            (identical(other.updated_at, updated_at) ||
-                other.updated_at == updated_at) &&
             (identical(other.cancellation_reason, cancellation_reason) ||
                 other.cancellation_reason == cancellation_reason));
   }
@@ -591,6 +591,8 @@ class _$EventImpl with DiagnosticableTreeMixin implements _Event {
         name,
         description,
         date,
+        created_at,
+        updated_at,
         banner,
         users_joined,
         const DeepCollectionEquality().hash(_users),
@@ -607,8 +609,6 @@ class _$EventImpl with DiagnosticableTreeMixin implements _Event {
         const DeepCollectionEquality().hash(_custom_variables),
         const DeepCollectionEquality().hash(_tags),
         status,
-        created_at,
-        updated_at,
         cancellation_reason
       ]);
 
@@ -634,6 +634,8 @@ abstract class _Event implements Event {
       required final String name,
       required final String description,
       required final DateTime date,
+      required final DateTime created_at,
+      required final DateTime updated_at,
       final String? banner,
       final int? users_joined,
       final List<String>? users,
@@ -650,8 +652,6 @@ abstract class _Event implements Event {
       final Map<String, dynamic>? custom_variables,
       final List<String>? tags,
       final String? status,
-      required final DateTime created_at,
-      required final DateTime updated_at,
       final String? cancellation_reason}) = _$EventImpl;
 
   factory _Event.fromJson(Map<String, dynamic> json) = _$EventImpl.fromJson;
@@ -664,6 +664,10 @@ abstract class _Event implements Event {
   String get description;
   @override
   DateTime get date;
+  @override
+  DateTime get created_at;
+  @override
+  DateTime get updated_at;
   @override
   String? get banner;
   @override
@@ -696,10 +700,6 @@ abstract class _Event implements Event {
   List<String>? get tags;
   @override
   String? get status;
-  @override
-  DateTime get created_at;
-  @override
-  DateTime get updated_at;
   @override
   String? get cancellation_reason;
 

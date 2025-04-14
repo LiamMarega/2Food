@@ -1,0 +1,109 @@
+{
+  "counterAppBarTitle": "Counter",
+  "testButtonLabel": "Test",
+  "authButtonLabel": "Authentication",
+  "welcome": {
+    "title": "Welcome to",
+    "appName": "2Food",
+    "subtitle": "Unlock your food line",
+    "signInPrompt": "Sign in now!"
+  },
+  "login": {
+    "welcomeBack": "Welcome back!",
+    "loginToContinue": "Login to continue",
+    "email": "Email",
+    "password": "Password",
+    "alreadyHaveAccount": "Already have an account?",
+    "login": "Login",
+    "signInWithGoogle": "Sign in with Google"
+  },
+  "googleSignup": {
+    "completeRegistration": "Complete Registration",
+    "verifyInformation": "Verify your information",
+    "fullName": "Full Name",
+    "email": "Email",
+    "phoneNumber": "Phone Number",
+    "completeButton": "Complete Registration"
+  },
+  "signin": {
+    "welcome": "Welcome!",
+    "signInToContinue": "Sign up to continue",
+    "enterOTP": "Enter OTP",
+    "name": "Name",
+    "mobileNo": "Mobile number",
+    "enterOTPPlaceholder": "Enter OTP",
+    "alreadyHaveAccount": "Already have an account?",
+    "login": "Login",
+    "agreeTerms": "I agree to the terms and conditions!"
+  },
+  "ordersPage": {
+    "title": "Orders",
+    "tabs": {
+      "active": "Active",
+      "completed": "Completed",
+      "canceled": "Canceled"
+    },
+    "orderStatus": {
+      "paid": "Paid",
+      "pending": "Pending",
+      "rejected": "Rejected"
+    },
+    "deliveryMethod": {
+      "delivery": "Delivery",
+      "pickUp": "Pick up",
+      "takeAway": "Take away"
+    },
+    "orderInfo": {
+      "orderNumber": "Order #",
+      "fromRestaurant": "From restaurant:",
+      "noOrders": "No orders"
+    },
+    "actions": {
+      "cancelOrder": "Cancel Order",
+      "trackDriver": "Track Driver",
+      "reminder": "Remind me 30 minutes before",
+      "retry": "Retry",
+      "confirmCancel": "Are you sure you want to cancel this order?",
+      "yes": "Yes",
+      "no": "No",
+      "goBack": "Go Back",
+      "trackDriverTitle": "Track Driver",
+      "trackDriverDescription": "Driver tracking functionality will be implemented here",
+      "errorLoading": "Error loading orders"
+    },
+    "detailSheet": {
+      "orderDetails": "Order Details",
+      "orderNumber": "Order Number",
+      "orderDate": "Order Date",
+      "orderStatus": "Status",
+      "orderTotal": "Total",
+      "restaurant": "Restaurant",
+      "deliveryMethod": "Delivery Method",
+      "paymentInfo": "Payment Information",
+      "paymentMethod": "Payment Method",
+      "paymentId": "Payment ID",
+      "close": "Close",
+      "noOrderData": "No data available for this order",
+      "noPaymentInfo": "No payment information available"
+    }
+  },
+  "eventHomePage": {
+    "priceEntry": "Entry price",
+    "perPerson": "Per person",
+    "availableSpots": "Available spots",
+    "aboutEvent": "About the event",
+    "secretLocation": "Secret location",
+    "location": "Location",
+    "locationReveal": "Location will be revealed soon",
+    "exactLocationReveal": "Exact location will be revealed to attendees before the event",
+    "eventDetails": "Event details",
+    "secretMenu": "Secret Menu",
+    "secretMenuDescription": "This event includes a special menu that will be revealed during the event.",
+    "secretAttendees": "Secret Attendees",
+    "secretAttendeesDescription": "The list of attendees is kept private. Get ready to meet new people!",
+    "eventEnded": "Event ended",
+    "noSpotsAvailable": "No spots available",
+    "joinEvent": "Join event",
+    "reserveFor": "Reserve for"
+  }
+} 

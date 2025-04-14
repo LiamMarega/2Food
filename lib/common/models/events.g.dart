@@ -11,6 +11,8 @@ _$EventImpl _$$EventImplFromJson(Map<String, dynamic> json) => _$EventImpl(
       name: json['name'] as String,
       description: json['description'] as String,
       date: DateTime.parse(json['date'] as String),
+      created_at: DateTime.parse(json['created_at'] as String),
+      updated_at: DateTime.parse(json['updated_at'] as String),
       banner: json['banner'] as String?,
       users_joined: (json['users_joined'] as num?)?.toInt(),
       users:
@@ -29,8 +31,6 @@ _$EventImpl _$$EventImplFromJson(Map<String, dynamic> json) => _$EventImpl(
       custom_variables: json['custom_variables'] as Map<String, dynamic>?,
       tags: (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList(),
       status: json['status'] as String?,
-      created_at: DateTime.parse(json['created_at'] as String),
-      updated_at: DateTime.parse(json['updated_at'] as String),
       cancellation_reason: json['cancellation_reason'] as String?,
     );
 
@@ -40,6 +40,8 @@ Map<String, dynamic> _$$EventImplToJson(_$EventImpl instance) =>
       'name': instance.name,
       'description': instance.description,
       'date': instance.date.toIso8601String(),
+      'created_at': instance.created_at.toIso8601String(),
+      'updated_at': instance.updated_at.toIso8601String(),
       'banner': instance.banner,
       'users_joined': instance.users_joined,
       'users': instance.users,
@@ -56,7 +58,5 @@ Map<String, dynamic> _$$EventImplToJson(_$EventImpl instance) =>
       'custom_variables': instance.custom_variables,
       'tags': instance.tags,
       'status': instance.status,
-      'created_at': instance.created_at.toIso8601String(),
-      'updated_at': instance.updated_at.toIso8601String(),
       'cancellation_reason': instance.cancellation_reason,
     };

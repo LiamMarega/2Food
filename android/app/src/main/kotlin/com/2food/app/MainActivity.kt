@@ -1,4 +1,4 @@
-package com.example.verygoodcore.snapfood
+package com.2food.app
 
 import io.flutter.embedding.android.FlutterActivity
 

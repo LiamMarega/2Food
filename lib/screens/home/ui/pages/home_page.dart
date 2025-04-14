@@ -231,7 +231,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
                       // Category buttons (horizontal scrolling)
                       SizedBox(
-                        height: 110,
+                        height: 80,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: ListView.builder(
@@ -258,9 +258,36 @@ class _HomePageState extends ConsumerState<HomePage> {
 
                       // Use existing components
                       if (homeState.promotions?.isNotEmpty ?? false) ...[
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20, bottom: 10),
+                          child: Text(
+                            'Super Ofertas',
+                            style: theme.textTheme.h4,
+                          ),
+                        ),
                         MenuCarousel(items: [...homeState.promotions!]),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 10,
+                          ),
+                          child: Text(
+                            'Hamburguesas',
+                            style: theme.textTheme.h4,
+                          ),
+                        ),
                         MenuCarousel(
                           items: [...homeState.promotions!]..shuffle(),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 10,
+                          ),
+                          child: Text(
+                            'Pizzas',
+                            style: theme.textTheme.h4,
+                          ),
                         ),
                         MenuCarousel(
                           items: [...homeState.promotions!]..shuffle(),

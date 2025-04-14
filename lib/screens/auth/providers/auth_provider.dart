@@ -1,5 +1,8 @@
 // ignore_for_file: no_default_cases
 
+import 'dart:developer';
+
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -29,6 +32,24 @@ class AuthStateError extends AuthState {
 
 class AuthStateOTPSent extends AuthState {
   const AuthStateOTPSent();
+}
+
+class AuthStateGoogleRegistration extends AuthState {
+  const AuthStateGoogleRegistration({
+    required this.name,
+    required this.email,
+    required this.photoUrl,
+    required this.googleAuthToken,
+    required this.googleIdToken,
+    this.phone,
+  });
+
+  final String name;
+  final String email;
+  final String photoUrl;
+  final String? phone;
+  final String googleAuthToken;
+  final String googleIdToken;
 }
 
 @Riverpod(keepAlive: true)
@@ -95,17 +116,25 @@ class Auth extends _$Auth {
     }
   }
 
-  Future<void> signInWithPhone(String name, String phone) async {
+  Future<void> signUp(
+      String email, String password, String name, String? phone) async {
     state = const AuthStateLoading();
     try {
-      // Enviar el código OTP al número de teléfono
-      await Supabase.instance.client.auth.signInWithOtp(
-        phone: phone,
-        data: {'name': name},
+      final response = await Supabase.instance.client.auth.signUp(
+        email: email,
+        password: password,
+        data: {
+          'full_name': name,
+          if (phone != null && phone.isNotEmpty) 'phone': phone,
+        },
       );
 
-      // Indicar que el OTP fue enviado
-      state = const AuthStateOTPSent();
+      if (response.user != null) {
+        state = AuthStateAuthenticated(response.user!);
+      } else {
+        // In case the signup requires email confirmation
+        state = const AuthStateUnauthenticated();
+      }
     } on AuthException catch (e) {
       state = AuthStateError(e.message);
     } catch (e) {
@@ -113,24 +142,52 @@ class Auth extends _$Auth {
     }
   }
 
-  Future<void> verifyOTP(String phone, String token) async {
+  Future<void> googleLogin() async {
     state = const AuthStateLoading();
     try {
-      final response = await Supabase.instance.client.auth.verifyOTP(
-        phone: phone,
-        token: token,
-        type: OtpType.sms,
+      const iosClientId =
+          '212712903666-4sgkak0hsbak0v93g9pcgo7j89b7pejj.apps.googleusercontent.com';
+      const webClientId =
+          '212712903666-2f39ighj9c61668goh3vls2qiu7cec9o.apps.googleusercontent.com';
+
+      final googleSignIn = GoogleSignIn(
+        clientId: iosClientId,
+        serverClientId: webClientId,
+        scopes: ['email', 'profile'],
       );
 
-      final user = response.user;
-      if (user != null) {
-        state = AuthStateAuthenticated(user);
-      } else {
-        state = const AuthStateError('Error al verificar el código OTP');
+      // Sign in with Google
+      final googleUser = await googleSignIn.signIn();
+      if (googleUser == null) {
+        state = const AuthStateUnauthenticated();
+        return;
       }
+
+      // Get Google authentication data
+      final googleAuth = await googleUser.authentication;
+      final idToken = googleAuth.idToken;
+      final accessToken = googleAuth.accessToken;
+
+      if (idToken == null) {
+        state = const AuthStateError('Could not get ID token from Google');
+        return;
+      }
+
+      // Instead of immediately authenticating with Supabase,
+      // we'll transition to the Google registration state
+      state = AuthStateGoogleRegistration(
+        name: googleUser.displayName ?? '',
+        email: googleUser.email,
+        photoUrl: googleUser.photoUrl ?? '',
+        phone: '',
+        googleAuthToken: accessToken ?? '',
+        googleIdToken: idToken,
+      );
+      log("adentrooo 4 ${googleUser.displayName}");
     } on AuthException catch (e) {
       state = AuthStateError(e.message);
     } catch (e) {
+      log("adentrooo 5 ");
       state = AuthStateError(e.toString());
     }
   }
