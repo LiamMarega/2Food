@@ -45,15 +45,6 @@ class _GoogleSignupPageState extends ConsumerState<GoogleSignupPage> {
     final theme = Theme.of(context);
     final isLoading = authState is AuthStateLoading;
 
-    // Store Google auth tokens
-    String? googleIdToken;
-    String? googleAuthToken;
-
-    if (authState is AuthStateGoogleRegistration) {
-      googleIdToken = authState.googleIdToken;
-      googleAuthToken = authState.googleAuthToken;
-    }
-
     // Prevent back navigation when loading
     if (isLoading) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -73,7 +64,7 @@ class _GoogleSignupPageState extends ConsumerState<GoogleSignupPage> {
     // If state is not GoogleRegistration, go back to login
     if (authState is! AuthStateGoogleRegistration &&
         authState is! AuthStateLoading &&
-        !(authState is AuthStateAuthenticated)) {
+        authState is! AuthStateAuthenticated) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         context.go('/auth/login');
       });
@@ -153,6 +144,7 @@ class _GoogleSignupPageState extends ConsumerState<GoogleSignupPage> {
                         children: [
                           TextField(
                             controller: nameController,
+                            enabled: !isLoading,
                             style: const TextStyle(color: Colors.black),
                             decoration: InputDecoration(
                               labelText: 'googleSignup.fullName'.tr(),
@@ -174,6 +166,13 @@ class _GoogleSignupPageState extends ConsumerState<GoogleSignupPage> {
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
                                 borderSide: const BorderSide(width: 0.5),
+                              ),
+                              disabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide(
+                                  width: 0.5,
+                                  color: Colors.grey.shade300,
+                                ),
                               ),
                               contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 20,
@@ -207,7 +206,9 @@ class _GoogleSignupPageState extends ConsumerState<GoogleSignupPage> {
                               disabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
                                 borderSide: BorderSide(
-                                    width: 0.5, color: Colors.grey.shade300),
+                                  width: 0.5,
+                                  color: Colors.grey.shade300,
+                                ),
                               ),
                               contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 20,
@@ -218,6 +219,7 @@ class _GoogleSignupPageState extends ConsumerState<GoogleSignupPage> {
                           const SizedBox(height: 20),
                           TextField(
                             controller: phoneController,
+                            enabled: !isLoading,
                             keyboardType: TextInputType.phone,
                             style: const TextStyle(color: Colors.black),
                             decoration: InputDecoration(
@@ -241,6 +243,13 @@ class _GoogleSignupPageState extends ConsumerState<GoogleSignupPage> {
                                 borderRadius: BorderRadius.circular(30),
                                 borderSide: const BorderSide(width: 0.5),
                               ),
+                              disabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide(
+                                  width: 0.5,
+                                  color: Colors.grey.shade300,
+                                ),
+                              ),
                               contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 20,
                                 vertical: 16,
@@ -259,56 +268,95 @@ class _GoogleSignupPageState extends ConsumerState<GoogleSignupPage> {
                         ),
                       ),
                     const Spacer(),
-                    Stack(
-                      clipBehavior: Clip.none,
-                      alignment: Alignment.topCenter,
-                      children: [
-                        Container(
-                          height: 100,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(30),
-                              bottomRight: Radius.circular(30),
+                    if (authState is AuthStateGoogleRegistration || isLoading)
+                      Stack(
+                        clipBehavior: Clip.none,
+                        alignment: Alignment.topCenter,
+                        children: [
+                          Container(
+                            height: 100,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(30),
+                                bottomRight: Radius.circular(30),
+                              ),
                             ),
-                          ),
-                          child: Center(
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 15),
-                              child: ElevatedButton(
-                                onPressed: isLoading ? null : () {},
-                                style: ElevatedButton.styleFrom(
-                                  foregroundColor: Colors.white,
-                                  backgroundColor: Colors.black,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 40, vertical: 15),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                ),
-                                child: isLoading
-                                    ? const SizedBox(
-                                        width: 20,
-                                        height: 20,
-                                        child: CircularProgressIndicator(
-                                          color: Colors.white,
-                                          strokeWidth: 2,
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 15),
+                                child: Consumer(
+                                  builder: (context, ref, _) {
+                                    return ElevatedButton(
+                                      onPressed: isLoading
+                                          ? null
+                                          : () {
+                                              if (authState
+                                                  is AuthStateGoogleRegistration) {
+                                                ref
+                                                    .read(authProvider.notifier)
+                                                    .saveUser(
+                                                      id: authState.id,
+                                                      name: nameController.text,
+                                                      email:
+                                                          emailController.text,
+                                                      photo: authState.photoUrl,
+                                                      phone:
+                                                          phoneController.text,
+                                                    );
+                                              }
+                                            },
+                                      style: ElevatedButton.styleFrom(
+                                        foregroundColor: Colors.white,
+                                        backgroundColor: isLoading
+                                            ? Colors.grey
+                                            : Colors.black,
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 40,
+                                          vertical: 15,
                                         ),
-                                      )
-                                    : Text(
-                                        'googleSignup.completeButton'.tr(),
-                                        style: const TextStyle(fontSize: 16),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                        ),
+                                        disabledForegroundColor:
+                                            Colors.white.withOpacity(0.8),
+                                        disabledBackgroundColor:
+                                            Colors.grey.shade400,
                                       ),
+                                      child: isLoading
+                                          ? const SizedBox(
+                                              width: 24,
+                                              height: 24,
+                                              child: CircularProgressIndicator(
+                                                color: Colors.white,
+                                                strokeWidth: 2,
+                                              ),
+                                            )
+                                          : Text(
+                                              'googleSignup.completeButton'
+                                                  .tr(),
+                                              style:
+                                                  const TextStyle(fontSize: 16),
+                                            ),
+                                    );
+                                  },
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
                   ],
                 ),
               ),
             ),
+            if (isLoading)
+              Container(
+                color: Colors.black.withOpacity(0.1),
+                width: double.infinity,
+                height: double.infinity,
+              ),
           ],
         ),
       ),

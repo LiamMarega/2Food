@@ -233,20 +233,20 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        isLoading
-                                            ? const SizedBox(
-                                                width: 24,
-                                                height: 24,
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  strokeWidth: 2,
-                                                  color: Colors.red,
-                                                ),
-                                              )
-                                            : const Icon(
-                                                PhosphorIcons.google_logo,
-                                                color: Colors.red,
-                                              ),
+                                        if (isLoading)
+                                          const SizedBox(
+                                            width: 24,
+                                            height: 24,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2,
+                                              color: Colors.red,
+                                            ),
+                                          )
+                                        else
+                                          const Icon(
+                                            PhosphorIcons.google_logo,
+                                            color: Colors.red,
+                                          ),
                                         const SizedBox(width: 10),
                                         Text(
                                           'login.signInWithGoogle'.tr(),

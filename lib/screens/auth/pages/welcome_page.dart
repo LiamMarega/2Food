@@ -118,7 +118,7 @@ class WelcomePage extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          context.go('/auth/signin');
+                          context.go('/auth/signup');
                         },
                         child: Container(
                           width: 70,

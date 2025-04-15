@@ -28,12 +28,9 @@ class AuthStateError extends AuthState {
   final String message;
 }
 
-class AuthStateOTPSent extends AuthState {
-  const AuthStateOTPSent();
-}
-
 class AuthStateGoogleRegistration extends AuthState {
   const AuthStateGoogleRegistration({
+    required this.id,
     required this.name,
     required this.email,
     required this.photoUrl,
@@ -42,6 +39,7 @@ class AuthStateGoogleRegistration extends AuthState {
     this.phone,
   });
 
+  final String id;
   final String name;
   final String email;
   final String photoUrl;
@@ -56,13 +54,17 @@ class Auth extends _$Auth {
   AuthState build() {
     _initialize();
     final session = Supabase.instance.client.auth.currentSession;
+
+    // Start with unauthenticated, then check in _initialize
     if (session != null) {
-      return AuthStateAuthenticated(session.user);
+      // Fetch user existence asynchronously
+      _checkExistence(session.user.id);
+      return const AuthStateLoading();
     }
     return const AuthStateUnauthenticated();
   }
 
-  void _initialize() async {
+  Future<void> _initialize() async {
     Supabase.instance.client.auth.onAuthStateChange.listen((data) async {
       final event = data.event;
       final session = data.session;
@@ -82,6 +84,21 @@ class Auth extends _$Auth {
           if (session != null && exist) {
             state = AuthStateAuthenticated(session.user);
           }
+          if (session != null && !exist) {
+            state = AuthStateGoogleRegistration(
+              id: session.user.id,
+              email: session.user.email ?? '',
+              name: session.user.userMetadata?['full_name']?.toString() ?? '',
+              photoUrl:
+                  session.user.userMetadata?['avatar_url']?.toString() ?? '',
+              googleAuthToken: session.providerToken ?? '',
+              googleIdToken: session.providerRefreshToken ?? '',
+              phone: session.user.phone,
+            );
+          } else {
+            state = const AuthStateLoading();
+          }
+
         case AuthChangeEvent.signedOut:
           state = const AuthStateUnauthenticated();
         case AuthChangeEvent.passwordRecovery:
@@ -103,6 +120,21 @@ class Auth extends _$Auth {
     });
   }
 
+  Future<void> _checkExistence(String userId) async {
+    try {
+      final exist = await existUser(userId);
+      final session = Supabase.instance.client.auth.currentSession;
+
+      if (session != null && exist) {
+        state = AuthStateAuthenticated(session.user);
+      } else {
+        state = const AuthStateUnauthenticated();
+      }
+    } catch (e) {
+      state = AuthStateError(e.toString());
+    }
+  }
+
   Future<void> login(String email, String password) async {
     state = const AuthStateLoading();
     try {
@@ -119,7 +151,11 @@ class Auth extends _$Auth {
   }
 
   Future<void> signUp(
-      String email, String password, String name, String? phone) async {
+    String email,
+    String password,
+    String name,
+    String? phone,
+  ) async {
     state = const AuthStateLoading();
     try {
       final response = await Supabase.instance.client.auth.signUp(
@@ -175,9 +211,8 @@ class Auth extends _$Auth {
         return;
       }
 
-      // Instead of immediately authenticating with Supabase,
-      // we'll transition to the Google registration state
       state = AuthStateGoogleRegistration(
+        id: '',
         name: googleUser.displayName ?? '',
         email: googleUser.email,
         photoUrl: googleUser.photoUrl ?? '',
@@ -271,6 +306,42 @@ class Auth extends _$Auth {
     } catch (e) {
       print('Error checking if user exists: $e');
       return false;
+    }
+  }
+
+  Future<void> saveUser({
+    required String id,
+    required String name,
+    required String email,
+    String? photo,
+    String? phone,
+    int points = 0,
+    String role = 'CUSTOMER',
+  }) async {
+    state = const AuthStateLoading();
+    try {
+      final supabase = Supabase.instance.client;
+
+      await supabase.from('users').upsert({
+        'id': id,
+        'email': email,
+        'name': name,
+        'photo': photo,
+        'points': points,
+        'phone': phone,
+        'role': role,
+        'created_at': DateTime.now().toIso8601String(),
+      });
+
+      // After successfully saving the user, update the state
+      final user = await findUser(id);
+      if (user != null) {
+        state = AuthStateAuthenticated(user);
+      } else {
+        state = const AuthStateError('Failed to retrieve saved user');
+      }
+    } catch (e) {
+      state = AuthStateError('Error saving user: $e');
     }
   }
 }
