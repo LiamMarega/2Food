@@ -232,9 +232,8 @@ class _SigninPageState extends ConsumerState<SigninPage> {
                                   ? null
                                   : () {
                                       ref
-                                          .read(
-                                              authRouteHandlerProvider.notifier)
-                                          .googleSignIn(context);
+                                          .read(authProvider.notifier)
+                                          .googleSignUp();
                                     },
                               child: Opacity(
                                 opacity: isLoading ? 0.7 : 1.0,

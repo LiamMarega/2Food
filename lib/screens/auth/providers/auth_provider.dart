@@ -1,5 +1,3 @@
-// ignore_for_file: no_default_cases
-
 import 'dart:developer';
 
 import 'package:google_sign_in/google_sign_in.dart';
@@ -64,20 +62,24 @@ class Auth extends _$Auth {
     return const AuthStateUnauthenticated();
   }
 
-  void _initialize() {
-    Supabase.instance.client.auth.onAuthStateChange.listen((data) {
+  void _initialize() async {
+    Supabase.instance.client.auth.onAuthStateChange.listen((data) async {
       final event = data.event;
       final session = data.session;
-
+      bool exist;
+      exist = false;
+      if (session != null) {
+        exist = await existUser(session.user.id);
+      }
       switch (event) {
         case AuthChangeEvent.initialSession:
-          if (session != null) {
+          if (session != null && exist) {
             state = AuthStateAuthenticated(session.user);
           } else {
             state = const AuthStateUnauthenticated();
           }
         case AuthChangeEvent.signedIn:
-          if (session != null) {
+          if (session != null && exist) {
             state = AuthStateAuthenticated(session.user);
           }
         case AuthChangeEvent.signedOut:
@@ -183,11 +185,54 @@ class Auth extends _$Auth {
         googleAuthToken: accessToken ?? '',
         googleIdToken: idToken,
       );
-      log("adentrooo 4 ${googleUser.displayName}");
     } on AuthException catch (e) {
       state = AuthStateError(e.message);
     } catch (e) {
-      log("adentrooo 5 ");
+      state = AuthStateError(e.toString());
+    }
+  }
+
+  Future<void> googleSignUp() async {
+    state = const AuthStateLoading();
+    try {
+      const iosClientId =
+          '212712903666-4sgkak0hsbak0v93g9pcgo7j89b7pejj.apps.googleusercontent.com';
+      const webClientId =
+          '212712903666-2f39ighj9c61668goh3vls2qiu7cec9o.apps.googleusercontent.com';
+
+      final googleSignIn = GoogleSignIn(
+        clientId: iosClientId,
+        serverClientId: webClientId,
+        scopes: ['email', 'profile'],
+      );
+
+      // Sign in with Google
+      final googleUser = await googleSignIn.signIn();
+      if (googleUser == null) {
+        state = const AuthStateUnauthenticated();
+        return;
+      }
+
+      // Get Google authentication data
+      final googleAuth = await googleUser.authentication;
+      final idToken = googleAuth.idToken;
+      final accessToken = googleAuth.accessToken;
+
+      if (idToken == null) {
+        state = const AuthStateError('Could not get ID token from Google');
+        return;
+      }
+
+      final supabase = Supabase.instance.client;
+
+      await supabase.auth.signInWithIdToken(
+        provider: OAuthProvider.google,
+        idToken: idToken,
+        accessToken: accessToken,
+      );
+    } on AuthException catch (e) {
+      state = AuthStateError(e.message);
+    } catch (e) {
       state = AuthStateError(e.toString());
     }
   }
@@ -198,6 +243,34 @@ class Auth extends _$Auth {
       state = const AuthStateUnauthenticated();
     } catch (e) {
       state = AuthStateError(e.toString());
+    }
+  }
+
+  Future<User?> findUser(String userId) async {
+    try {
+      final supabase = Supabase.instance.client;
+      final response =
+          await supabase.from('users').select().eq('id', userId).single();
+
+      return User.fromJson(response);
+    } catch (e) {
+      print('Error fetching user: $e');
+      return null;
+    }
+  }
+
+  Future<bool> existUser(String userId) async {
+    try {
+      final supabase = Supabase.instance.client;
+      final response =
+          await supabase.from('users').select().eq('id', userId).single();
+
+      log(response.toString());
+
+      return response != null;
+    } catch (e) {
+      print('Error checking if user exists: $e');
+      return false;
     }
   }
 }

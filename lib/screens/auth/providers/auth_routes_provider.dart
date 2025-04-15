@@ -31,10 +31,6 @@ class AuthRouteHandler extends _$AuthRouteHandler {
     }
   }
 
-  void googleSignIn(BuildContext context) {
-    ref.read(authProvider.notifier).googleLogin();
-  }
-
   void signUp(
     BuildContext context, {
     required String email,
