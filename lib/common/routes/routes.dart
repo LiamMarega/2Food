@@ -35,11 +35,6 @@ class RouterNotifier extends ChangeNotifier {
   String? _redirect(BuildContext context, GoRouterState state) {
     final authState = _ref.read(authProvider);
 
-    // Show splash screen while loading
-    if (authState is AuthStateLoading) {
-      return '/splash';
-    }
-
     // Handle authenticated state
     final isAuth = authState is AuthStateAuthenticated;
     final isAuthPath = state.matchedLocation.startsWith('/auth');
@@ -59,6 +54,11 @@ class RouterNotifier extends ChangeNotifier {
     if (!isAuth && !isAuthPath && !isSplashPath) {
       return '/auth/welcome';
     }
+
+    // // Show splash screen while loading
+    // if (authState is AuthStateLoading ) {
+    //   return '/splash';
+    // }
 
     // Otherwise, allow navigation
     return null;

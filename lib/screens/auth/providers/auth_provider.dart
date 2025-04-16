@@ -4,7 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
 
-import '../models/auth_state.dart';
+import 'package:snapfood/screens/auth/models/auth_state.dart';
 
 part 'auth_provider.g.dart';
 
