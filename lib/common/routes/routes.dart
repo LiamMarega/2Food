@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:snapfood/common/widgets/splash_page.dart';
 import 'package:snapfood/screens/auth/models/auth_state.dart';
 import 'package:snapfood/screens/auth/providers/auth_provider.dart';
 import 'package:snapfood/screens/auth/routes/auth_routes.dart';
@@ -15,11 +16,13 @@ import 'package:snapfood/screens/profile/profile_page.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final router = RouterNotifier(ref);
+
   return GoRouter(
     refreshListenable: router,
     redirect: router._redirect,
     routes: router._routes,
     initialLocation: '/',
+    debugLogDiagnostics: true,
   );
 });
 
@@ -31,30 +34,42 @@ class RouterNotifier extends ChangeNotifier {
 
   String? _redirect(BuildContext context, GoRouterState state) {
     final authState = _ref.read(authProvider);
-    final isAuth = switch (authState) {
-      AuthStateAuthenticated() => true,
-      _ => false,
-    };
 
+    // Show splash screen while loading
+    if (authState is AuthStateLoading) {
+      return '/splash';
+    }
+
+    // Handle authenticated state
+    final isAuth = authState is AuthStateAuthenticated;
     final isAuthPath = state.matchedLocation.startsWith('/auth');
+    final isSplashPath = state.matchedLocation == '/splash';
 
-    // Si el usuario está autenticado y trata de acceder a una ruta de auth,
-    // redirigir a la página principal
+    // If on splash and not loading anymore, redirect appropriately
+    if (isSplashPath && authState is! AuthStateLoading) {
+      return isAuth ? '/' : '/auth/welcome';
+    }
+
+    // If authenticated and trying to access auth pages, redirect to home
     if (isAuth && isAuthPath) {
       return '/';
     }
 
-    // Si el usuario no está autenticado y trata de acceder a una ruta protegida,
-    // redirigir a la página de bienvenida
-    if (!isAuth && !isAuthPath) {
+    // If not authenticated and trying to access protected routes, redirect to welcome
+    if (!isAuth && !isAuthPath && !isSplashPath) {
       return '/auth/welcome';
     }
 
-    // En cualquier otro caso, permitir la navegación
+    // Otherwise, allow navigation
     return null;
   }
 
   List<RouteBase> get _routes => [
+        // Splash route
+        GoRoute(
+          path: '/splash',
+          builder: (context, state) => const SplashPage(),
+        ),
         ...authRoutes,
         // Add a separate route for the payment screen
         GoRoute(
@@ -139,8 +154,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.surface,
         activeColor: Theme.of(context).colorScheme.primary,
         inactiveColor: Theme.of(context).colorScheme.onSurfaceVariant,
-        splashColor:
-            Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+        splashColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
         splashSpeedInMilliseconds: 300,
       ),
     );

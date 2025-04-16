@@ -54,31 +54,9 @@ class _SignupPageState extends ConsumerState<SignupPage> {
     final authState = ref.watch(authProvider);
     final isLoading = authState is AuthStateLoading;
 
-    // Prevent back navigation when loading
-    if (isLoading) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (Navigator.of(context).canPop()) {
-          Navigator.of(context).pop();
-        }
-      });
-    }
-
-    // Navigate to home when authenticated
-    if (authState is AuthStateAuthenticated) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        context.go('/');
-      });
-    }
-
-    // Navigate to Google signup page when in Google registration state
-    if (authState is AuthStateGoogleRegistration) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        context.go('/auth/google-signup');
-      });
-    }
-
-    // Handle navigation based on auth state
-    AuthNavigationHelper.handleAuthStateNavigation(context, ref, authState);
+    // Handle navigation based on auth state - this is now handled by the router
+    // Navigation is now entirely handled by the router
+    AuthUtils.preventBackNavigation(context, isLoading);
 
     return AuthScaffold(
       isLoading: isLoading,

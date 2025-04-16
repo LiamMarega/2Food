@@ -12,85 +12,88 @@ part 'auth_provider.g.dart';
 class Auth extends _$Auth {
   @override
   AuthState build() {
+    // Always start with loading state
     _initialize();
-    final session = Supabase.instance.client.auth.currentSession;
-
-    // Start with unauthenticated, then check in _initialize
-    if (session != null) {
-      // Fetch user existence asynchronously
-      _checkExistence(session.user.id);
-      return const AuthStateLoading();
-    }
-    return const AuthStateUnauthenticated();
+    return const AuthStateLoading();
   }
 
   Future<void> _initialize() async {
-    Supabase.instance.client.auth.onAuthStateChange.listen((data) async {
-      final event = data.event;
-      final session = data.session;
-      bool exist;
-      exist = false;
-      if (session != null) {
-        exist = await existUser(session.user.id);
-      }
-      switch (event) {
-        case AuthChangeEvent.initialSession:
-          if (session != null && exist) {
-            state = AuthStateAuthenticated(session.user);
-          } else {
-            state = const AuthStateUnauthenticated();
-          }
-        case AuthChangeEvent.signedIn:
-          if (session != null && exist) {
-            state = AuthStateAuthenticated(session.user);
-          }
-          if (session != null && !exist) {
-            state = AuthStateGoogleRegistration(
-              id: session.user.id,
-              email: session.user.email ?? '',
-              name: session.user.userMetadata?['full_name']?.toString() ?? '',
-              photoUrl:
-                  session.user.userMetadata?['avatar_url']?.toString() ?? '',
-              googleAuthToken: session.providerToken ?? '',
-              googleIdToken: session.providerRefreshToken ?? '',
-              phone: session.user.phone,
-            );
-          } else {
-            state = const AuthStateLoading();
-          }
+    final session = Supabase.instance.client.auth.currentSession;
 
-        case AuthChangeEvent.signedOut:
-          state = const AuthStateUnauthenticated();
-        case AuthChangeEvent.passwordRecovery:
-          break;
-        case AuthChangeEvent.tokenRefreshed:
-          if (session != null) {
-            state = AuthStateAuthenticated(session.user);
-          }
-        case AuthChangeEvent.userUpdated:
-          if (session != null) {
-            state = AuthStateAuthenticated(session.user);
-          }
-        case AuthChangeEvent.mfaChallengeVerified:
-          // Manejar verificación MFA si lo implementas en el futuro
-          break;
-        default:
-          state = const AuthStateUnauthenticated();
-      }
-    });
-  }
+    // No session means no authenticated user
+    if (session == null) {
+      state = const AuthStateUnauthenticated();
+      return;
+    }
 
-  Future<void> _checkExistence(String userId) async {
+    // Check if user exists in the database
     try {
-      final exist = await existUser(userId);
-      final session = Supabase.instance.client.auth.currentSession;
+      final exist = await existUser(session.user.id);
 
-      if (session != null && exist) {
+      if (exist) {
         state = AuthStateAuthenticated(session.user);
       } else {
         state = const AuthStateUnauthenticated();
       }
     } catch (e) {
+      log('Error checking user existence: $e', error: e);
+      state = AuthStateError(e.toString());
+    }
+
+    // Set up auth state change listener
+    _setupAuthListener();
+  }
+
+  void _setupAuthListener() {
+    Supabase.instance.client.auth.onAuthStateChange.listen((data) async {
+      final event = data.event;
+      final session = data.session;
+
+      // Handle different auth events
+      switch (event) {
+        case AuthChangeEvent.signedIn:
+          _handleSignIn(session);
+        case AuthChangeEvent.signedOut:
+          state = const AuthStateUnauthenticated();
+        case AuthChangeEvent.tokenRefreshed:
+        case AuthChangeEvent.userUpdated:
+          if (session != null) {
+            state = AuthStateAuthenticated(session.user);
+          }
+        default:
+          // No-op for other events
+          break;
+      }
+    });
+  }
+
+  Future<void> _handleSignIn(Session? session) async {
+    if (session == null) {
+      state = const AuthStateUnauthenticated();
+      return;
+    }
+
+    state = const AuthStateLoading();
+
+    try {
+      final exist = await existUser(session.user.id);
+
+      if (exist) {
+        state = AuthStateAuthenticated(session.user);
+      } else {
+        // User authenticated but not in database - needs registration
+        state = AuthStateGoogleRegistration(
+          id: session.user.id,
+          email: session.user.email ?? '',
+          name: session.user.userMetadata?['full_name']?.toString() ?? '',
+          photoUrl: session.user.userMetadata?['avatar_url']?.toString() ?? '',
+          googleAuthToken: session.providerToken ?? '',
+          googleIdToken: session.providerRefreshToken ?? '',
+          phone: session.user.phone,
+        );
+      }
+    } catch (e) {
+      log('Error during sign in: $e', error: e);
       state = AuthStateError(e.toString());
     }
   }

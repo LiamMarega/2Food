@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:snapfood/common/routes/routes.dart';
+import 'package:snapfood/screens/auth/providers/auth_provider.dart';
 
 class App extends ConsumerWidget {
   const App({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Watch the auth state for changes - this will trigger app rebuilds when auth changes
+    ref.watch(authProvider);
     final router = ref.watch(routerProvider);
 
     return EasyLocalization(

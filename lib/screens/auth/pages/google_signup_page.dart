@@ -57,10 +57,10 @@ class _GoogleSignupPageState extends ConsumerState<GoogleSignupPage> {
     final authState = ref.watch(authProvider);
     final isLoading = authState is AuthStateLoading;
 
-    // Handle navigation based on auth state
-    AuthNavigationHelper.handleAuthStateNavigation(context, ref, authState);
+    // Handle navigation based on auth state (now managed by the router)
+    AuthUtils.preventBackNavigation(context, isLoading);
 
-    // If state is not GoogleRegistration, go back to login
+    // If state is not GoogleRegistration, navigation will be handled by the router
     if (authState is! AuthStateGoogleRegistration &&
         authState is! AuthStateLoading &&
         authState is! AuthStateAuthenticated) {
