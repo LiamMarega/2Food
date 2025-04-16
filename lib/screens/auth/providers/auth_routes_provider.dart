@@ -2,7 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:snapfood/screens/auth/providers/auth_provider.dart';
+
+import '../models/auth_state.dart';
+import '../providers/auth_provider.dart';
 
 part 'auth_routes_provider.g.dart';
 

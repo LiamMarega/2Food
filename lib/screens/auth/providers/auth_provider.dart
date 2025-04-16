@@ -2,51 +2,11 @@ import 'dart:developer';
 
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
+
+import '../models/auth_state.dart';
 
 part 'auth_provider.g.dart';
-
-sealed class AuthState {
-  const AuthState();
-}
-
-class AuthStateLoading extends AuthState {
-  const AuthStateLoading();
-}
-
-class AuthStateAuthenticated extends AuthState {
-  const AuthStateAuthenticated(this.user);
-  final User user;
-}
-
-class AuthStateUnauthenticated extends AuthState {
-  const AuthStateUnauthenticated();
-}
-
-class AuthStateError extends AuthState {
-  const AuthStateError(this.message);
-  final String message;
-}
-
-class AuthStateGoogleRegistration extends AuthState {
-  const AuthStateGoogleRegistration({
-    required this.id,
-    required this.name,
-    required this.email,
-    required this.photoUrl,
-    required this.googleAuthToken,
-    required this.googleIdToken,
-    this.phone,
-  });
-
-  final String id;
-  final String name;
-  final String email;
-  final String photoUrl;
-  final String? phone;
-  final String googleAuthToken;
-  final String googleIdToken;
-}
 
 @Riverpod(keepAlive: true)
 class Auth extends _$Auth {
@@ -289,7 +249,7 @@ class Auth extends _$Auth {
 
       return User.fromJson(response);
     } catch (e) {
-      print('Error fetching user: $e');
+      log('Error fetching user: $e');
       return null;
     }
   }
@@ -304,7 +264,7 @@ class Auth extends _$Auth {
 
       return response != null;
     } catch (e) {
-      print('Error checking if user exists: $e');
+      log('Error checking if user exists: $e', error: e);
       return false;
     }
   }
