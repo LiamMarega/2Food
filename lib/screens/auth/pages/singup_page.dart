@@ -1,15 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-import '../components/auth_components.dart';
-import '../models/auth_state.dart';
-import '../providers/auth_provider.dart';
-import '../providers/auth_routes_provider.dart';
-import '../utils/auth_utils.dart';
+import 'package:snapfood/screens/auth/components/auth_components.dart';
+import 'package:snapfood/screens/auth/models/auth_state.dart';
+import 'package:snapfood/screens/auth/providers/auth_provider.dart';
+import 'package:snapfood/screens/auth/providers/auth_routes_provider.dart';
+import 'package:snapfood/screens/auth/utils/auth_utils.dart';
 
 class SignupPage extends ConsumerStatefulWidget {
   const SignupPage({super.key});
@@ -53,7 +52,6 @@ class _SignupPageState extends ConsumerState<SignupPage> {
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
-    final theme = Theme.of(context);
     final isLoading = authState is AuthStateLoading;
 
     // Prevent back navigation when loading

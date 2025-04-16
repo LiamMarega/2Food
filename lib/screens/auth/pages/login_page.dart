@@ -1,14 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
-
-import '../components/auth_components.dart';
-import '../models/auth_state.dart';
-import '../providers/auth_provider.dart';
-import '../utils/auth_utils.dart';
+import 'package:snapfood/screens/auth/components/auth_components.dart';
+import 'package:snapfood/screens/auth/models/auth_state.dart';
+import 'package:snapfood/screens/auth/providers/auth_provider.dart';
+import 'package:snapfood/screens/auth/utils/auth_utils.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});

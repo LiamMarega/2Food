@@ -58,7 +58,8 @@ class _CarouselRestaurantsState extends State<CarouselRestaurants> {
                 child: Consumer(
                   builder: (context, ref, child) {
                     final restaurants = ref.watch(
-                        homeProvider.select((state) => state.restaurants),);
+                      homeProvider.select((state) => state.restaurants),
+                    );
                     return CarouselView.weighted(
                       controller: controller,
                       itemSnapping: true,
@@ -71,11 +72,10 @@ class _CarouselRestaurantsState extends State<CarouselRestaurants> {
                       },
                       children:
                           [...?restaurants, ...?restaurants, ...?restaurants]
-                                  .map(
-                                    (e) => HeroLayoutCard(restaurant: e),
-                                  )
-                                  .toList() ??
-                              [],
+                              .map(
+                                (e) => HeroLayoutCard(restaurant: e),
+                              )
+                              .toList(),
                     );
                   },
                 ),

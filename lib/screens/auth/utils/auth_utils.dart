@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:snapfood/screens/auth/models/auth_state.dart';
 
-import '../providers/auth_provider.dart';
-
 /// Auth state navigation helper
 class AuthNavigationHelper {
   /// Handle common navigation based on auth state

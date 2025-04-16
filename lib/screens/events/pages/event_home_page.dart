@@ -573,19 +573,6 @@ class EventHomePage extends StatelessWidget {
     return event.date.isBefore(DateTime.now());
   }
 
-  String _getButtonText(Event event) {
-    if (_isEventPast(event)) {
-      return 'eventHomePage.eventEnded'.tr();
-    }
-    if (_isEventFull(event)) {
-      return 'eventHomePage.noSpotsAvailable'.tr();
-    }
-    if (event.price != null && event.price! > 0) {
-      return '${'eventHomePage.reserveFor'.tr()} \$${event.price}';
-    }
-    return 'eventHomePage.joinEvent'.tr();
-  }
-
   int _getRemainingSpots(int maxUsers, int? usersJoined) {
     if (usersJoined == null) return maxUsers;
     return maxUsers - usersJoined;
