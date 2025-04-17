@@ -1,10 +1,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-   
+
    	<uses-permission android:name="android.permission.VIBRATE"/>
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- Required for apps targeting Android 13+ -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <!-- Set custom default icon. This is used when no icon is set for incoming notification messages. -->
+    <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_launch_image" />
+
     <application
+
         android:label="${appName}"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
@@ -27,7 +35,7 @@
             <meta-data
               android:name="flutterEmbedding"
               android:value="2" />            
-
+          
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -41,7 +49,12 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="snapfood" android:host="com.snapfood.app" />
             </intent-filter>
-
+            
+          <meta-data android:name="com.google.firebase.messaging.default_notification_color" android:resource="@color/launch_background" />
+            <service
+                android:name="com.google.firebase.components.ComponentDiscoveryService"
+                android:exported="false">
+            </service>
 
 
         </activity>
