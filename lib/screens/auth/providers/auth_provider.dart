@@ -111,7 +111,6 @@ class AuthSocial extends _$AuthSocial {
   }
 
   Future<void> logout() async {
-    print('adentroooo');
     state = state.copyWith(loading: true);
     try {
       final supabase = Supabase.instance.client;
