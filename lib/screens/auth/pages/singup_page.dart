@@ -5,10 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 import 'package:snapfood/screens/auth/components/auth_components.dart';
-import 'package:snapfood/screens/auth/models/auth_state.dart';
-import 'package:snapfood/screens/auth/providers/auth_provider.dart';
-import 'package:snapfood/screens/auth/providers/auth_routes_provider.dart';
-import 'package:snapfood/screens/auth/utils/auth_utils.dart';
 
 class SignupPage extends ConsumerStatefulWidget {
   const SignupPage({super.key});
@@ -33,36 +29,12 @@ class _SignupPageState extends ConsumerState<SignupPage> {
     super.dispose();
   }
 
-  void _handleSignup() {
-    ref.read(authRouteHandlerProvider.notifier).signUp(
-          context,
-          email: emailController.text,
-          password: passwordController.text,
-          name: nameController.text,
-          termsAccepted: agreeWithTerms,
-          passwordsMatch:
-              passwordController.text == confirmPasswordController.text,
-        );
-  }
-
-  void _handleGoogleSignup() {
-    ref.read(authProvider.notifier).googleSignUp();
-  }
-
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authProvider);
-    final isLoading = authState is AuthStateLoading;
-
-    // Handle navigation based on auth state - this is now handled by the router
-    // Navigation is now entirely handled by the router
-    AuthUtils.preventBackNavigation(context, isLoading);
-
     return AuthScaffold(
-      isLoading: isLoading,
       child: SingleChildScrollView(
         child: AuthFormContainer(
-          height: MediaQuery.of(context).size.height * 0.8,
+          height: MediaQuery.of(context).size.height * .8,
           children: [
             const SizedBox(height: 40),
 
@@ -84,7 +56,6 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                     controller: nameController,
                     labelText: 'signup.fullName'.tr(),
                     prefixIcon: Icons.person_outline,
-                    enabled: !isLoading,
                   ),
 
                   const SizedBox(height: 15),
@@ -94,7 +65,6 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                     controller: emailController,
                     labelText: 'signup.email'.tr(),
                     prefixIcon: Icons.email_outlined,
-                    enabled: !isLoading,
                     keyboardType: TextInputType.emailAddress,
                   ),
 
@@ -106,7 +76,6 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                     labelText: 'signup.password'.tr(),
                     prefixIcon: Icons.lock_outline,
                     obscureText: true,
-                    enabled: !isLoading,
                   ),
 
                   const SizedBox(height: 15),
@@ -117,29 +86,15 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                     labelText: 'signup.confirmPassword'.tr(),
                     prefixIcon: Icons.lock_outline,
                     obscureText: true,
-                    enabled: !isLoading,
                   ),
 
                   const SizedBox(height: 30),
 
                   // Google sign up button
-                  GoogleSignInButton(
-                    onPressed: _handleGoogleSignup,
-                    isLoading: isLoading,
-                  ),
+                  const GoogleSignInButton(),
                 ],
               ),
             ),
-
-            // Error message
-            if (authState is AuthStateError)
-              Padding(
-                padding: const EdgeInsets.only(top: 16),
-                child: Text(
-                  authState.message,
-                  style: const TextStyle(color: Colors.red),
-                ),
-              ),
 
             // Already have account row
             Padding(
@@ -152,7 +107,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                     style: ShadTheme.of(context).textTheme.large,
                   ),
                   GestureDetector(
-                    onTap: isLoading ? null : () => context.go('/auth/login'),
+                    onTap: () => context.go('/auth/login'),
                     child: Text(
                       'signup.login'.tr(),
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -171,8 +126,6 @@ class _SignupPageState extends ConsumerState<SignupPage> {
             // Terms and conditions + signup button
             AuthBottomActionContainer(
               buttonText: 'signup.signUp'.tr(),
-              isLoading: isLoading,
-              onButtonPressed: _handleSignup,
               extraContent: Positioned(
                 bottom: 20,
                 child: Row(

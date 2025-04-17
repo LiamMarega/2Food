@@ -13,7 +13,7 @@ class ProfilePage extends StatelessWidget {
         return ShadButton.secondary(
           child: const Text('Cerrar sesión'),
           onTapUp: (value) {
-            ref.read(authProvider.notifier).logout();
+            // ref.read(authProvider.notifier).logout();
           },
         );
       },

@@ -4,8 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:snapfood/common/widgets/splash_page.dart';
-import 'package:snapfood/screens/auth/models/auth_state.dart';
-import 'package:snapfood/screens/auth/providers/auth_provider.dart';
 import 'package:snapfood/screens/auth/routes/auth_routes.dart';
 import 'package:snapfood/screens/events/routes/routes.dart';
 import 'package:snapfood/screens/home/routes/home_routes.dart';
@@ -15,11 +13,10 @@ import 'package:snapfood/screens/payments/ui/page/payment_screen.dart';
 import 'package:snapfood/screens/profile/profile_page.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final router = RouterNotifier(ref);
+  final router = RouterNotifier();
 
   return GoRouter(
     refreshListenable: router,
-    redirect: router._redirect,
     routes: router._routes,
     initialLocation: '/',
     debugLogDiagnostics: true,
@@ -27,43 +24,6 @@ final routerProvider = Provider<GoRouter>((ref) {
 });
 
 class RouterNotifier extends ChangeNotifier {
-  RouterNotifier(this._ref) {
-    _ref.listen(authProvider, (_, __) => notifyListeners());
-  }
-  final Ref _ref;
-
-  String? _redirect(BuildContext context, GoRouterState state) {
-    final authState = _ref.read(authProvider);
-
-    // Handle authenticated state
-    final isAuth = authState is AuthStateAuthenticated;
-    final isAuthPath = state.matchedLocation.startsWith('/auth');
-    final isSplashPath = state.matchedLocation == '/splash';
-
-    // If on splash and not loading anymore, redirect appropriately
-    if (isSplashPath && authState is! AuthStateLoading) {
-      return isAuth ? '/' : '/auth/welcome';
-    }
-
-    // If authenticated and trying to access auth pages, redirect to home
-    if (isAuth && isAuthPath) {
-      return '/';
-    }
-
-    // If not authenticated and trying to access protected routes, redirect to welcome
-    if (!isAuth && !isAuthPath && !isSplashPath) {
-      return '/auth/welcome';
-    }
-
-    // // Show splash screen while loading
-    // if (authState is AuthStateLoading ) {
-    //   return '/splash';
-    // }
-
-    // Otherwise, allow navigation
-    return null;
-  }
-
   List<RouteBase> get _routes => [
         // Splash route
         GoRoute(

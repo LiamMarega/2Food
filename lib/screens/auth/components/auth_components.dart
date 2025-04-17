@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:snapfood/screens/auth/providers/auth_provider.dart';
 
 /// Shared container for all auth screens
 class AuthScaffold extends StatelessWidget {
@@ -58,8 +60,8 @@ class AuthFormContainer extends StatelessWidget {
   final double? height;
 
   const AuthFormContainer({
-    super.key,
     required this.children,
+    super.key,
     this.height,
   });
 
@@ -69,6 +71,7 @@ class AuthFormContainer extends StatelessWidget {
       child: Container(
         width: MediaQuery.of(context).size.width * 0.85,
         height: height ?? MediaQuery.of(context).size.height * 0.8,
+        margin: const EdgeInsets.only(top: 70),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(30),
@@ -228,12 +231,10 @@ class AuthBottomActionContainer extends StatelessWidget {
 
 /// Social login button (Google)
 class GoogleSignInButton extends StatelessWidget {
-  final VoidCallback? onPressed;
   final bool isLoading;
 
   const GoogleSignInButton({
     super.key,
-    this.onPressed,
     this.isLoading = false,
   });
 
@@ -241,55 +242,63 @@ class GoogleSignInButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return GestureDetector(
-      onTap: isLoading ? null : onPressed,
-      child: Opacity(
-        opacity: isLoading ? 0.7 : 1.0,
-        child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 10,
-          ),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 15,
-                offset: const Offset(0, 5),
+    return Consumer(
+      builder: (context, ref, _) {
+        return GestureDetector(
+          onTap: isLoading
+              ? null
+              : () {
+                  ref.read(authSocialProvider.notifier).googleSignUp();
+                },
+          child: Opacity(
+            opacity: isLoading ? 0.7 : 1.0,
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 10,
               ),
-            ],
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (isLoading)
-                const SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: Colors.red,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(30),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 15,
+                    offset: const Offset(0, 5),
                   ),
-                )
-              else
-                const Icon(
-                  Icons.g_mobiledata, // Replace with proper Google icon
-                  color: Colors.red,
-                ),
-              const SizedBox(width: 10),
-              Text(
-                'login.signInWithGoogle'.tr(),
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black,
-                ),
+                ],
               ),
-            ],
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (isLoading)
+                    const SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.red,
+                      ),
+                    )
+                  else
+                    const Icon(
+                      Icons.g_mobiledata, // Replace with proper Google icon
+                      color: Colors.red,
+                    ),
+                  const SizedBox(width: 10),
+                  Text(
+                    'login.signInWithGoogle'.tr(),
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
