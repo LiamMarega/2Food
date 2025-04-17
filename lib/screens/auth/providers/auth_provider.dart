@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:snapfood/screens/auth/models/auth_state.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'auth_provider.freezed.dart';

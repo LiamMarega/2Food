@@ -126,30 +126,27 @@ class _SignupPageState extends ConsumerState<SignupPage> {
             // Terms and conditions + signup button
             AuthBottomActionContainer(
               buttonText: 'signup.signUp'.tr(),
-              extraContent: Positioned(
-                bottom: 20,
-                child: Row(
-                  children: [
-                    Checkbox(
-                      value: agreeWithTerms,
-                      onChanged: (value) {
-                        setState(() {
-                          agreeWithTerms = value ?? false;
-                        });
-                      },
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(3),
-                      ),
+              extraContent: Row(
+                children: [
+                  Checkbox(
+                    value: agreeWithTerms,
+                    onChanged: (value) {
+                      setState(() {
+                        agreeWithTerms = value ?? false;
+                      });
+                    },
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(3),
                     ),
-                    Text(
-                      'signup.agreeTerms'.tr(),
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
+                  ),
+                  Text(
+                    'signup.agreeTerms'.tr(),
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],
