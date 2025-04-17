@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:snapfood/screens/auth/components/auth_components.dart';
 import 'package:snapfood/screens/auth/providers/auth_provider.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -24,87 +25,61 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authSocialProvider);
-    return const SizedBox.shrink();
-    //   final isLoading = authState is AuthStateLoading;
+    return PopScope(
+      child: AuthScaffold(
+        child: AuthFormContainer(
+          height: MediaQuery.of(context).size.height * 0.7,
+          children: [
+            const SizedBox(height: 40),
 
-    //   // Navigation is now handled by the router
-    //   AuthUtils.preventBackNavigation(context, isLoading);
+            // Login header
+            AuthHeader(
+              title: 'login.welcomeBack'.tr(),
+              subtitle: 'login.loginToContinue'.tr(),
+            ),
 
-    //   return PopScope(
-    //     canPop: !isLoading,
-    //     child: AuthScaffold(
-    //       isLoading: isLoading,
-    //       child: AuthFormContainer(
-    //         height: MediaQuery.of(context).size.height * 0.7,
-    //         children: [
-    //           const SizedBox(height: 40),
+            const SizedBox(height: 60),
 
-    //           // Login header
-    //           AuthHeader(
-    //             title: 'login.welcomeBack'.tr(),
-    //             subtitle: 'login.loginToContinue'.tr(),
-    //           ),
+            // Login form fields
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              child: Column(
+                children: [
+                  // Email field
+                  AuthTextField(
+                    controller: emailController,
+                    labelText: 'login.email'.tr(),
+                    prefixIcon: Icons.email_outlined,
+                    keyboardType: TextInputType.emailAddress,
+                  ),
 
-    //           const SizedBox(height: 60),
+                  const SizedBox(height: 20),
 
-    //           // Login form fields
-    //           Padding(
-    //             padding: const EdgeInsets.symmetric(horizontal: 25),
-    //             child: Column(
-    //               children: [
-    //                 // Email field
-    //                 AuthTextField(
-    //                   controller: emailController,
-    //                   labelText: 'login.email'.tr(),
-    //                   prefixIcon: Icons.email_outlined,
-    //                   enabled: !isLoading,
-    //                   keyboardType: TextInputType.emailAddress,
-    //                 ),
+                  // Password field
+                  AuthTextField(
+                    controller: passwordController,
+                    labelText: 'login.password'.tr(),
+                    prefixIcon: Icons.lock_outline,
+                    obscureText: true,
+                  ),
 
-    //                 const SizedBox(height: 20),
+                  const SizedBox(height: 50),
 
-    //                 // Password field
-    //                 AuthTextField(
-    //                   controller: passwordController,
-    //                   labelText: 'login.password'.tr(),
-    //                   prefixIcon: Icons.lock_outline,
-    //                   obscureText: true,
-    //                   enabled: !isLoading,
-    //                 ),
+                  // Google sign-in button
+                  const GoogleSignInButton(),
+                ],
+              ),
+            ),
 
-    //                 const SizedBox(height: 50),
+            const Spacer(),
 
-    //                 // Google sign-in button
-    //                 GoogleSignInButton(
-    //                   onPressed: _handleGoogleLogin,
-    //                   isLoading: isLoading,
-    //                 ),
-    //               ],
-    //             ),
-    //           ),
-
-    //           // Error message
-    //           if (authState is AuthStateError)
-    //             Padding(
-    //               padding: const EdgeInsets.only(top: 16),
-    //               child: Text(
-    //                 authState.message,
-    //                 style: const TextStyle(color: Colors.red),
-    //               ),
-    //             ),
-
-    //           const Spacer(),
-
-    //           // Login button
-    //           AuthBottomActionContainer(
-    //             buttonText: 'login.login'.tr(),
-    //             isLoading: isLoading,
-    //             onButtonPressed: _handleLogin,
-    //           ),
-    //         ],
-    //       ),
-    //     ),
-    //   );
+            // Login button
+            AuthBottomActionContainer(
+              buttonText: 'login.login'.tr(),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
