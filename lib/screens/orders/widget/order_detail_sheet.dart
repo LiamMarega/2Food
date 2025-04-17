@@ -1,8 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:snapfood/common/models/order.dart';
 import 'package:snapfood/common/utils/constants.dart';
 import 'package:snapfood/screens/orders/models/order_model.dart';
+import 'package:snapfood/screens/orders/providers/qr_provider.dart';
 
 class OrderDetailSheet extends StatelessWidget {
   const OrderDetailSheet({
@@ -20,7 +23,7 @@ class OrderDetailSheet extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.8,
+        initialChildSize: 0.92,
         minChildSize: 0.4,
         expand: false,
         builder: (context, scrollController) {
@@ -57,6 +60,8 @@ class OrderDetailSheet extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
+                _buildQrCode(order),
+                const SizedBox(height: 24),
                 _buildOrderHeader(context, theme, order),
                 const SizedBox(height: 24),
                 _buildOrderInfo(context, theme, order),
@@ -69,6 +74,43 @@ class OrderDetailSheet extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildQrCode(Order order) {
+    return Consumer(
+      builder: (context, ref, _) {
+        final qrData = ref.watch(qrProvider(order.order_hash)).qrData;
+        final loading = ref.watch(qrProvider(order.order_hash)).loading;
+
+        if (qrData == null || loading) {
+          return const Center(
+            child: Padding(
+              padding: EdgeInsets.all(120),
+              child: SizedBox(
+                height: 50,
+                width: 50,
+                child: CircularProgressIndicator(
+                  strokeWidth: 5,
+                ),
+              ),
+            ),
+          );
+        }
+
+        return Center(
+          child: QrImageView(
+            data: qrData.toJson().toString(),
+            size: 320,
+            gapless: false,
+            embeddedImage:
+                const AssetImage('assets/images/my_embedded_image.png'),
+            embeddedImageStyle: const QrEmbeddedImageStyle(
+              size: Size(60, 60),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -108,8 +150,8 @@ class OrderDetailSheet extends StatelessWidget {
   }
 
   Widget _buildOrderHeader(BuildContext context, ThemeData theme, Order order) {
-    final statusColor = _getStatusColor(order.status);
-    final statusText = _getStatusText(order.status);
+    final statusColor = _getStatusColor(order.payment_status);
+    final statusText = _getStatusText(order.payment_status);
 
     return Card(
       elevation: 2,

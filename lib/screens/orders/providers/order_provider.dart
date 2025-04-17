@@ -1,49 +1,49 @@
+import 'dart:convert';
 import 'dart:developer';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:snapfood/common/models/order.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:snapfood/common/models/order.dart' as order_model;
 import 'package:snapfood/screens/orders/models/order_model.dart';
+import 'package:snapfood/screens/orders/models/qr_data.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+part 'order_provider.freezed.dart';
+part 'order_provider.g.dart';
+
 // Order state
-class OrderState {
-  final Map<String, List<OrderItem>> orders;
-  final bool isLoading;
-  final String? error;
-
-  OrderState({
-    required this.orders,
-    this.isLoading = false,
-    this.error,
-  });
-
-  OrderState copyWith({
-    Map<String, List<OrderItem>>? orders,
-    bool? isLoading,
+@freezed
+class OrderState with _$OrderState {
+  factory OrderState({
+    required Map<String, List<OrderItem>> orders,
+    @Default(false) bool isLoading,
     String? error,
-  }) {
-    return OrderState(
-      orders: orders ?? this.orders,
-      isLoading: isLoading ?? this.isLoading,
-      error: error,
-    );
-  }
+    QrResponse? qrData,
+  }) = _OrderState;
 }
 
 // Order notifier
-class OrderNotifier extends StateNotifier<OrderState> {
-  OrderNotifier() : super(OrderState(orders: {}));
+@Riverpod(keepAlive: true)
+class Order extends _$Order {
+  @override
+  OrderState build() {
+    // Initialize and fetch orders
+    fetchOrders();
+    return OrderState(orders: {});
+  }
 
   SupabaseClient get supabase => Supabase.instance.client;
 
   Future<void> fetchOrders() async {
-    state = state.copyWith(isLoading: true);
+    // state = state.copyWith(isLoading: true);
 
     try {
-      final data = await supabase
-          .from('orders')
-          .select()
-          .withConverter(Order.converter);
+      final response = await supabase.from('orders').select();
+      final data = response is List
+          ? response
+              .map((e) => order_model.Order.fromJson(e as Map<String, dynamic>))
+              .toList()
+          : <order_model.Order>[];
 
       final categorizedOrders = <String, List<OrderItem>>{
         'Active': [],
@@ -62,12 +62,12 @@ class OrderNotifier extends StateNotifier<OrderState> {
           orderData: order,
         );
 
-        switch (order.status) {
-          case OrderStatus.paid:
+        switch (order.payment_status) {
+          case order_model.OrderStatus.paid:
             categorizedOrders['Completed']!.add(orderItem);
-          case OrderStatus.pending:
+          case order_model.OrderStatus.pending:
             categorizedOrders['Active']!.add(orderItem);
-          case OrderStatus.rejected:
+          case order_model.OrderStatus.rejected:
             categorizedOrders['Canceled']!.add(orderItem);
         }
       }
@@ -100,7 +100,7 @@ class OrderNotifier extends StateNotifier<OrderState> {
   }
 
   // Toggle order reminder
-  void toggleReminder(String orderId, bool enabled) {
+  Future<void> toggleReminder(String orderId, bool enabled) async {
     final orders = state.orders;
 
     for (final category in orders.keys) {
@@ -142,12 +142,19 @@ class OrderNotifier extends StateNotifier<OrderState> {
       );
     }
   }
-}
 
-// Provider
-final orderProvider = StateNotifierProvider<OrderNotifier, OrderState>((ref) {
-  final notifier = OrderNotifier();
-  // Fetch orders immediately
-  notifier.fetchOrders();
-  return notifier;
-});
+  Future<QrResponse> getSecureQRData(String orderHash) async {
+    final response = await supabase.functions
+        .invoke('generate-qr', body: {'order_hash': orderHash});
+
+    // Convert the response data to a String before decoding
+    final responseData = response.data as String;
+
+    final jsonData = jsonDecode(responseData) as Map<String, dynamic>;
+
+    final qr = QrResponse.fromJson(jsonData);
+
+    state = state.copyWith(qrData: qr);
+    return qr;
+  }
+}

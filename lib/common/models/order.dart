@@ -13,8 +13,9 @@ class Order {
   final double total_amount;
   final String order_type;
   final DateTime created_at;
-  final OrderStatus status;
+  final OrderStatus payment_status;
   final Map<String, dynamic>? mercadopago_info;
+  final String order_hash;
 
   Order({
     required this.id,
@@ -23,7 +24,8 @@ class Order {
     required this.total_amount,
     required this.order_type,
     required this.created_at,
-    required this.status,
+    required this.payment_status,
+    required this.order_hash,
     this.mercadopago_info,
   });
 
@@ -48,8 +50,9 @@ class Order {
       total_amount: (json['total_amount'] as num).toDouble(),
       order_type: json['order_type'] as String,
       created_at: DateTime.parse(json['created_at'] as String),
-      status: mapStatus(json['status'] as String),
+      payment_status: mapStatus(json['payment_status'] as String),
       mercadopago_info: json['mercadopago_info'] as Map<String, dynamic>?,
+      order_hash: json['order_hash'] as String,
     );
   }
 
@@ -72,8 +75,9 @@ class Order {
       'total_amount': total_amount,
       'order_type': order_type,
       'created_at': created_at.toIso8601String(),
-      'status': mapStatus(status),
+      'payment_status': mapStatus(payment_status),
       'mercadopago_info': mercadopago_info,
+      'order_hash': order_hash,
     };
   }
 
@@ -92,19 +96,21 @@ class Order {
         other.total_amount == total_amount &&
         other.order_type == order_type &&
         other.created_at == created_at &&
-        other.status == status &&
-        mapEquals(other.mercadopago_info, mercadopago_info);
+        other.payment_status == payment_status &&
+        mapEquals(other.mercadopago_info, mercadopago_info) &&
+        other.order_hash == order_hash;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
         user_id.hashCode ^
+        order_hash.hashCode ^
         restaurant_id.hashCode ^
         total_amount.hashCode ^
         order_type.hashCode ^
         created_at.hashCode ^
-        status.hashCode ^
+        payment_status.hashCode ^
         mercadopago_info.hashCode;
   }
 }

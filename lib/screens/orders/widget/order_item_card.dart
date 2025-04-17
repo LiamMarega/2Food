@@ -113,7 +113,8 @@ class OrderItemCard extends StatelessWidget {
                               ),
                               const SizedBox(width: 4),
                               Text(
-                                NumberFormat.currency(symbol: r'$').format(orderData.total_amount),
+                                NumberFormat.currency(symbol: r'$')
+                                    .format(orderData.total_amount),
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: theme.primaryColor,
@@ -164,10 +165,11 @@ class OrderItemCard extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: DeliveryMethodBadge(
-                        deliveryMethod: order.deliveryMethod,),
+                      deliveryMethod: order.deliveryMethod,
+                    ),
                   ),
                   if (orderData != null)
-                    _getStatusBadge(orderData.status, theme),
+                    _getStatusBadge(orderData.payment_status, theme),
                 ],
               ),
             ),

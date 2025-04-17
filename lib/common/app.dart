@@ -4,9 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:snapfood/common/routes/routes.dart';
-import 'package:snapfood/screens/auth/providers/auth_provider.dart';
-
-
 
 class App extends ConsumerWidget {
   const App({super.key});
@@ -16,7 +13,6 @@ class App extends ConsumerWidget {
     // Watch the auth state for changes - this will trigger app rebuilds when auth changes
     final router = ref.watch(routerProvider);
 
-    _getDeviceToken();
     return EasyLocalization(
       supportedLocales: const [Locale('es')],
       path: 'assets/translations',
@@ -47,16 +43,5 @@ class App extends ConsumerWidget {
         ),
       ),
     );
-  }
-}
-
-Future<void> _getDeviceToken() async {
-  try {
-    final fcmToken = await FirebaseMessaging.instance.getToken();
-    if (fcmToken != null) {
-      print('Device Token: $fcmToken');
-    }
-  } catch (e) {
-    print('Error getting device token: $e');
   }
 }
