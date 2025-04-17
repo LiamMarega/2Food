@@ -52,16 +52,72 @@ class AuthSocial extends _$AuthSocial {
 
       final supabase = Supabase.instance.client;
 
-      await supabase.auth.signInWithIdToken(
+      final res = await supabase.auth.signInWithIdToken(
         provider: OAuthProvider.google,
         idToken: idToken,
         accessToken: accessToken,
       );
+
+      final session = res.session;
+      final user = res.user;
+
+      if (user == null || session == null) {
+        throw Exception('Error al iniciar sesión con Google');
+      }
+
+      final userData =
+          await supabase.from('users').select().eq('id', user.id).maybeSingle();
+
+      if (userData == null) {
+        // 3. Si no existe, crear el registro en tu tabla
+        await supabase.from('users').insert({
+          'id': user.id,
+          'email': user.email,
+          'name': user.userMetadata?['full_name'] ?? googleUser?.displayName,
+          'photo': user.userMetadata?['avatar_url'] ?? googleUser?.photoUrl,
+          'created_at': DateTime.now().toIso8601String(),
+        });
+      }
+
       state = state.copyWith(loading: false);
     } on AuthException catch (e) {
       state = state.copyWith(error: e.message);
     } catch (e) {
       state = state.copyWith(error: e.toString());
+    }
+  }
+
+  Future<bool> userExist(String userId) async {
+    state = state.copyWith(loading: true);
+    try {
+      final supabase = Supabase.instance.client;
+
+      // Query the users table in the public schema to check if the user exists
+      final response = await supabase
+          .from('users')
+          .select()
+          .eq('id', userId)
+          .limit(1)
+          .maybeSingle();
+
+      state = state.copyWith(loading: false);
+
+      // If response is not null, the user exists
+      return response != null;
+    } catch (e) {
+      state = state.copyWith(loading: false, error: e.toString());
+      return false;
+    }
+  }
+
+  Future<void> logout() async {
+    print('adentroooo');
+    state = state.copyWith(loading: true);
+    try {
+      final supabase = Supabase.instance.client;
+      await supabase.auth.signOut();
+    } catch (e) {
+      state = state.copyWith(loading: false, error: e.toString());
     }
   }
 }

@@ -1,12 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-
-import '../components/auth_components.dart';
-import '../models/auth_state.dart';
-import '../providers/auth_provider.dart';
-import '../utils/auth_utils.dart';
+import 'package:snapfood/screens/auth/components/auth_components.dart';
 
 class GoogleSignupPage extends ConsumerStatefulWidget {
   const GoogleSignupPage({super.key});

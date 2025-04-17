@@ -245,11 +245,9 @@ class GoogleSignInButton extends StatelessWidget {
     return Consumer(
       builder: (context, ref, _) {
         return GestureDetector(
-          onTap: isLoading
-              ? null
-              : () {
-                  ref.read(authSocialProvider.notifier).googleSignUp();
-                },
+          onTap: () {
+            ref.read(authSocialProvider.notifier).googleSignUp();
+          },
           child: Opacity(
             opacity: isLoading ? 0.7 : 1.0,
             child: Container(
