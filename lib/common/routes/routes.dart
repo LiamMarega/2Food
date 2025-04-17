@@ -5,23 +5,37 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:snapfood/common/widgets/splash_page.dart';
 import 'package:snapfood/screens/auth/routes/auth_routes.dart';
+import 'package:snapfood/screens/auth/utils/auth_gate.dart';
 import 'package:snapfood/screens/events/routes/routes.dart';
 import 'package:snapfood/screens/home/routes/home_routes.dart';
 import 'package:snapfood/screens/orders/pages/orders_page.dart';
 import 'package:snapfood/screens/payments/routes/payment_routes.dart';
 import 'package:snapfood/screens/payments/ui/page/payment_screen.dart';
 import 'package:snapfood/screens/profile/profile_page.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-final routerProvider = Provider<GoRouter>((ref) {
-  final router = RouterNotifier();
+// Class that listens to auth state changes
+class AuthNotifier extends ChangeNotifier {
+  AuthNotifier() {
+    _initialize();
+  }
 
-  return GoRouter(
-    refreshListenable: router,
-    routes: router._routes,
-    initialLocation: '/',
-    debugLogDiagnostics: true,
-  );
-});
+  void _initialize() {
+    // Listen to auth state changes
+    Supabase.instance.client.auth.onAuthStateChange.listen((data) {
+      final AuthChangeEvent event = data.event;
+      // Notify listeners when sign in, sign out, or token refresh happens
+      if (event == AuthChangeEvent.signedIn ||
+          event == AuthChangeEvent.signedOut ||
+          event == AuthChangeEvent.tokenRefreshed) {
+        notifyListeners();
+      }
+    });
+  }
+
+  // Check if user is logged in
+  bool get isLoggedIn => Supabase.instance.client.auth.currentUser != null;
+}
 
 class RouterNotifier extends ChangeNotifier {
   List<RouteBase> get _routes => [
@@ -129,3 +143,42 @@ class ScaffoldWithNavBar extends StatelessWidget {
     return 0;
   }
 }
+
+final authNotifierProvider = Provider((ref) => AuthNotifier());
+
+final routerProvider = Provider<GoRouter>((ref) {
+  final router = RouterNotifier();
+  final authNotifier = ref.watch(authNotifierProvider);
+
+  return GoRouter(
+    refreshListenable: authNotifier,
+    routes: router._routes,
+    initialLocation: '/splash',
+    debugLogDiagnostics: true,
+    redirect: (context, state) {
+      final isLoggedIn = authNotifier.isLoggedIn;
+      final isGoingToAuth = state.fullPath?.startsWith('/auth') ?? false;
+      final isGoingToSplash = state.fullPath == '/splash';
+
+      // If the user is at splash, redirect based on authentication status after loading
+      if (isGoingToSplash) {
+        // Small delay to allow splash to be visible briefly - not actually needed in redirect
+        // The actual redirect will happen immediately
+        return isLoggedIn ? '/' : '/auth/welcome';
+      }
+
+      // If not logged in and not going to auth pages, redirect to welcome page
+      if (!isLoggedIn && !isGoingToAuth) {
+        return '/auth/welcome';
+      }
+
+      // If logged in and going to auth pages, redirect to home
+      if (isLoggedIn && isGoingToAuth) {
+        return '/';
+      }
+
+      // Allow the current navigation
+      return null;
+    },
+  );
+});
