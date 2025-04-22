@@ -14,6 +14,7 @@ class ProductsState with _$ProductsState {
   const factory ProductsState({
     List<MenuItem>? products,
     List<MenuType>? menuTypes,
+    Map<String, List<MenuItem>>? menuTypeProducts,
     @Default(false) bool isLoading,
     String? error,
     String? currentMenuType,
@@ -31,13 +32,39 @@ class Products extends _$Products {
   SupabaseClient get supabase => Supabase.instance.client;
 
   Future<void> fetchMenuTypes() async {
-    // state = state.copyWith(isLoading: true, error: null);
-
     try {
+      // First, get a list of menu_type_ids that have at least one menu item
+      final menuTypeIdsWithItems = await supabase
+          .from('menu_items')
+          .select('menu_type')
+          .not('menu_type', 'is', 'null')
+          .withConverter(
+            (data) => (data as List<dynamic>)
+                .map((item) {
+                  log('Menu item data: $item');
+                  return item['menu_type'] as String;
+                })
+                .toSet() // Use Set to remove duplicates
+                .toList(),
+          );
+
+      log('Menu type IDs with items: $menuTypeIdsWithItems');
+
+      if (menuTypeIdsWithItems.isEmpty) {
+        log('No menu types found with associated menu items');
+        state = state.copyWith(
+          menuTypes: [],
+          isLoading: false,
+        );
+        return;
+      }
+
+      // Then get the menu types that match these IDs
       final data = await supabase
           .from('menu_types')
           .select()
           .eq('active', true)
+          .inFilter('id', menuTypeIdsWithItems)
           .order('type')
           .withConverter(MenuType.converter);
 
@@ -46,7 +73,10 @@ class Products extends _$Products {
         isLoading: false,
       );
 
-      log('Fetched ${data.length} menu types');
+      log('Fetched ${data.length} menu types with at least one menu item');
+
+      // Pre-fetch products for specific menu types for homepage
+      await fetchProductsForFeaturedMenuTypes();
     } catch (e, stack) {
       log('Error fetching menu types: $e');
       log('Stack trace: $stack');
@@ -55,6 +85,71 @@ class Products extends _$Products {
         error: 'Failed to load menu types: $e',
       );
     }
+  }
+
+  Future<void> fetchProductsForFeaturedMenuTypes() async {
+    try {
+      final featuredTypes = state.menuTypes;
+      if (featuredTypes == null || featuredTypes.isEmpty) {
+        return;
+      }
+
+      // Try to find hamburger and pizza menu types
+      final burgerType = featuredTypes
+          .where((type) => type.type.toLowerCase().contains('hamburgues'))
+          .firstOrNull;
+
+      final pizzaType = featuredTypes
+          .where((type) => type.type.toLowerCase().contains('pizza'))
+          .firstOrNull;
+
+      if (burgerType == null && pizzaType == null) {
+        // If neither type is found, just use the first two menu types
+        await _fetchProductsForMenuTypes(
+          featuredTypes.take(2).map((e) => e.id).toList(),
+        );
+      } else {
+        // Fetch products for the found menu types
+        final typeIds = [
+          if (burgerType != null) burgerType.id,
+          if (pizzaType != null) pizzaType.id,
+        ];
+        await _fetchProductsForMenuTypes(typeIds);
+      }
+    } catch (e, stack) {
+      log('Error fetching featured products: $e');
+      log('Stack trace: $stack');
+    }
+  }
+
+  Future<void> _fetchProductsForMenuTypes(List<String> menuTypeIds) async {
+    if (menuTypeIds.isEmpty) return;
+
+    final currentProducts = state.menuTypeProducts ?? {};
+    final newProducts = Map<String, List<MenuItem>>.from(currentProducts);
+
+    for (final typeId in menuTypeIds) {
+      try {
+        final data = await supabase
+            .from('menu_items')
+            .select('*, promotions(*)')
+            .eq('menu_type', typeId)
+            .limit(10)
+            .withConverter(
+              (items) => (items as List<dynamic>)
+                  .map(
+                      (item) => MenuItem.fromJson(item as Map<String, dynamic>))
+                  .toList(),
+            );
+
+        newProducts[typeId] = data;
+        log('Fetched ${data.length} products for menu type: $typeId');
+      } catch (e) {
+        log('Error fetching products for menu type $typeId: $e');
+      }
+    }
+
+    state = state.copyWith(menuTypeProducts: newProducts);
   }
 
   Future<void> fetchProductsByMenuType(String? menuTypeId) async {

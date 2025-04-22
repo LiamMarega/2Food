@@ -3,6 +3,7 @@ import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:snapfood/common/models/menu_item.dart';
 import 'package:snapfood/common/models/menu_type.dart';
 import 'package:snapfood/common/utils/constants.dart';
 import 'package:snapfood/common/utils/media_query.dart';
@@ -48,6 +49,22 @@ class _HomePageState extends ConsumerState<HomePage> {
     }
 
     final menuTypes = productsState.menuTypes ?? [];
+    final menuTypeProducts = productsState.menuTypeProducts ?? {};
+
+    // Find specific menu types for featured carousels
+    final burgerType = menuTypes
+        .where((type) => type.type.toLowerCase().contains('hamburgues'))
+        .firstOrNull;
+
+    final pizzaType = menuTypes
+        .where((type) => type.type.toLowerCase().contains('pizza'))
+        .firstOrNull;
+
+    // Get products for the menu types
+    final burgerProducts =
+        burgerType != null ? menuTypeProducts[burgerType.id] ?? [] : [];
+    final pizzaProducts =
+        pizzaType != null ? menuTypeProducts[pizzaType.id] ?? [] : [];
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
@@ -282,8 +299,8 @@ class _HomePageState extends ConsumerState<HomePage> {
 
                       SizedBox(height: mediaHeight(context, 0.02)),
 
-                      // Use existing components
-                      if (homeState.promotions?.isNotEmpty ?? false) ...[
+                      // Super Ofertas section
+                      if (homeState.promotions?.isNotEmpty ?? false)
                         Padding(
                           padding: const EdgeInsets.only(left: 20, bottom: 10),
                           child: Row(
@@ -320,7 +337,12 @@ class _HomePageState extends ConsumerState<HomePage> {
                             ],
                           ),
                         ),
+
+                      if (homeState.promotions?.isNotEmpty ?? false)
                         MenuCarousel(items: [...homeState.promotions!]),
+
+                      // Hamburguesas section with filtered products
+                      if (burgerType != null && burgerProducts.isNotEmpty)
                         Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 20,
@@ -330,25 +352,17 @@ class _HomePageState extends ConsumerState<HomePage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Hamburguesas',
+                                burgerType.type,
                                 style: theme.textTheme.h4,
                               ),
                               TextButton(
                                 onPressed: () {
-                                  // Find hamburger menu type ID
-                                  final burgerType = menuTypes
-                                      .where((type) => type.type
-                                          .toLowerCase()
-                                          .contains('hamburgues'))
-                                      .firstOrNull;
-
                                   context.go(
                                     Uri(
                                       path: '/products',
                                       queryParameters: {
-                                        'title': 'Hamburguesas',
-                                        'type':
-                                            burgerType?.id ?? 'Hamburguesas',
+                                        'title': burgerType.type,
+                                        'type': burgerType.id,
                                       },
                                     ).toString(),
                                   );
@@ -358,9 +372,13 @@ class _HomePageState extends ConsumerState<HomePage> {
                             ],
                           ),
                         ),
+
+                      if (burgerType != null && burgerProducts.isNotEmpty)
                         MenuCarousel(
-                          items: [...homeState.promotions!]..shuffle(),
-                        ),
+                            items: List<MenuItem>.from(burgerProducts)),
+
+                      // Pizzas section with filtered products
+                      if (pizzaType != null && pizzaProducts.isNotEmpty)
                         Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 20,
@@ -370,24 +388,17 @@ class _HomePageState extends ConsumerState<HomePage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Pizzas',
+                                pizzaType.type,
                                 style: theme.textTheme.h4,
                               ),
                               TextButton(
                                 onPressed: () {
-                                  // Find pizza menu type ID
-                                  final pizzaType = menuTypes
-                                      .where((type) => type.type
-                                          .toLowerCase()
-                                          .contains('pizza'))
-                                      .firstOrNull;
-
                                   context.go(
                                     Uri(
                                       path: '/products',
                                       queryParameters: {
-                                        'title': 'Pizzas',
-                                        'type': pizzaType?.id ?? 'Pizza',
+                                        'title': pizzaType.type,
+                                        'type': pizzaType.id,
                                       },
                                     ).toString(),
                                   );
@@ -397,10 +408,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                             ],
                           ),
                         ),
-                        MenuCarousel(
-                          items: [...homeState.promotions!]..shuffle(),
-                        ),
-                      ],
+
+                      if (pizzaType != null && pizzaProducts.isNotEmpty)
+                        MenuCarousel(items: List<MenuItem>.from(pizzaProducts)),
 
                       // Add some space at the bottom
                       SizedBox(height: mediaHeight(context, 0.01)),

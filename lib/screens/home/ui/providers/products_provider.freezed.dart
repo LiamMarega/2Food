@@ -18,6 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$ProductsState {
   List<MenuItem>? get products => throw _privateConstructorUsedError;
   List<MenuType>? get menuTypes => throw _privateConstructorUsedError;
+  Map<String, List<MenuItem>>? get menuTypeProducts =>
+      throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
   String? get error => throw _privateConstructorUsedError;
   String? get currentMenuType => throw _privateConstructorUsedError;
@@ -38,6 +40,7 @@ abstract class $ProductsStateCopyWith<$Res> {
   $Res call(
       {List<MenuItem>? products,
       List<MenuType>? menuTypes,
+      Map<String, List<MenuItem>>? menuTypeProducts,
       bool isLoading,
       String? error,
       String? currentMenuType});
@@ -60,6 +63,7 @@ class _$ProductsStateCopyWithImpl<$Res, $Val extends ProductsState>
   $Res call({
     Object? products = freezed,
     Object? menuTypes = freezed,
+    Object? menuTypeProducts = freezed,
     Object? isLoading = null,
     Object? error = freezed,
     Object? currentMenuType = freezed,
@@ -73,6 +77,10 @@ class _$ProductsStateCopyWithImpl<$Res, $Val extends ProductsState>
           ? _value.menuTypes
           : menuTypes // ignore: cast_nullable_to_non_nullable
               as List<MenuType>?,
+      menuTypeProducts: freezed == menuTypeProducts
+          ? _value.menuTypeProducts
+          : menuTypeProducts // ignore: cast_nullable_to_non_nullable
+              as Map<String, List<MenuItem>>?,
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
@@ -100,6 +108,7 @@ abstract class _$$ProductsStateImplCopyWith<$Res>
   $Res call(
       {List<MenuItem>? products,
       List<MenuType>? menuTypes,
+      Map<String, List<MenuItem>>? menuTypeProducts,
       bool isLoading,
       String? error,
       String? currentMenuType});
@@ -120,6 +129,7 @@ class __$$ProductsStateImplCopyWithImpl<$Res>
   $Res call({
     Object? products = freezed,
     Object? menuTypes = freezed,
+    Object? menuTypeProducts = freezed,
     Object? isLoading = null,
     Object? error = freezed,
     Object? currentMenuType = freezed,
@@ -133,6 +143,10 @@ class __$$ProductsStateImplCopyWithImpl<$Res>
           ? _value._menuTypes
           : menuTypes // ignore: cast_nullable_to_non_nullable
               as List<MenuType>?,
+      menuTypeProducts: freezed == menuTypeProducts
+          ? _value._menuTypeProducts
+          : menuTypeProducts // ignore: cast_nullable_to_non_nullable
+              as Map<String, List<MenuItem>>?,
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
@@ -155,11 +169,13 @@ class _$ProductsStateImpl implements _ProductsState {
   const _$ProductsStateImpl(
       {final List<MenuItem>? products,
       final List<MenuType>? menuTypes,
+      final Map<String, List<MenuItem>>? menuTypeProducts,
       this.isLoading = false,
       this.error,
       this.currentMenuType})
       : _products = products,
-        _menuTypes = menuTypes;
+        _menuTypes = menuTypes,
+        _menuTypeProducts = menuTypeProducts;
 
   final List<MenuItem>? _products;
   @override
@@ -181,6 +197,16 @@ class _$ProductsStateImpl implements _ProductsState {
     return EqualUnmodifiableListView(value);
   }
 
+  final Map<String, List<MenuItem>>? _menuTypeProducts;
+  @override
+  Map<String, List<MenuItem>>? get menuTypeProducts {
+    final value = _menuTypeProducts;
+    if (value == null) return null;
+    if (_menuTypeProducts is EqualUnmodifiableMapView) return _menuTypeProducts;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(value);
+  }
+
   @override
   @JsonKey()
   final bool isLoading;
@@ -191,7 +217,7 @@ class _$ProductsStateImpl implements _ProductsState {
 
   @override
   String toString() {
-    return 'ProductsState(products: $products, menuTypes: $menuTypes, isLoading: $isLoading, error: $error, currentMenuType: $currentMenuType)';
+    return 'ProductsState(products: $products, menuTypes: $menuTypes, menuTypeProducts: $menuTypeProducts, isLoading: $isLoading, error: $error, currentMenuType: $currentMenuType)';
   }
 
   @override
@@ -202,6 +228,8 @@ class _$ProductsStateImpl implements _ProductsState {
             const DeepCollectionEquality().equals(other._products, _products) &&
             const DeepCollectionEquality()
                 .equals(other._menuTypes, _menuTypes) &&
+            const DeepCollectionEquality()
+                .equals(other._menuTypeProducts, _menuTypeProducts) &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
             (identical(other.error, error) || other.error == error) &&
@@ -214,6 +242,7 @@ class _$ProductsStateImpl implements _ProductsState {
       runtimeType,
       const DeepCollectionEquality().hash(_products),
       const DeepCollectionEquality().hash(_menuTypes),
+      const DeepCollectionEquality().hash(_menuTypeProducts),
       isLoading,
       error,
       currentMenuType);
@@ -231,6 +260,7 @@ abstract class _ProductsState implements ProductsState {
   const factory _ProductsState(
       {final List<MenuItem>? products,
       final List<MenuType>? menuTypes,
+      final Map<String, List<MenuItem>>? menuTypeProducts,
       final bool isLoading,
       final String? error,
       final String? currentMenuType}) = _$ProductsStateImpl;
@@ -239,6 +269,8 @@ abstract class _ProductsState implements ProductsState {
   List<MenuItem>? get products;
   @override
   List<MenuType>? get menuTypes;
+  @override
+  Map<String, List<MenuItem>>? get menuTypeProducts;
   @override
   bool get isLoading;
   @override
