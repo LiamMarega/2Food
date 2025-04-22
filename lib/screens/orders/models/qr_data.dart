@@ -1,6 +1,5 @@
 // QR Response model
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:json_annotation/json_annotation.dart';
 
 part 'qr_data.freezed.dart';
 part 'qr_data.g.dart';

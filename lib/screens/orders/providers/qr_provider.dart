@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -25,7 +24,7 @@ class Qr extends _$Qr {
   @override
   QrState build(String orderHash) {
     // Initialize and fetch QR data
-    log("adentro -1 $orderHash");
+    log('adentro -1 $orderHash');
 
     getSecureQRData(orderHash);
     return QrState(loading: true);
@@ -36,18 +35,18 @@ class Qr extends _$Qr {
   Future<void> getSecureQRData(String orderHash) async {
     // state = state.copyWith(loading: true);
     try {
-      log("adentro $orderHash");
+      log('adentro $orderHash');
       final response = await supabase.functions
           .invoke('generate-qr', body: {'order_hash': orderHash});
 
-      log("adentro 2 $orderHash");
+      log('adentro 2 $orderHash');
       // Convert the response data to a String before decoding
       final responseData = response.data;
 
-      log("adentro 3 $responseData");
+      log('adentro 3 $responseData');
       final qr = QrResponse.fromJson(responseData as Map<String, dynamic>);
 
-      log("adentro 4 $qr");
+      log('adentro 4 $qr');
       state = state.copyWith(qrData: qr, loading: false);
     } catch (e) {
       state = state.copyWith(error: e.toString(), loading: false);

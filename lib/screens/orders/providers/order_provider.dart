@@ -41,7 +41,7 @@ class Order extends _$Order {
       final response = await supabase.from('orders').select();
       final data = response is List
           ? response
-              .map((e) => order_model.Order.fromJson(e as Map<String, dynamic>))
+              .map(order_model.Order.fromJson)
               .toList()
           : <order_model.Order>[];
 

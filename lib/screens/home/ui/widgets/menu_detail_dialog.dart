@@ -460,7 +460,7 @@ class _MenuDetailDialogState extends ConsumerState<MenuDetailDialog> {
                                       ? discountedPrice
                                       : widget.menuItem.price)
                                   .toDouble(),
-                              restaurantId: widget.menuItem.restaurantId,
+                              restaurantId: widget.menuItem.restaurant_id,
                             );
                       },
                       child: Text(

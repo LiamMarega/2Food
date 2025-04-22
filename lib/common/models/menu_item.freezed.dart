@@ -21,7 +21,7 @@ MenuItem _$MenuItemFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$MenuItem {
   String get id => throw _privateConstructorUsedError;
-  String get restaurantId => throw _privateConstructorUsedError;
+  String get restaurant_id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   num get price => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
@@ -30,6 +30,7 @@ mixin _$MenuItem {
   int? get trendingScore => throw _privateConstructorUsedError;
   String? get photo => throw _privateConstructorUsedError;
   List<Promotion>? get promotions => throw _privateConstructorUsedError;
+  String? get menu_type => throw _privateConstructorUsedError;
 
   /// Serializes this MenuItem to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -48,7 +49,7 @@ abstract class $MenuItemCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      String restaurantId,
+      String restaurant_id,
       String name,
       num price,
       String? description,
@@ -56,7 +57,8 @@ abstract class $MenuItemCopyWith<$Res> {
       bool? isSignature,
       int? trendingScore,
       String? photo,
-      List<Promotion>? promotions});
+      List<Promotion>? promotions,
+      String? menu_type});
 }
 
 /// @nodoc
@@ -75,7 +77,7 @@ class _$MenuItemCopyWithImpl<$Res, $Val extends MenuItem>
   @override
   $Res call({
     Object? id = null,
-    Object? restaurantId = null,
+    Object? restaurant_id = null,
     Object? name = null,
     Object? price = null,
     Object? description = freezed,
@@ -84,15 +86,16 @@ class _$MenuItemCopyWithImpl<$Res, $Val extends MenuItem>
     Object? trendingScore = freezed,
     Object? photo = freezed,
     Object? promotions = freezed,
+    Object? menu_type = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      restaurantId: null == restaurantId
-          ? _value.restaurantId
-          : restaurantId // ignore: cast_nullable_to_non_nullable
+      restaurant_id: null == restaurant_id
+          ? _value.restaurant_id
+          : restaurant_id // ignore: cast_nullable_to_non_nullable
               as String,
       name: null == name
           ? _value.name
@@ -126,6 +129,10 @@ class _$MenuItemCopyWithImpl<$Res, $Val extends MenuItem>
           ? _value.promotions
           : promotions // ignore: cast_nullable_to_non_nullable
               as List<Promotion>?,
+      menu_type: freezed == menu_type
+          ? _value.menu_type
+          : menu_type // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -140,7 +147,7 @@ abstract class _$$MenuItemImplCopyWith<$Res>
   @useResult
   $Res call(
       {String id,
-      String restaurantId,
+      String restaurant_id,
       String name,
       num price,
       String? description,
@@ -148,7 +155,8 @@ abstract class _$$MenuItemImplCopyWith<$Res>
       bool? isSignature,
       int? trendingScore,
       String? photo,
-      List<Promotion>? promotions});
+      List<Promotion>? promotions,
+      String? menu_type});
 }
 
 /// @nodoc
@@ -165,7 +173,7 @@ class __$$MenuItemImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? restaurantId = null,
+    Object? restaurant_id = null,
     Object? name = null,
     Object? price = null,
     Object? description = freezed,
@@ -174,15 +182,16 @@ class __$$MenuItemImplCopyWithImpl<$Res>
     Object? trendingScore = freezed,
     Object? photo = freezed,
     Object? promotions = freezed,
+    Object? menu_type = freezed,
   }) {
     return _then(_$MenuItemImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      restaurantId: null == restaurantId
-          ? _value.restaurantId
-          : restaurantId // ignore: cast_nullable_to_non_nullable
+      restaurant_id: null == restaurant_id
+          ? _value.restaurant_id
+          : restaurant_id // ignore: cast_nullable_to_non_nullable
               as String,
       name: null == name
           ? _value.name
@@ -216,6 +225,10 @@ class __$$MenuItemImplCopyWithImpl<$Res>
           ? _value._promotions
           : promotions // ignore: cast_nullable_to_non_nullable
               as List<Promotion>?,
+      menu_type: freezed == menu_type
+          ? _value.menu_type
+          : menu_type // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -225,7 +238,7 @@ class __$$MenuItemImplCopyWithImpl<$Res>
 class _$MenuItemImpl implements _MenuItem {
   const _$MenuItemImpl(
       {required this.id,
-      required this.restaurantId,
+      required this.restaurant_id,
       required this.name,
       required this.price,
       this.description,
@@ -233,7 +246,8 @@ class _$MenuItemImpl implements _MenuItem {
       this.isSignature,
       this.trendingScore,
       this.photo,
-      final List<Promotion>? promotions})
+      final List<Promotion>? promotions,
+      this.menu_type})
       : _promotions = promotions;
 
   factory _$MenuItemImpl.fromJson(Map<String, dynamic> json) =>
@@ -242,7 +256,7 @@ class _$MenuItemImpl implements _MenuItem {
   @override
   final String id;
   @override
-  final String restaurantId;
+  final String restaurant_id;
   @override
   final String name;
   @override
@@ -268,8 +282,11 @@ class _$MenuItemImpl implements _MenuItem {
   }
 
   @override
+  final String? menu_type;
+
+  @override
   String toString() {
-    return 'MenuItem(id: $id, restaurantId: $restaurantId, name: $name, price: $price, description: $description, arContentUrl: $arContentUrl, isSignature: $isSignature, trendingScore: $trendingScore, photo: $photo, promotions: $promotions)';
+    return 'MenuItem(id: $id, restaurant_id: $restaurant_id, name: $name, price: $price, description: $description, arContentUrl: $arContentUrl, isSignature: $isSignature, trendingScore: $trendingScore, photo: $photo, promotions: $promotions, menu_type: $menu_type)';
   }
 
   @override
@@ -278,8 +295,8 @@ class _$MenuItemImpl implements _MenuItem {
         (other.runtimeType == runtimeType &&
             other is _$MenuItemImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.restaurantId, restaurantId) ||
-                other.restaurantId == restaurantId) &&
+            (identical(other.restaurant_id, restaurant_id) ||
+                other.restaurant_id == restaurant_id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.price, price) || other.price == price) &&
             (identical(other.description, description) ||
@@ -292,7 +309,9 @@ class _$MenuItemImpl implements _MenuItem {
                 other.trendingScore == trendingScore) &&
             (identical(other.photo, photo) || other.photo == photo) &&
             const DeepCollectionEquality()
-                .equals(other._promotions, _promotions));
+                .equals(other._promotions, _promotions) &&
+            (identical(other.menu_type, menu_type) ||
+                other.menu_type == menu_type));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -300,7 +319,7 @@ class _$MenuItemImpl implements _MenuItem {
   int get hashCode => Object.hash(
       runtimeType,
       id,
-      restaurantId,
+      restaurant_id,
       name,
       price,
       description,
@@ -308,7 +327,8 @@ class _$MenuItemImpl implements _MenuItem {
       isSignature,
       trendingScore,
       photo,
-      const DeepCollectionEquality().hash(_promotions));
+      const DeepCollectionEquality().hash(_promotions),
+      menu_type);
 
   /// Create a copy of MenuItem
   /// with the given fields replaced by the non-null parameter values.
@@ -329,7 +349,7 @@ class _$MenuItemImpl implements _MenuItem {
 abstract class _MenuItem implements MenuItem {
   const factory _MenuItem(
       {required final String id,
-      required final String restaurantId,
+      required final String restaurant_id,
       required final String name,
       required final num price,
       final String? description,
@@ -337,7 +357,8 @@ abstract class _MenuItem implements MenuItem {
       final bool? isSignature,
       final int? trendingScore,
       final String? photo,
-      final List<Promotion>? promotions}) = _$MenuItemImpl;
+      final List<Promotion>? promotions,
+      final String? menu_type}) = _$MenuItemImpl;
 
   factory _MenuItem.fromJson(Map<String, dynamic> json) =
       _$MenuItemImpl.fromJson;
@@ -345,7 +366,7 @@ abstract class _MenuItem implements MenuItem {
   @override
   String get id;
   @override
-  String get restaurantId;
+  String get restaurant_id;
   @override
   String get name;
   @override
@@ -362,6 +383,8 @@ abstract class _MenuItem implements MenuItem {
   String? get photo;
   @override
   List<Promotion>? get promotions;
+  @override
+  String? get menu_type;
 
   /// Create a copy of MenuItem
   /// with the given fields replaced by the non-null parameter values.

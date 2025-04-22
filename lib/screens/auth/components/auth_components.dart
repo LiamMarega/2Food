@@ -10,8 +10,7 @@ class AuthScaffold extends StatelessWidget {
   final Color? primaryColor;
 
   const AuthScaffold({
-    super.key,
-    required this.child,
+    required this.child, super.key,
     this.isLoading = false,
     this.primaryColor,
   });
@@ -99,10 +98,7 @@ class AuthTextField extends StatelessWidget {
   final TextInputType keyboardType;
 
   const AuthTextField({
-    super.key,
-    required this.controller,
-    required this.labelText,
-    required this.prefixIcon,
+    required this.controller, required this.labelText, required this.prefixIcon, super.key,
     this.obscureText = false,
     this.enabled = true,
     this.keyboardType = TextInputType.text,
@@ -161,9 +157,8 @@ class AuthBottomActionContainer extends StatelessWidget {
   final Widget? extraContent;
 
   const AuthBottomActionContainer({
-    super.key,
+    required this.buttonText, super.key,
     this.onButtonPressed,
-    required this.buttonText,
     this.isLoading = false,
     this.extraContent,
   });
@@ -188,7 +183,7 @@ class AuthBottomActionContainer extends StatelessWidget {
                   child: Padding(
                   padding: const EdgeInsets.only(top: 15),
                   child: extraContent,
-                ))
+                ),)
               : null,
         ),
         if (onButtonPressed != null)
@@ -307,9 +302,7 @@ class AuthHeader extends StatelessWidget {
   final String subtitle;
 
   const AuthHeader({
-    super.key,
-    required this.title,
-    required this.subtitle,
+    required this.title, required this.subtitle, super.key,
   });
 
   @override

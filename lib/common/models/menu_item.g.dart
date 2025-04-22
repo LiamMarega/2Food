@@ -9,7 +9,7 @@ part of 'menu_item.dart';
 _$MenuItemImpl _$$MenuItemImplFromJson(Map<String, dynamic> json) =>
     _$MenuItemImpl(
       id: json['id'] as String,
-      restaurantId: json['restaurantId'] as String,
+      restaurant_id: json['restaurant_id'] as String,
       name: json['name'] as String,
       price: json['price'] as num,
       description: json['description'] as String?,
@@ -20,12 +20,13 @@ _$MenuItemImpl _$$MenuItemImplFromJson(Map<String, dynamic> json) =>
       promotions: (json['promotions'] as List<dynamic>?)
           ?.map((e) => Promotion.fromJson(e as Map<String, dynamic>))
           .toList(),
+      menu_type: json['menu_type'] as String?,
     );
 
 Map<String, dynamic> _$$MenuItemImplToJson(_$MenuItemImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'restaurantId': instance.restaurantId,
+      'restaurant_id': instance.restaurant_id,
       'name': instance.name,
       'price': instance.price,
       'description': instance.description,
@@ -34,4 +35,5 @@ Map<String, dynamic> _$$MenuItemImplToJson(_$MenuItemImpl instance) =>
       'trendingScore': instance.trendingScore,
       'photo': instance.photo,
       'promotions': instance.promotions,
+      'menu_type': instance.menu_type,
     };

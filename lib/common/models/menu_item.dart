@@ -7,7 +7,7 @@ part 'menu_item.g.dart'; // Add this line to include the generated JSON serializ
 class MenuItem with _$MenuItem {
   const factory MenuItem({
     required String id,
-    required String restaurantId,
+    required String restaurant_id,
     required String name,
     required num price,
     String? description,
@@ -16,6 +16,7 @@ class MenuItem with _$MenuItem {
     int? trendingScore,
     String? photo,
     List<Promotion>? promotions,
+    String? menu_type,
   }) = _MenuItem;
 
   factory MenuItem.fromJson(Map<String, dynamic> json) =>

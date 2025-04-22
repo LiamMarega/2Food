@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:snapfood/common/models/menu_type.dart';
 import 'package:snapfood/common/utils/constants.dart';
 import 'package:snapfood/common/utils/media_query.dart';
 import 'package:snapfood/screens/home/ui/providers/home_provider.dart';
+import 'package:snapfood/screens/home/ui/providers/products_provider.dart';
 import 'package:snapfood/screens/home/ui/widgets/carousels/carousel_restaurants.dart';
 import 'package:snapfood/screens/home/ui/widgets/hand_animation.dart';
 import 'package:snapfood/screens/home/ui/widgets/home_page_skeleton.dart';
@@ -21,17 +24,20 @@ class HomePage extends ConsumerStatefulWidget {
 class _HomePageState extends ConsumerState<HomePage> {
   final scrollController = ScrollController();
 
-  final categories = [
-    (icon: LucideIcons.pizza, label: 'Pizza'),
-    (icon: LucideIcons.cookie, label: 'Snacks'),
-    (icon: PhosphorIcons.hamburger_bold, label: 'Burguers'),
-    (icon: LucideIcons.percent, label: 'Promo'),
-    (icon: LucideIcons.beer, label: 'Cerveza'),
-  ];
+  // Map of menu type names to their corresponding icons
+  final Map<String, IconData> menuIcons = {
+    'Pizza': LucideIcons.pizza,
+    'Snacks': LucideIcons.cookie,
+    'Hamburguesas': PhosphorIcons.hamburger_bold,
+    'Promociones': LucideIcons.percent,
+    'Bebidas': LucideIcons.beer,
+    // Add more mappings as needed
+  };
 
   @override
   Widget build(BuildContext context) {
     final homeState = ref.watch(homeProvider);
+    final productsState = ref.watch(productsProvider);
     final theme = ShadTheme.of(context);
 
     // Show skeleton loading while data is loading
@@ -40,6 +46,8 @@ class _HomePageState extends ConsumerState<HomePage> {
         homeState.restaurants == null) {
       return const HomePageSkeleton();
     }
+
+    final menuTypes = productsState.menuTypes ?? [];
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
@@ -229,26 +237,44 @@ class _HomePageState extends ConsumerState<HomePage> {
                         ),
                       ),
 
-                      // Category buttons (horizontal scrolling)
+                      // Menu type categories from Supabase (horizontal scrolling)
                       SizedBox(
                         height: 80,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: categories.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 12),
-                                child: _buildCategoryButton(
-                                  icon: categories[index].icon,
-                                  label: categories[index].label,
-                                  theme: theme,
+                          child: menuTypes.isEmpty
+                              ? const Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: menuTypes.length,
+                                  itemBuilder: (context, index) {
+                                    final menuType = menuTypes[index];
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 12),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          // Navigate to products page with this menu type
+                                          context.go(
+                                            Uri(
+                                              path: '/products',
+                                              queryParameters: {
+                                                'title': menuType.type,
+                                                'type': menuType.id,
+                                              },
+                                            ).toString(),
+                                          );
+                                        },
+                                        child: _buildCategoryButton(
+                                          type: menuType,
+                                          theme: theme,
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
-                              );
-                            },
-                          ),
                         ),
                       ),
 
@@ -260,9 +286,38 @@ class _HomePageState extends ConsumerState<HomePage> {
                       if (homeState.promotions?.isNotEmpty ?? false) ...[
                         Padding(
                           padding: const EdgeInsets.only(left: 20, bottom: 10),
-                          child: Text(
-                            'Super Ofertas',
-                            style: theme.textTheme.h4,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Super Ofertas',
+                                style: theme.textTheme.h4,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 20),
+                                child: TextButton(
+                                  onPressed: () {
+                                    // Find promo menu type ID if available
+                                    final promoType = menuTypes
+                                        .where((type) => type.type
+                                            .toLowerCase()
+                                            .contains('promoc'))
+                                        .firstOrNull;
+
+                                    context.go(
+                                      Uri(
+                                        path: '/products',
+                                        queryParameters: {
+                                          'title': 'Super Ofertas',
+                                          'type': promoType?.id ?? 'Promo',
+                                        },
+                                      ).toString(),
+                                    );
+                                  },
+                                  child: const Text('Ver más'),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         MenuCarousel(items: [...homeState.promotions!]),
@@ -271,9 +326,36 @@ class _HomePageState extends ConsumerState<HomePage> {
                             horizontal: 20,
                             vertical: 10,
                           ),
-                          child: Text(
-                            'Hamburguesas',
-                            style: theme.textTheme.h4,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Hamburguesas',
+                                style: theme.textTheme.h4,
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  // Find hamburger menu type ID
+                                  final burgerType = menuTypes
+                                      .where((type) => type.type
+                                          .toLowerCase()
+                                          .contains('hamburgues'))
+                                      .firstOrNull;
+
+                                  context.go(
+                                    Uri(
+                                      path: '/products',
+                                      queryParameters: {
+                                        'title': 'Hamburguesas',
+                                        'type':
+                                            burgerType?.id ?? 'Hamburguesas',
+                                      },
+                                    ).toString(),
+                                  );
+                                },
+                                child: const Text('Ver más'),
+                              ),
+                            ],
                           ),
                         ),
                         MenuCarousel(
@@ -284,9 +366,35 @@ class _HomePageState extends ConsumerState<HomePage> {
                             horizontal: 20,
                             vertical: 10,
                           ),
-                          child: Text(
-                            'Pizzas',
-                            style: theme.textTheme.h4,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Pizzas',
+                                style: theme.textTheme.h4,
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  // Find pizza menu type ID
+                                  final pizzaType = menuTypes
+                                      .where((type) => type.type
+                                          .toLowerCase()
+                                          .contains('pizza'))
+                                      .firstOrNull;
+
+                                  context.go(
+                                    Uri(
+                                      path: '/products',
+                                      queryParameters: {
+                                        'title': 'Pizzas',
+                                        'type': pizzaType?.id ?? 'Pizza',
+                                      },
+                                    ).toString(),
+                                  );
+                                },
+                                child: const Text('Ver más'),
+                              ),
+                            ],
                           ),
                         ),
                         MenuCarousel(
@@ -310,10 +418,31 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   Widget _buildCategoryButton({
-    required IconData icon,
-    required String label,
+    required MenuType type,
     required ShadThemeData theme,
   }) {
+    // Map of menu type names to their corresponding icons
+    final Map<String, IconData> typeToIcon = {
+      'pizza': LucideIcons.pizza,
+      'hamburguesa': PhosphorIcons.hamburger_bold,
+      'snack': LucideIcons.cookie,
+      'promocion': LucideIcons.percent,
+      'cerveza': LucideIcons.beer,
+      'bebida': LucideIcons.beer,
+      'postre': LucideIcons.cake,
+    };
+
+    // Try to find an icon based on the type name
+    IconData icon = LucideIcons.utensils; // Default icon
+    final lowerType = type.type.toLowerCase();
+
+    for (final entry in typeToIcon.entries) {
+      if (lowerType.contains(entry.key)) {
+        icon = entry.value;
+        break;
+      }
+    }
+
     return Column(
       children: [
         Container(
@@ -333,7 +462,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
         ),
         Text(
-          label,
+          type.type,
           style: theme.textTheme.p,
         ),
       ],

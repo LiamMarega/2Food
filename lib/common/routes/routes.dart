@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:snapfood/common/widgets/splash_page.dart';
 import 'package:snapfood/screens/auth/routes/auth_routes.dart';
-import 'package:snapfood/screens/auth/utils/auth_gate.dart';
 import 'package:snapfood/screens/events/routes/routes.dart';
 import 'package:snapfood/screens/home/routes/home_routes.dart';
 import 'package:snapfood/screens/orders/pages/orders_page.dart';
@@ -23,7 +22,7 @@ class AuthNotifier extends ChangeNotifier {
   void _initialize() {
     // Listen to auth state changes
     Supabase.instance.client.auth.onAuthStateChange.listen((data) {
-      final AuthChangeEvent event = data.event;
+      final event = data.event;
       // Notify listeners when sign in, sign out, or token refresh happens
       if (event == AuthChangeEvent.signedIn ||
           event == AuthChangeEvent.signedOut ||

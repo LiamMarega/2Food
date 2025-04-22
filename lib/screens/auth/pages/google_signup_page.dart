@@ -48,7 +48,7 @@ class _GoogleSignupPageState extends ConsumerState<GoogleSignupPage> {
           // Profile photo
           CircleAvatar(
             radius: 40,
-            backgroundImage: NetworkImage("authState.photoUrl"),
+            backgroundImage: const NetworkImage('authState.photoUrl'),
             backgroundColor: Colors.grey.shade200,
           ),
 
