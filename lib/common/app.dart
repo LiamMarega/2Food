@@ -19,6 +19,10 @@ class App extends ConsumerWidget {
       child: Builder(
         builder: (context) => ShadApp.materialRouter(
           routerConfig: router,
+          darkTheme: ShadThemeData(
+            brightness: Brightness.dark,
+            colorScheme: const ShadSlateColorScheme.dark(),
+          ),
           materialThemeBuilder: (context, theme) {
             return ThemeData(
               colorScheme: ColorScheme.light(

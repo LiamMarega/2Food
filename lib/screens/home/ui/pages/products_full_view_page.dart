@@ -48,13 +48,6 @@ class _ProductsFullViewPageState extends ConsumerState<ProductsFullViewPage> {
     final productsState = ref.watch(productsProvider);
     final theme = ShadTheme.of(context);
 
-    // Show skeleton loading while data is loading
-    if (productsState.isLoading) {
-      return const Scaffold(
-        body: HomePageSkeleton(),
-      );
-    }
-
     // Get products from the provider
     final products = productsState.products ?? [];
     final menuTypes = productsState.menuTypes ?? [];
@@ -104,7 +97,6 @@ class _ProductsFullViewPageState extends ConsumerState<ProductsFullViewPage> {
             ),
           ),
 
-          // Products grid view
           Expanded(
             child: products.isEmpty
                 ? _buildEmptyProductsMessage()

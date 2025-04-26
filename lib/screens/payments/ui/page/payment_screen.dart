@@ -40,9 +40,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
           colorSchemes: CustomTabsColorSchemes.defaults(
             toolbarColor: Theme.of(context).colorScheme.surface,
           ),
-          shareState: CustomTabsShareState.off,
-          urlBarHidingEnabled: false,
-          showTitle: false,
+          shareState: CustomTabsShareState.on,
+          shareIdentityEnabled: true,
+          urlBarHidingEnabled: true,
+          showTitle: true,
           closeButton: CustomTabsCloseButton(
             icon: CustomTabsCloseButtonIcons.back,
           ),

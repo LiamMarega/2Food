@@ -129,25 +129,25 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
 
             // Search bar
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: ShadInput(
-                prefix: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8),
-                  child: Icon(LucideIcons.search, size: 16),
-                ),
-                suffix: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8),
-                  child: Icon(LucideIcons.x, size: 16),
-                ),
-                placeholder:
-                    Text('Search any...', style: theme.textTheme.muted),
-                decoration: ShadDecoration(
-                  border: ShadBorder(radius: BorderRadius.circular(24)),
-                  color: Colors.white,
-                ),
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            //   child: ShadInput(
+            //     prefix: const Padding(
+            //       padding: EdgeInsets.symmetric(horizontal: 8),
+            //       child: Icon(LucideIcons.search, size: 16),
+            //     ),
+            //     suffix: const Padding(
+            //       padding: EdgeInsets.symmetric(horizontal: 8),
+            //       child: Icon(LucideIcons.x, size: 16),
+            //     ),
+            //     placeholder:
+            //         Text('Search any...', style: theme.textTheme.muted),
+            //     decoration: ShadDecoration(
+            //       border: ShadBorder(radius: BorderRadius.circular(24)),
+            //       color: Colors.white,
+            //     ),
+            //   ),
+            // ),
 
             // Main content with white background
             Expanded(
