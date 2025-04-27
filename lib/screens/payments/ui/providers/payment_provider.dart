@@ -182,12 +182,12 @@ class PaymentService {
       final res = await _client.functions.invoke(
         'create-preference',
         body: {
-          'marketplace_id': restaurantId,
+          'restaurant_id': restaurantId,
           'title': title,
+          'text': title,
+          'user_id': currentUser?.id,
           'quantity': quantity,
           'unit_price': price,
-          'user_id': currentUser?.id,
-          'currency_id': 'ARS',
         },
       );
 
@@ -217,7 +217,7 @@ class PaymentService {
       // Navigate to payment screen with the URL as extra parameter
       if (context.mounted) {
         // Use named route navigation with the correct name
-        context.goNamed('payment', extra: preference.sandboxInitPoint);
+        context.goNamed('payment', extra: preference.initPoint);
       }
 
       return preference;
