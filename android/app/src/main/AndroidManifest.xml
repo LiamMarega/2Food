@@ -47,7 +47,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="snapfood" android:host="com.2food.app" />
+                <data android:scheme="snapfood" android:host="com.timefood.app" />
             </intent-filter>
             
           <meta-data android:name="com.google.firebase.messaging.default_notification_color" android:resource="@color/launch_background" />

@@ -6,7 +6,7 @@
 	<string>development</string>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>snapfood:com.2food.app</string>
+		<string>snapfood:com.timefood.app</string>
 	</array>
 </dict>
 </plist>

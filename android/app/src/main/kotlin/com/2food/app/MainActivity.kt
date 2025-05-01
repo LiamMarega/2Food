@@ -1,4 +1,4 @@
-package com.2food.app
+package com.timefood.app
 
 import io.flutter.embedding.android.FlutterActivity
 
