@@ -70,6 +70,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '212712903666',
     projectId: 'food-da905',
     storageBucket: 'food-da905.firebasestorage.app',
-    iosBundleId: 'com.example.verygoodcore.snapfood',
+    iosBundleId: 'com.timefood.app',
   );
 }
