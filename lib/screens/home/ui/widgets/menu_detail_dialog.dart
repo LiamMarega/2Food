@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -160,32 +162,7 @@ class _MenuDetailDialogState extends ConsumerState<MenuDetailDialog> {
 
                   // Timer indicator (solo si hay promoción activa con fecha de fin)
                   if (isPromotionActive && promotion.endTime != null) ...[
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 16),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.amber.shade100,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.timer, color: Colors.amber.shade800),
-                          const SizedBox(width: 8),
-                          Text(
-                            // Calcular tiempo restante hasta el fin de la promoción
-                            _getRemainingTime(promotion.endTime!),
-                            style: TextStyle(
-                              color: Colors.amber.shade800,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    RemainingTime(endTime: promotion.endTime!),
                   ],
 
                   // Title
@@ -352,28 +329,7 @@ class _MenuDetailDialogState extends ConsumerState<MenuDetailDialog> {
 
                   Row(
                     children: [
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey.shade300),
-                            borderRadius: kDefaultBorderRadius,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.shopping_bag_outlined),
-                              const SizedBox(width: 8),
-                              Text(
-                                'Retirar',
-                                style: Theme.of(context).textTheme.bodyMedium,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
+                      Flexible(
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 12),
                           decoration: BoxDecoration(
@@ -486,8 +442,20 @@ class _MenuDetailDialogState extends ConsumerState<MenuDetailDialog> {
     if (date == null) return 'No especificado';
     return '${date.day}/${date.month}/${date.year}';
   }
+}
 
-  // Método para calcular el tiempo restante
+class RemainingTime extends StatefulWidget {
+  const RemainingTime({required this.endTime, super.key});
+
+  final DateTime endTime;
+
+  @override
+  State<RemainingTime> createState() => _RemainingTimeState();
+}
+
+class _RemainingTimeState extends State<RemainingTime> {
+  Timer? _timer;
+// Método para calcular el tiempo restante
   String _getRemainingTime(DateTime endTime) {
     final now = DateTime.now();
     final difference = endTime.difference(now);
@@ -499,5 +467,49 @@ class _MenuDetailDialogState extends ConsumerState<MenuDetailDialog> {
     final seconds = difference.inSeconds % 60;
 
     return '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 16),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 12,
+        vertical: 8,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.amber.shade100,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.timer, color: Colors.amber.shade800),
+          const SizedBox(width: 8),
+          Text(
+            // Calcular tiempo restante hasta el fin de la promoción
+            _getRemainingTime(widget.endTime),
+            style: TextStyle(
+              color: Colors.amber.shade800,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
